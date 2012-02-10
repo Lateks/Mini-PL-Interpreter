@@ -36,5 +36,20 @@ namespace LexerTest
             lexer = new Lexer("f_o12a");
             Assert.That(lexer.NextToken(), Is.EqualTo("f_o12a"));
         }
+
+        [Test]
+        public void StringConstantTest()
+        {
+            var lexer = new Lexer("\"foo 42\"");
+            Assert.That(lexer.NextToken(), Is.EqualTo("\"foo 42\""));
+            lexer = new Lexer("\"foo\\n\"");
+            Assert.That(lexer.NextToken(), Is.EqualTo("\"foo\\n\""));
+            lexer = new Lexer("\"foo\\\"...\\\"\"");
+            Assert.That(lexer.NextToken(), Is.EqualTo("\"foo\\\"...\\\"\""));
+            lexer = new Lexer("\"foo\\\"");
+            Assert.Throws<LexicalError>(() => lexer.NextToken());
+            lexer = new Lexer("\"foo\\");
+            Assert.Throws<LexicalError>(() => lexer.NextToken());
+        }
     }
 }

@@ -26,6 +26,8 @@ namespace LexicalAnalyser
                 return MakeIntegerConstantToken();
             else if (Char.IsLetter(input.Peek()))
                 return MakeIdentifierToken();
+            else if (input.Peek().Equals('"'))
+                return MakeStringConstantToken();
             else
                 throw new LexicalError("Invalid token or not implemented yet.");
         }
@@ -65,6 +67,28 @@ namespace LexicalAnalyser
                                    input.Peek().Equals('_')))
                 token += input.Dequeue();
             return token;
+        }
+
+        private string MakeStringConstantToken()
+        {
+            string token = "" + input.Dequeue();
+            while (InputLeft() && !(input.Peek().Equals('"')))
+                if (input.Peek().Equals('\\'))
+                    token += GetEscapeCharacter();
+                else
+                    token += input.Dequeue();
+            if (!InputLeft())
+                throw new LexicalError("Reached end of input while scanning for string literal.");
+            return token + input.Dequeue();
+        }
+
+        private string GetEscapeCharacter()
+        {
+            string token = "" + input.Dequeue();
+            if (InputLeft()) // currently accepts anything as an escape character
+                return token + input.Dequeue();
+            else
+                throw new LexicalError("Reached end of input while scanning for string literal.");
         }
     }
 
