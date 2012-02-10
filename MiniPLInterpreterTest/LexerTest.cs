@@ -25,5 +25,16 @@ namespace LexerTest
             lexer = new Lexer(".");
             Assert.Throws<LexicalError>(() => lexer.NextToken());
         }
+
+        [Test]
+        public void IdentifierTest()
+        {
+            var lexer = new Lexer("for");
+            Assert.That(lexer.NextToken(), Is.EqualTo("for"));
+            lexer = new Lexer("42for");
+            Assert.That(lexer.NextToken(), Is.EqualTo("42"));
+            lexer = new Lexer("f_o12a");
+            Assert.That(lexer.NextToken(), Is.EqualTo("f_o12a"));
+        }
     }
 }
