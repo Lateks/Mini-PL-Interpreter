@@ -27,11 +27,11 @@ namespace LexicalAnalyser
             else if (input.Peek().Equals('/'))
                 return input.Pop().ToString();
             else if (Char.IsDigit(input.Peek()))
-                return MakeIntegerConstantToken();
+                return MakeIntegerLiteralToken();
             else if (Char.IsLetter(input.Peek()))
                 return MakeIdentifierToken();
             else if (input.Peek().Equals('"'))
-                return MakeStringConstantToken();
+                return MakeStringLiteralToken();
             else
                 throw new LexicalError("Invalid token or not implemented yet.");
         }
@@ -118,7 +118,7 @@ namespace LexicalAnalyser
                 throw new LexicalError("Invalid token \".\"");
         }
 
-        private string MakeIntegerConstantToken()
+        private string MakeIntegerLiteralToken()
         {
             string token = "";
             while (InputLeft() && Char.IsDigit(input.Peek()))
@@ -135,7 +135,7 @@ namespace LexicalAnalyser
             return token;
         }
 
-        private string MakeStringConstantToken()
+        private string MakeStringLiteralToken()
         {
             string token = "" + input.Pop();
             while (InputLeft() && !(input.Peek().Equals('"')))
