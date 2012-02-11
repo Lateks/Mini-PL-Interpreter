@@ -14,6 +14,8 @@ namespace LexerTest
             Assert.That(lexer.NextToken(), Is.EqualTo("123"));
             lexer = new Lexer("1 23");
             Assert.That(lexer.NextToken(), Is.EqualTo("1"));
+            Assert.That(lexer.Row, Is.EqualTo(1));
+            Assert.That(lexer.Col, Is.EqualTo(1));
             Assert.That(lexer.NextToken(), Is.EqualTo("23"));
         }
 
@@ -24,6 +26,7 @@ namespace LexerTest
             Assert.That(lexer.NextToken(), Is.EqualTo(".."));
             lexer = new Lexer(".");
             Assert.Throws<LexicalError>(() => lexer.NextToken());
+            Assert.That(lexer.Col, Is.EqualTo(1));
         }
 
         [Test]
@@ -57,8 +60,12 @@ namespace LexerTest
         {
             var lexer = new Lexer("// ... \n // ... \n foo");
             Assert.That(lexer.NextToken(), Is.EqualTo("foo"));
+            Assert.That(lexer.Row, Is.EqualTo(3));
+            Assert.That(lexer.Col, Is.EqualTo(4));
             lexer = new Lexer("/* ... \n\n*/ \tfoo");
             Assert.That(lexer.NextToken(), Is.EqualTo("foo"));
+            Assert.That(lexer.Row, Is.EqualTo(3));
+            Assert.That(lexer.Col, Is.EqualTo(7));
             lexer = new Lexer("\n\n// ...//\n// ... \n\n/* ... */ foo");
             Assert.That(lexer.NextToken(), Is.EqualTo("foo"));
         }
@@ -70,6 +77,7 @@ namespace LexerTest
             Assert.That(lexer.NextToken(), Is.EqualTo("/"));
             lexer = new Lexer("// .. / ..\n /");
             Assert.That(lexer.NextToken(), Is.EqualTo("/"));
+            Assert.That(lexer.Col, Is.EqualTo(2));
         }
 
         [Test]
@@ -87,6 +95,14 @@ namespace LexerTest
             Assert.That(lexer.NextToken(), Is.EqualTo(":"));
             lexer = new Lexer(":=");
             Assert.That(lexer.NextToken(), Is.EqualTo(":="));
+        }
+
+        [Test]
+        public void ShouldBeInvalid()
+        {
+            var lexer = new Lexer("$");
+            Assert.Throws<LexicalError>(() => lexer.NextToken());
+            Assert.That(lexer.Col, Is.EqualTo(1));
         }
     }
 }

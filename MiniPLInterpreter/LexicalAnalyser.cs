@@ -9,6 +9,15 @@ namespace LexicalAnalyser
     public class Lexer
     {
         private Stack<char> input;
+        private int row, col;
+        public int Row
+        {
+            get { return row; }
+        }
+        public int Col
+        {
+            get { return col; }
+        }
         private static HashSet<char> symbolsAndOperators =
             new HashSet<char>(new char[]
             {'/', ';', '(', ')', '+', '-', '*', '<', '=', '&', '!'});
@@ -18,6 +27,7 @@ namespace LexicalAnalyser
             var inputchars = input.ToArray();
             Array.Reverse(inputchars);
             this.input = new Stack<char>(inputchars);
+            row = 1; col = 0;
         }
 
         public string NextToken()
@@ -30,7 +40,7 @@ namespace LexicalAnalyser
             else if (input.Peek().Equals(':'))
                 return MakeColonOrAssignmentToken();
             else if (symbolsAndOperators.Contains(input.Peek()))
-                return input.Pop().ToString();
+                return PopInput();
             else if (Char.IsDigit(input.Peek()))
                 return MakeIntegerLiteralToken();
             else if (Char.IsLetter(input.Peek()))
@@ -38,7 +48,8 @@ namespace LexicalAnalyser
             else if (input.Peek().Equals('"'))
                 return MakeStringLiteralToken();
             else
-                throw new LexicalError("Invalid token or not implemented yet.");
+                throw new LexicalError("Invalid token \"" + PopInput() +
+                    "\" on row " + row.ToString() + ", col " + col.ToString() + ".");
         }
 
         private void SkipWhiteSpaceAndComments()
@@ -57,7 +68,7 @@ namespace LexicalAnalyser
         private void SkipWhiteSpace()
         {
             while (NextCharIsWhiteSpace())
-                input.Pop();
+                PopInput();
         }
 
         private bool NextCharIsWhiteSpace()
@@ -86,7 +97,7 @@ namespace LexicalAnalyser
             }
             catch (InvalidOperationException)
             {
-                throw new LexicalError("Reached end of file while scanning for a comment.");
+                throw new LexicalError("Reached end of input while scanning for a comment.");
             }
         }
 
@@ -96,24 +107,36 @@ namespace LexicalAnalyser
 
         private void SkipMultilineComment()
         {
-            input.Pop();
+            PopInput();
             while (true)
             {
                 ReadUntil('*');
-                input.Pop();
                 if (input.Peek().Equals('/'))
                 {
-                    input.Pop();
+                    PopInput();
                     return;
                 }
             }
         }
 
+        private string PopInput()
+        {
+            char symbol = input.Pop();
+            if (symbol.Equals('\n'))
+            {
+                row++;
+                col = 0;
+            }
+            else
+                col++;
+            return symbol.ToString();
+        }
 
         private void ReadUntil(char symbol)
         {
             while (!input.Peek().Equals(symbol))
-                input.Pop();
+                PopInput();
+            PopInput();
         }
 
         private bool InputLeft()
@@ -123,18 +146,19 @@ namespace LexicalAnalyser
 
         private string MakeDotDotToken()
         {
-            string token = "" + input.Pop();
+            string token = PopInput();
             if (InputLeft() && input.Peek().Equals('.'))
-                return token + input.Pop();
+                return token + PopInput();
             else
-                throw new LexicalError("Invalid token \".\"");
+                throw new LexicalError("Invalid token \".\" on row " +
+                    row.ToString() + ", col " + col.ToString() + ".");
         }
 
         private string MakeColonOrAssignmentToken()
         {
-            string token = "" + input.Pop();
+            string token = PopInput();
             if (InputLeft() && input.Peek().Equals('='))
-                token += input.Pop();
+                token += PopInput();
             return token;
         }
 
@@ -142,7 +166,7 @@ namespace LexicalAnalyser
         {
             string token = "";
             while (InputLeft() && Char.IsDigit(input.Peek()))
-                token += input.Pop();
+                token += PopInput();
             return token;
         }
 
@@ -151,28 +175,28 @@ namespace LexicalAnalyser
             string token = "";
             while (InputLeft() && (Char.IsLetterOrDigit(input.Peek()) ||
                                    input.Peek().Equals('_')))
-                token += input.Pop();
+                token += PopInput();
             return token;
         }
 
         private string MakeStringLiteralToken()
         {
-            string token = "" + input.Pop();
+            string token = PopInput();
             while (InputLeft() && !(input.Peek().Equals('"')))
                 if (input.Peek().Equals('\\'))
                     token += GetEscapeCharacter();
                 else
-                    token += input.Pop();
+                    token += PopInput();
             if (!InputLeft())
                 throw new LexicalError("Reached end of input while scanning for a string literal.");
-            return token + input.Pop();
+            return token + PopInput();
         }
 
         private string GetEscapeCharacter()
         {
-            string token = "" + input.Pop();
+            string token = PopInput();
             if (InputLeft()) // currently accepts anything as an escape character
-                return token + input.Pop();
+                return token + PopInput();
             else
                 throw new LexicalError("Reached end of input while scanning for a string literal.");
         }
