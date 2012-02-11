@@ -71,5 +71,22 @@ namespace LexerTest
             lexer = new Lexer("// .. / ..\n /");
             Assert.That(lexer.NextToken(), Is.EqualTo("/"));
         }
+
+        [Test]
+        public void Operators()
+        {
+            var lexer = new Lexer("+ =");
+            Assert.That(lexer.NextToken(), Is.EqualTo("+"));
+            Assert.That(lexer.NextToken(), Is.EqualTo("="));
+        }
+
+        [Test]
+        public void AssignmentAndColon()
+        {
+            var lexer = new Lexer(":");
+            Assert.That(lexer.NextToken(), Is.EqualTo(":"));
+            lexer = new Lexer(":=");
+            Assert.That(lexer.NextToken(), Is.EqualTo(":="));
+        }
     }
 }

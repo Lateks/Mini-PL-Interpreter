@@ -9,6 +9,9 @@ namespace LexicalAnalyser
     public class Lexer
     {
         private Stack<char> input;
+        private static HashSet<char> symbolsAndOperators =
+            new HashSet<char>(new char[]
+            {'/', ';', '(', ')', '+', '-', '*', '<', '=', '&', '!'});
 
         public Lexer(string input)
         {
@@ -24,7 +27,9 @@ namespace LexicalAnalyser
                 return null;
             if (input.Peek().Equals('.'))
                 return MakeDotDotToken();
-            else if (input.Peek().Equals('/'))
+            else if (input.Peek().Equals(':'))
+                return MakeColonOrAssignmentToken();
+            else if (symbolsAndOperators.Contains(input.Peek()))
                 return input.Pop().ToString();
             else if (Char.IsDigit(input.Peek()))
                 return MakeIntegerLiteralToken();
@@ -41,8 +46,10 @@ namespace LexicalAnalyser
             while (true)
             {
                 SkipWhiteSpace();
-                bool skipped = SkipComments();
-                if ((!skipped && !NextCharIsWhiteSpace()) || !InputLeft())
+                bool nothing_skipped = !SkipComments();
+                if ((nothing_skipped && !NextCharIsWhiteSpace()))
+                    return;
+                if (!InputLeft())
                     return;
             }
         }
@@ -84,8 +91,7 @@ namespace LexicalAnalyser
         }
 
         private void SkipOneLineComment() {
-            while (!input.Peek().Equals('\n'))
-                input.Pop();
+            ReadUntil('\n');
         }
 
         private void SkipMultilineComment()
@@ -93,8 +99,7 @@ namespace LexicalAnalyser
             input.Pop();
             while (true)
             {
-                while (!input.Peek().Equals('*'))
-                    input.Pop();
+                ReadUntil('*');
                 input.Pop();
                 if (input.Peek().Equals('/'))
                 {
@@ -102,6 +107,13 @@ namespace LexicalAnalyser
                     return;
                 }
             }
+        }
+
+
+        private void ReadUntil(char symbol)
+        {
+            while (!input.Peek().Equals(symbol))
+                input.Pop();
         }
 
         private bool InputLeft()
@@ -116,6 +128,14 @@ namespace LexicalAnalyser
                 return token + input.Pop();
             else
                 throw new LexicalError("Invalid token \".\"");
+        }
+
+        private string MakeColonOrAssignmentToken()
+        {
+            string token = "" + input.Pop();
+            if (InputLeft() && input.Peek().Equals('='))
+                token += input.Pop();
+            return token;
         }
 
         private string MakeIntegerLiteralToken()
