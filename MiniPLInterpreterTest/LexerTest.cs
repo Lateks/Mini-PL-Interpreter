@@ -8,7 +8,7 @@ namespace LexerTest
     public class LexerTests
     {
         [Test]
-        public void IntegerConstantTest()
+        public void IntegerConstants()
         {
             var lexer = new Lexer("123");
             Assert.That(lexer.NextToken(), Is.EqualTo("123"));
@@ -18,7 +18,7 @@ namespace LexerTest
         }
 
         [Test]
-        public void DotDotTest()
+        public void DoubleDots()
         {
             var lexer = new Lexer("..");
             Assert.That(lexer.NextToken(), Is.EqualTo(".."));
@@ -27,7 +27,7 @@ namespace LexerTest
         }
 
         [Test]
-        public void IdentifierTest()
+        public void Identifiers()
         {
             var lexer = new Lexer("for");
             Assert.That(lexer.NextToken(), Is.EqualTo("for"));
@@ -38,7 +38,7 @@ namespace LexerTest
         }
 
         [Test]
-        public void StringConstantTest()
+        public void StringLiterals()
         {
             var lexer = new Lexer("\"foo 42\"");
             Assert.That(lexer.NextToken(), Is.EqualTo("\"foo 42\""));
@@ -50,6 +50,26 @@ namespace LexerTest
             Assert.Throws<LexicalError>(() => lexer.NextToken());
             lexer = new Lexer("\"foo\\");
             Assert.Throws<LexicalError>(() => lexer.NextToken());
+        }
+
+        [Test]
+        public void CommentsAreSkipped()
+        {
+            var lexer = new Lexer("// ... \n // ... \n foo");
+            Assert.That(lexer.NextToken(), Is.EqualTo("foo"));
+            lexer = new Lexer("/* ... \n\n*/ \tfoo");
+            Assert.That(lexer.NextToken(), Is.EqualTo("foo"));
+            lexer = new Lexer("\n\n// ...//\n// ... \n\n/* ... */ foo");
+            Assert.That(lexer.NextToken(), Is.EqualTo("foo"));
+        }
+
+        [Test]
+        public void DivisionSymbolIsNotConfusedWithAComment()
+        {
+            var lexer = new Lexer("/");
+            Assert.That(lexer.NextToken(), Is.EqualTo("/"));
+            lexer = new Lexer("// .. / ..\n /");
+            Assert.That(lexer.NextToken(), Is.EqualTo("/"));
         }
     }
 }
