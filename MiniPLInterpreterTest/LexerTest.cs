@@ -12,6 +12,7 @@ namespace LexerTest
         {
             var lexer = new Lexer("123");
             Assert.That(lexer.NextToken(), Is.EqualTo("123"));
+            Assert.That(lexer.NextToken(), Is.Null);
             lexer = new Lexer("1 23");
             Assert.That(lexer.NextToken(), Is.EqualTo("1"));
             Assert.That(lexer.Row, Is.EqualTo(1));
@@ -45,6 +46,7 @@ namespace LexerTest
         {
             var lexer = new Lexer("\"foo 42\"");
             Assert.That(lexer.NextToken(), Is.EqualTo("\"foo 42\""));
+            Assert.That(lexer.NextToken(), Is.Null);
             lexer = new Lexer("\"foo\\n\"");
             Assert.That(lexer.NextToken(), Is.EqualTo("\"foo\\n\""));
             lexer = new Lexer("\"foo\\\"...\\\"\"");
@@ -53,6 +55,13 @@ namespace LexerTest
             Assert.Throws<LexicalError>(() => lexer.NextToken());
             lexer = new Lexer("\"foo\\");
             Assert.Throws<LexicalError>(() => lexer.NextToken());
+        }
+
+        [Test]
+        public void WhiteSpaceIsSkipped()
+        {
+            var lexer = new Lexer("\n\t\v\n  foo");
+            Assert.That(lexer.NextToken(), Is.EqualTo("foo"));
         }
 
         [Test]
@@ -67,6 +76,13 @@ namespace LexerTest
             Assert.That(lexer.Row, Is.EqualTo(3));
             Assert.That(lexer.Col, Is.EqualTo(7));
             lexer = new Lexer("\n\n// ...//\n// ... \n\n/* ... */ foo");
+            Assert.That(lexer.NextToken(), Is.EqualTo("foo"));
+        }
+
+        [Test]
+        public void CombinedWhiteSpaceAndComments()
+        {
+            var lexer = new Lexer("\n\t\t// ... \n // ... \n     foo");
             Assert.That(lexer.NextToken(), Is.EqualTo("foo"));
         }
 

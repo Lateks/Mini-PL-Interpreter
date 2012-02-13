@@ -54,13 +54,11 @@ namespace LexicalAnalyser
 
         private void SkipWhiteSpaceAndComments()
         {
-            while (true)
+            while (InputLeft())
             {
                 SkipWhiteSpace();
-                bool nothing_skipped = !SkipComments();
-                if ((nothing_skipped && !NextCharIsWhiteSpace()))
-                    return;
-                if (!InputLeft())
+                bool no_comments_skipped = !SkipComments();
+                if ((no_comments_skipped && !NextCharIsWhiteSpace()))
                     return;
             }
         }
