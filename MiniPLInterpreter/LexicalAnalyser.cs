@@ -78,7 +78,7 @@ namespace LexicalAnalyser
         {
             try
             {
-                if (!input.Peek().Equals('/'))
+                if (!InputLeft() || !input.Peek().Equals('/'))
                     return false;
 
                 char symbol = input.Pop();

@@ -87,6 +87,13 @@ namespace LexerTest
         }
 
         [Test]
+        public void InputConsistingOfWhitespaceOnly()
+        {
+            var lexer = new Lexer("\n   ");
+            Assert.That(lexer.NextToken(), Is.Null);
+        }
+
+        [Test]
         public void DivisionSymbolIsNotConfusedWithAComment()
         {
             var lexer = new Lexer("/");
