@@ -142,5 +142,24 @@ namespace LexerTest
             Assert.Throws<LexicalError>(() => lexer.NextToken());
             Assert.That(lexer.Col, Is.EqualTo(1));
         }
+
+        [Test]
+        public void Statement()
+        {
+            var lexer = new Lexer("var x : int := 4 + (2 * \"foo\");");
+            Assert.That(((Keyword) lexer.NextToken()).Name, Is.EqualTo("var"));
+            Assert.That(((Identifier) lexer.NextToken()).Name, Is.EqualTo("x"));
+            Assert.That(((Operator) lexer.NextToken()).Symbol, Is.EqualTo(":"));
+            Assert.That(((Keyword) lexer.NextToken()).Name, Is.EqualTo("int"));
+            Assert.That(((Operator) lexer.NextToken()).Symbol, Is.EqualTo(":="));
+            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo(4));
+            Assert.That(((Operator) lexer.NextToken()).Symbol, Is.EqualTo("+"));
+            Assert.That(lexer.NextToken(), Is.InstanceOf<LeftParenthesis>());
+            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo(2));
+            Assert.That(((Operator) lexer.NextToken()).Symbol, Is.EqualTo("*"));
+            Assert.That(((StringLiteral) lexer.NextToken()).Value, Is.EqualTo("\"foo\""));
+            Assert.That(lexer.NextToken(), Is.InstanceOf<RightParenthesis>());
+            Assert.That(lexer.NextToken(), Is.InstanceOf<EndLine>());
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using TokenTypes;
+using System.Diagnostics;
 
 namespace LexicalAnalyser
 {
@@ -163,9 +164,9 @@ namespace LexicalAnalyser
         private Token MakeSymbolToken()
         {
             string token = PopInput();
-            if (token.Equals(ENDLINE))
+            if (token.Equals(ENDLINE.ToString()))
                 return new EndLine();
-            else if (token.Equals(LEFT_PAREN))
+            else if (token.Equals(LEFT_PAREN.ToString()))
                 return new LeftParenthesis();
             else
                 return new RightParenthesis();
