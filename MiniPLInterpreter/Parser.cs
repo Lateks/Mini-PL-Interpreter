@@ -37,8 +37,8 @@ namespace SyntaxAnalysis
         {
             if (input_token is T)
             {
-                if (value == null || (input_token is ValueToken<string> &&
-                    ((ValueToken<string>)input_token).Value == value))
+                if (value == null || (input_token is StringToken &&
+                    ((StringToken)input_token).Value == value))
                     input_token = scanner.NextToken();
             }
             else

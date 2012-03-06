@@ -25,14 +25,14 @@ namespace LexerTest
         public void IntegerConstants()
         {
             var lexer = new Scanner("123");
-            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo(123));
+            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo("123"));
             Assert.That(lexer.NextToken(), Is.InstanceOf<EOF>());
             lexer = new Scanner("1 23");
             var token = (IntegerLiteral) lexer.NextToken();
-            Assert.That(token.Value, Is.EqualTo(1));
+            Assert.That(token.Value, Is.EqualTo("1"));
             Assert.That(token.Row, Is.EqualTo(1));
             Assert.That(token.Col, Is.EqualTo(1));
-            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo(23));
+            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo("23"));
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace LexerTest
         public void Identifiers()
         {
             var lexer = new Scanner("42foo");
-            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo(42));
+            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo("42"));
             Token next = lexer.NextToken();
             Assert.That(next, Is.InstanceOf<Identifier>());
             Assert.That(((Identifier) next).Value, Is.EqualTo("foo"));
@@ -156,10 +156,10 @@ namespace LexerTest
             Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo(":"));
             Assert.That(((Keyword) lexer.NextToken()).Value, Is.EqualTo("int"));
             Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo(":="));
-            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo(4));
+            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo("4"));
             Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo("+"));
             Assert.That(lexer.NextToken(), Is.InstanceOf<LeftParenthesis>());
-            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo(2));
+            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo("2"));
             Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo("*"));
             Assert.That(((StringLiteral) lexer.NextToken()).Value, Is.EqualTo("\"foo\""));
             Assert.That(lexer.NextToken(), Is.InstanceOf<RightParenthesis>());

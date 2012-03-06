@@ -197,7 +197,7 @@ namespace LexicalAnalysis
             string token = "";
             while (InputLeft() && Char.IsDigit(input.Peek()))
                 token += PopInput();
-            return new IntegerLiteral(Convert.ToInt32(token), row, col);
+            return new IntegerLiteral(token, row, col);
         }
 
         private Token MakeIdentifierOrKeywordToken()

@@ -26,45 +26,7 @@ namespace TokenTypes
         }
     }
 
-    public interface ValueToken<T>
-    {
-        T Value
-        {
-            get;
-        }
-    }
-
-    public class IntegerLiteral : Token, ValueToken<int>
-    {
-        private int value;
-        public int Value
-        {
-            get { return value; }
-        }
-
-        public IntegerLiteral(int value, int row, int col)
-            : base(row, col)
-        {
-            this.value = value;
-        }
-    }
-
-    public class StringLiteral : Token, ValueToken<string>
-    {
-        private string value;
-        public string Value
-        {
-            get { return value; }
-        }
-
-        public StringLiteral(string value, int row, int col)
-            : base(row, col)
-        {
-            this.value = value;
-        }
-    }
-
-    public class StringToken : Token, ValueToken<string>
+    public class StringToken : Token
     {
         private string value;
         public string Value
@@ -79,7 +41,19 @@ namespace TokenTypes
         }
     }
 
-    public class Identifier : StringToken, ValueToken<string>
+    public class IntegerLiteral : StringToken
+    {
+        public IntegerLiteral(string value, int row, int col)
+            : base(value, row, col) { }
+    }
+
+    public class StringLiteral : StringToken
+    {
+        public StringLiteral(string value, int row, int col)
+            : base(value, row, col) { }
+    }
+
+    public class Identifier : StringToken
     {
         public Identifier(string name, int row, int col)
             : base(name, row, col) { }
@@ -95,6 +69,12 @@ namespace TokenTypes
     {
         public Type(string name, int row, int col)
             : base(name, row, col) { }        
+    }
+
+    public class Operator : StringToken
+    {
+        public Operator(string symbol, int row, int col)
+            : base(symbol, row, col) { }
     }
 
     public class LeftParenthesis : Token
@@ -113,12 +93,6 @@ namespace TokenTypes
     {
         public EndLine(int row, int col)
             : base(row, col) { }
-    }
-
-    public class Operator : StringToken, ValueToken<string>
-    {
-        public Operator(string symbol, int row, int col)
-            : base(symbol, row, col) { }
     }
 
     public class EOF : Token
