@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using LexicalAnalysis;
 using TokenTypes;
+using Errors;
 
 namespace LexerTest
 {

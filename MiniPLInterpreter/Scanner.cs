@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using TokenTypes;
+using Errors;
 
 
 namespace LexicalAnalysis
@@ -234,10 +235,5 @@ namespace LexicalAnalysis
             else
                 throw new LexicalError("Reached end of input while scanning for a string literal.");
         }
-    }
-
-    public class LexicalError : System.Exception
-    {
-        public LexicalError(string message) {}
     }
 }

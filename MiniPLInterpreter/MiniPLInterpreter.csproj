@@ -8,7 +8,7 @@
     <ProjectGuid>{9C8D972D-3D36-4487-83C6-AD2FAAD27100}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Errors</RootNamespace>
+    <RootNamespace>MiniPlInterpreter</RootNamespace>
     <AssemblyName>MiniPLInterpreter</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -43,8 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AST.cs" />
     <Compile Include="Parser.cs" />
-    <Compile Include="SyntaxError.cs" />
+    <Compile Include="Errors.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="Interpreter.cs" />
     <Compile Include="Scanner.cs" />

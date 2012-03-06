@@ -12,7 +12,10 @@ namespace AST
     public class Literal
     {
         private string value;
-        public Literal(string value);
+        public Literal(string value)
+        {
+            this.value = value;
+        }
     }
 
     public class IntegerLiteral : Literal, Node
