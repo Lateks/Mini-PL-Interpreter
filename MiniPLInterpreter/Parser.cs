@@ -5,6 +5,7 @@ using System.Text;
 using LexicalAnalysis;
 using TokenTypes;
 using Errors;
+using AST;
 
 namespace SyntaxAnalysis
 {
@@ -19,12 +20,14 @@ namespace SyntaxAnalysis
             this.input_token = scanner.NextToken();
         }
 
-        private void Program()
+        private Node Program()
         {
             if (input_token is Keyword || input_token is Identifier)
             {
-                StatementList();
+                var root = new Program();
+                root.AddChildren(StatementList());
                 Match<EOF>();
+                return root;
             }
             else
                 throw new SyntaxError("foobar");
@@ -33,34 +36,42 @@ namespace SyntaxAnalysis
         // Checks that the current input symbol is of token type T
         // and matches value when given. Otherwise a syntax error
         // is thrown.
-        private void Match<T>(string value = null) where T : Token
+        private T Match<T>(string value = null) where T : Token
         {
             if (input_token is T)
             {
                 if (value == null || (input_token is StringToken &&
                     ((StringToken)input_token).Value == value))
+                {
+                    var temp = (T)input_token;
                     input_token = scanner.NextToken();
+                    return temp;
+                }
+                else
+                    throw new SyntaxError("foobar");
             }
             else
                 throw new SyntaxError("foobar");
         }
 
-        private void StatementList()
+        private List<Node> StatementList()
         {
-            Statement();
+            var nodes = new List<Node>();
+            nodes.Add(Statement());
             Match<EndLine>();
-            StatementListTail();
+            nodes.AddRange(StatementListTail());
+            return nodes;
         }
 
-        private void StatementListTail()
+        private List<Node> StatementListTail()
         {
             if (input_token is EOF) // epsilon production
-                return;
+                return new List<Node>();
             else
-                StatementList();
+                return StatementList();
         }
 
-        private void Statement()
+        private Node Statement()
         {
             if (input_token is Keyword)
             {
@@ -69,106 +80,139 @@ namespace SyntaxAnalysis
                 {
                     case "var":
                         input_token = scanner.NextToken();
-                        Identifier();
+                        string variable = Identifier();
                         Match<Operator>(":");
-                        Type();
-                        OptionalAssignment();
-                        break;
+                        string type = Type();
+                        var var = new VariableDeclaration(variable, type);
+                        return OptionalAssignment(var);
                     case "for":
                         input_token = scanner.NextToken();
-                        Identifier();
+                        Variable ident = new Variable(Identifier());
                         Match<Keyword>("in");
-                        Expression();
-                        Match<Operator>("..");
-                        Expression();
+                        Range range = RangeExpr();
                         Match<Keyword>("do");
-                        StatementList();
+                        var stmts = StatementList();
                         Match<Keyword>("end");
                         Match<Keyword>("for");
-                        break;
+                        Loop loop = new Loop(ident, range, stmts);
+                        return loop;
                     case "read":
+                        Statement stmt = new Statement(new KeywordNode(token.Value));
                         input_token = scanner.NextToken();
-                        Identifier();
-                        break;
+                        stmt.AddChild(new Variable(Identifier()));
+                        return stmt;
                     case "print":
-                        Expression();
-                        break;
+                        stmt = new Statement(new KeywordNode(token.Value));
+                        input_token = scanner.NextToken();
+                        stmt.AddChild(Expression());
+                        return stmt;
                     case "assert":
+                        stmt = new Statement(new KeywordNode(token.Value));
                         Match<LeftParenthesis>();
-                        Expression();
+                        stmt.AddChild(Expression());
                         Match<RightParenthesis>();
-                        break;
+                        return stmt;
                     default:
                         throw new SyntaxError("foobar");
                 }
             }
             else
             {
-                var token = (Identifier)input_token;
-                // TODO: handle and get next token
+                Identifier token = Match<Identifier>();
+                Match<Operator>(":=");
+                Assignment assignment = new Assignment();
+                assignment.AddChildren(new Variable(token.Value), Expression());
+                return assignment;
             }
         }
 
-        private void Expression()
+        private Range RangeExpr()
+        {
+            var range_lhs = Expression();
+            Match<Operator>("..");
+            var range_rhs = Expression();
+            return new Range(range_lhs, range_rhs);
+        }
+
+        private Node Expression()
         {
             if (input_token is Operator)
             {
                 Match<Operator>("!");
-                Operand();
+                UnaryOpNot op = new UnaryOpNot();
+                op.AddChild(Operand());
+                return op;
             }
             else
             {
-                Operand();
-                ExpressionTail();
+                Node op = Operand();
+                return ExpressionTail(op);
             }
         }
 
-        private void ExpressionTail()
+        private Node ExpressionTail(Node lhs)
         {
             if (input_token is Operator)
             {
-                Match<Operator>();
-                Operand();
+                Operator op = Match<Operator>();
+                BinaryOp binop = new BinaryOp(op.Value);
+                binop.AddChildren(lhs, Operand());
+                return binop;
             }
-            // otherwise produce epsilon
+            return lhs;
         }
 
-        private void Operand()
+        private Node Operand()
         {
             if (input_token is IntegerLiteral)
-                Match<IntegerLiteral>();
+            {
+                IntegerLiteral token = Match<IntegerLiteral>();
+                return new IntegerLiteralNode(token.Value);
+            }
             else if (input_token is StringLiteral)
-                Match<StringLiteral>();
+            {
+                StringLiteral token = Match<StringLiteral>();
+                return new StringLiteralNode(token.Value);
+            }
             else if (input_token is Identifier)
-                Match<Identifier>();
+            {
+                Identifier token = Match<Identifier>();
+                return new Variable(token.Value);
+            }
             else if (input_token is LeftParenthesis)
             {
                 input_token = scanner.NextToken();
-                Expression();
+                Node expr = Expression();
                 Match<RightParenthesis>();
+                return expr;
             }
             else
                 throw new SyntaxError("foobar");
         }
 
-        private void Identifier()
+        private string Identifier()
         {
-            Match<Identifier>();
+            Identifier token = Match<Identifier>();
+            return token.Value;
         }
 
-        private void Type()
+        private string Type()
         {
-            Match<TokenTypes.Type>();
+            TokenTypes.Type token = Match<TokenTypes.Type>();
+            return token.Value;
         }
 
-        private void OptionalAssignment()
+        private Node OptionalAssignment(Assignable variable)
         {
             if (input_token is Operator && ((Operator)input_token).Value == ":=")
             {
                 input_token = scanner.NextToken();
-                Expression();
+                Assignment assignment = new Assignment();
+                assignment.AddChildren(variable, Expression());
+                return assignment;
             }
             // otherwise produce epsilon
+            return (Node) variable;
         }
     }
 }

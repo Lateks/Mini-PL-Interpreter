@@ -9,6 +9,26 @@ namespace AST
     {
     }
 
+    public class Program : Node
+    {
+        List<Node> nodes;
+
+        public Program()
+        {
+            this.nodes = new List<Node>();
+        }
+
+        public void AddChild(Node child)
+        {
+            nodes.Add(child);
+        }
+
+        public void AddChildren(List<Node> children)
+        {
+            nodes.AddRange(children);
+        }
+    }
+
     public class Literal
     {
         private string value;
@@ -18,33 +38,44 @@ namespace AST
         }
     }
 
-    public class IntegerLiteral : Literal, Node
+    public class IntegerLiteralNode : Literal, Node
     {
-        public IntegerLiteral(string value) : base(value) { }
+        public IntegerLiteralNode(string value) : base(value) { }
     }
 
-    public class StringLiteral : Literal, Node
+    public class StringLiteralNode : Literal, Node
     {
-        public StringLiteral(string value) : base(value) { }
+        public StringLiteralNode(string value) : base(value) { }
     }
 
-    public class Variable : Node
+    public interface Assignable {}
+
+    public class VariableDeclaration : Node, Assignable
     {
         private string name;
         private string type;
 
-        public Variable(string name, string type)
+        public VariableDeclaration(string name, string type)
         {
             this.name = name;
             this.type = type;
         }
     }
 
-    public class Keyword : Node
+    public class Variable : Node, Assignable
+    {
+        private string name;
+        public Variable(string name)
+        {
+            this.name = name;
+        }
+    }
+
+    public class KeywordNode : Node
     {
         private string name;
 
-        public Keyword(string name)
+        public KeywordNode(string name)
         {
             this.name = name;
         }
@@ -54,31 +85,39 @@ namespace AST
     {
         private Node lhs;
         private Node rhs;
+        private string opsymbol;
 
-        public BinaryOp(Node lhs, Node rhs)
+        public BinaryOp(string opsymbol)
+        {
+            this.opsymbol = opsymbol;
+        }
+
+        public void AddChildren(Node lhs, Node rhs)
         {
             this.lhs = lhs;
             this.rhs = rhs;
         }
     }
 
-    public class UnaryOp : Node
+    public class UnaryOpNot : Node
     {
-        private Node operand;
+        Node operand;
 
-        public UnaryOp(Node operand)
+        public UnaryOpNot() { }
+
+        public void AddChild(Node child)
         {
-            this.operand = operand;
+            this.operand = child;
         }
     }
 
     public class Loop : Node
     {
         private Node var;
-        private Node loop_body;
+        private List<Node> loop_body;
         private Node range;
 
-        public Loop(Variable var, Range range, Node body)
+        public Loop(Variable var, Range range, List<Node> body)
         {
             this.var = var;
             this.loop_body = body;
@@ -86,9 +125,30 @@ namespace AST
         }
     }
 
-    public class Range : BinaryOp
+    public class Range : Node
     {
-        public Range(Node start, Node end) : base(start, end) { }
+        private Node lhs;
+        private Node rhs;
+
+        public Range(Node lhs, Node rhs)
+        {
+            this.lhs = lhs;
+            this.rhs = rhs;
+        }
+    }
+
+    public class Assignment : Node
+    {
+        Node var;
+        Node expression;
+
+        public Assignment() { }
+        
+        public void AddChildren(Assignable var, Node expression)
+        {
+            this.var = (Node) var;
+            this.expression = expression;
+        }
     }
 
     public class Statement : Node
@@ -96,9 +156,14 @@ namespace AST
         private Node keyword;
         private Node expression;
 
-        public Statement(Keyword keyword, Node expression)
+        public Statement(KeywordNode keyword)
         {
             this.keyword = keyword;
+            this.expression = null;
+        }
+
+        public void AddChild(Node expression)
+        {
             this.expression = expression;
         }
     }
