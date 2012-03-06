@@ -158,25 +158,25 @@ namespace LexicalAnalyser
 
         private Operator MakeOperatorToken()
         {
-            return new Operator(PopInput());
+            return new Operator(PopInput(), row, col);
         }
 
         private Token MakeSymbolToken()
         {
             string token = PopInput();
             if (token.Equals(ENDLINE.ToString()))
-                return new EndLine();
+                return new EndLine(row, col);
             else if (token.Equals(LEFT_PAREN.ToString()))
-                return new LeftParenthesis();
+                return new LeftParenthesis(row, col);
             else
-                return new RightParenthesis();
+                return new RightParenthesis(row, col);
         }
 
         private Operator MakeDotDotToken()
         {
             string token = PopInput();
             if (InputLeft() && input.Peek().Equals('.'))
-                return new Operator(token + PopInput());
+                return new Operator(token + PopInput(), row, col);
             else
                 throw new LexicalError("Invalid token \".\" on row " +
                     row.ToString() + ", col " + col.ToString() + ".");
@@ -187,7 +187,7 @@ namespace LexicalAnalyser
             string token = PopInput();
             if (InputLeft() && input.Peek().Equals('='))
                 token += PopInput();
-            return new Operator(token);
+            return new Operator(token, row, col);
         }
 
         private IntegerLiteral MakeIntegerLiteralToken()
@@ -195,7 +195,7 @@ namespace LexicalAnalyser
             string token = "";
             while (InputLeft() && Char.IsDigit(input.Peek()))
                 token += PopInput();
-            return new IntegerLiteral(Convert.ToInt32(token));
+            return new IntegerLiteral(Convert.ToInt32(token), row, col);
         }
 
         private Token MakeIdentifierOrKeywordToken()
@@ -205,8 +205,8 @@ namespace LexicalAnalyser
                                    input.Peek().Equals('_')))
                 token += PopInput();
             if (keywords.Contains(token))
-                return new Keyword(token);
-            return new Identifier(token);
+                return new Keyword(token, row, col);
+            return new Identifier(token, row, col);
         }
 
         private StringLiteral MakeStringLiteralToken()
@@ -219,7 +219,7 @@ namespace LexicalAnalyser
                     token += PopInput();
             if (!InputLeft())
                 throw new LexicalError("Reached end of input while scanning for a string literal.");
-            return new StringLiteral(token + PopInput());
+            return new StringLiteral(token + PopInput(), row, col);
         }
 
         private string GetEscapeCharacter()

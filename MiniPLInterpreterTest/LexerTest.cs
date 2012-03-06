@@ -28,9 +28,10 @@ namespace LexerTest
             Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo(123));
             Assert.That(lexer.NextToken(), Is.Null);
             lexer = new Lexer("1 23");
-            Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo(1));
-            Assert.That(lexer.Row, Is.EqualTo(1));
-            Assert.That(lexer.Col, Is.EqualTo(1));
+            var token = (IntegerLiteral) lexer.NextToken();
+            Assert.That(token.Value, Is.EqualTo(1));
+            Assert.That(token.Row, Is.EqualTo(1));
+            Assert.That(token.Col, Is.EqualTo(1));
             Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo(23));
         }
 
@@ -83,13 +84,15 @@ namespace LexerTest
         public void CommentsAreSkipped()
         {
             var lexer = new Lexer("// ... \n // ... \n foo");
-            Assert.That(((Identifier) lexer.NextToken()).Name, Is.EqualTo("foo"));
-            Assert.That(lexer.Row, Is.EqualTo(3));
-            Assert.That(lexer.Col, Is.EqualTo(4));
+            var token = (Identifier) lexer.NextToken();
+            Assert.That(token.Name, Is.EqualTo("foo"));
+            Assert.That(token.Row, Is.EqualTo(3));
+            Assert.That(token.Col, Is.EqualTo(4));
             lexer = new Lexer("/* ... \n\n*/ \tfoo");
-            Assert.That(((Identifier) lexer.NextToken()).Name, Is.EqualTo("foo"));
-            Assert.That(lexer.Row, Is.EqualTo(3));
-            Assert.That(lexer.Col, Is.EqualTo(7));
+            token = (Identifier) lexer.NextToken();
+            Assert.That(token.Name, Is.EqualTo("foo"));
+            Assert.That(token.Row, Is.EqualTo(3));
+            Assert.That(token.Col, Is.EqualTo(7));
             lexer = new Lexer("\n\n// ...//\n// ... \n\n/* ... */ foo");
             Assert.That(((Identifier) lexer.NextToken()).Name, Is.EqualTo("foo"));
         }
@@ -116,6 +119,7 @@ namespace LexerTest
             lexer = new Lexer("// .. / ..\n /");
             Assert.That(((Operator) lexer.NextToken()).Symbol, Is.EqualTo("/"));
             Assert.That(lexer.Col, Is.EqualTo(2));
+            Assert.That(lexer.Row, Is.EqualTo(2));
         }
 
         [Test]

@@ -5,8 +5,25 @@ using System.Text;
 
 namespace TokenTypes
 {
-    public interface Token
+    public class Token
     {
+        private int row;
+        private int col;
+
+        public int Row
+        {
+            get { return row; }
+        }
+        public int Col
+        {
+            get { return col; }
+        }
+
+        public Token(int row, int col)
+        {
+            this.row = row;
+            this.col = col;
+        }
     }
 
     public class IntegerLiteral : Token
@@ -17,7 +34,7 @@ namespace TokenTypes
             get { return value; }
         }
 
-        public IntegerLiteral(int value)
+        public IntegerLiteral(int value, int row, int col) : base(row, col)
         {
             this.value = value;
         }
@@ -31,7 +48,7 @@ namespace TokenTypes
             get { return value; }
         }
 
-        public StringLiteral(string value)
+        public StringLiteral(string value, int row, int col) : base(row, col)
         {
             this.value = value;
         }
@@ -45,7 +62,7 @@ namespace TokenTypes
             get { return name; }
         }
 
-        public Keyword(string name)
+        public Keyword(string name, int row, int col) : base(row, col)
         {
             this.name = name;
         }
@@ -59,7 +76,7 @@ namespace TokenTypes
             get { return name; }
         }
 
-        public Identifier(string name)
+        public Identifier(string name, int row, int col) : base(row, col)
         {
             this.name = name;
         }
@@ -67,17 +84,17 @@ namespace TokenTypes
 
     public class LeftParenthesis : Token
     {
-        public LeftParenthesis() { }
+        public LeftParenthesis(int row, int col) : base(row, col) { }
     }
 
     public class RightParenthesis : Token
     {
-        public RightParenthesis() { }
+        public RightParenthesis(int row, int col) : base(row, col) { }
     }
 
     public class EndLine : Token
     {
-        public EndLine() { }
+        public EndLine(int row, int col) : base(row, col) { }
     }
 
     public class Operator : Token
@@ -88,7 +105,7 @@ namespace TokenTypes
             get { return symbol; }
         }
 
-        public Operator(string symbol)
+        public Operator(string symbol, int row, int col) : base(row, col)
         {
             this.symbol = symbol;
         }
