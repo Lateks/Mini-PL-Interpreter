@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using TokenTypes;
-using System.Diagnostics;
+
 
 namespace LexicalAnalyser
 {
@@ -30,8 +30,9 @@ namespace LexicalAnalyser
             {'/', '+', '-', '*', '<', '=', '&', '!'});
         private static HashSet<string> keywords =
             new HashSet<string>(new string[]
-            {"var", "for", "end", "in", "do", "read", "print", "int",
-             "string", "bool", "assert"});
+            {"var", "for", "end", "in", "do", "read", "print", "assert"});
+        private static HashSet<string> types =
+            new HashSet<string>(new string[] { "int", "string", "bool" });
 
         public Lexer(string input)
         {
@@ -204,6 +205,8 @@ namespace LexicalAnalyser
             while (InputLeft() && (Char.IsLetterOrDigit(input.Peek()) ||
                                    input.Peek().Equals('_')))
                 token += PopInput();
+            if (types.Contains(token))
+                return new TokenTypes.Type(token, row, col);
             if (keywords.Contains(token))
                 return new Keyword(token, row, col);
             return new Identifier(token, row, col);
