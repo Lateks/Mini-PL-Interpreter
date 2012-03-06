@@ -6,9 +6,9 @@ using System.Collections;
 using TokenTypes;
 
 
-namespace LexicalAnalyser
+namespace LexicalAnalysis
 {
-    public class Lexer
+    public class Scanner
     {
         private Stack<char> input;
         private int row, col;
@@ -34,7 +34,7 @@ namespace LexicalAnalyser
         private static HashSet<string> types =
             new HashSet<string>(new string[] { "int", "string", "bool" });
 
-        public Lexer(string input)
+        public Scanner(string input)
         {
             var inputchars = input.ToArray();
             Array.Reverse(inputchars);
@@ -47,7 +47,7 @@ namespace LexicalAnalyser
         {
             SkipWhiteSpaceAndComments();
             if (!InputLeft())
-                return null;
+                return new EOF(row, col);
             if (input.Peek().Equals('.'))
                 return MakeDotDotToken();
             else if (input.Peek().Equals(':'))
@@ -89,6 +89,7 @@ namespace LexicalAnalyser
             return (InputLeft() && Char.IsWhiteSpace(input.Peek()));
         }
 
+        // Returns true if something was skipped and false otherwise.
         private bool SkipComments()
         {
             try

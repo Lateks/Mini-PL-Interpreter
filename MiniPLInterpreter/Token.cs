@@ -26,7 +26,15 @@ namespace TokenTypes
         }
     }
 
-    public class IntegerLiteral : Token
+    public interface ValueToken<T>
+    {
+        T Value
+        {
+            get;
+        }
+    }
+
+    public class IntegerLiteral : Token, ValueToken<int>
     {
         private int value;
         public int Value
@@ -41,7 +49,7 @@ namespace TokenTypes
         }
     }
 
-    public class StringLiteral : Token
+    public class StringLiteral : Token, ValueToken<string>
     {
         private string value;
         public string Value
@@ -56,18 +64,18 @@ namespace TokenTypes
         }
     }
 
-    public class Identifier : Token
+    public class Identifier : Token, ValueToken<string>
     {
-        private string name;
-        public string Name
+        private string value;
+        public string Value
         {
-            get { return name; }
+            get { return value; }
         }
 
         public Identifier(string name, int row, int col)
             : base(row, col)
         {
-            this.name = name;
+            this.value = name;
         }
     }
 
@@ -101,18 +109,23 @@ namespace TokenTypes
             : base(row, col) { }
     }
 
-    public class Operator : Token
+    public class Operator : Token, ValueToken<string>
     {
-        private string symbol;
-        public string Symbol
+        private string value;
+        public string Value
         {
-            get { return symbol; }
+            get { return value; }
         }
 
         public Operator(string symbol, int row, int col)
             : base(row, col)
         {
-            this.symbol = symbol;
+            this.value = symbol;
         }
+    }
+
+    public class EOF : Token
+    {
+        public EOF(int row, int col) : base(row, col) { }
     }
 }
