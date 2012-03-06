@@ -64,7 +64,7 @@ namespace TokenTypes
         }
     }
 
-    public class Identifier : Token, ValueToken<string>
+    public class StringToken : Token, ValueToken<string>
     {
         private string value;
         public string Value
@@ -72,14 +72,20 @@ namespace TokenTypes
             get { return value; }
         }
 
-        public Identifier(string name, int row, int col)
+        public StringToken(string name, int row, int col)
             : base(row, col)
         {
             this.value = name;
         }
     }
 
-    public class Keyword : Identifier
+    public class Identifier : StringToken, ValueToken<string>
+    {
+        public Identifier(string name, int row, int col)
+            : base(name, row, col) { }
+    }
+
+    public class Keyword : StringToken
     {
         public Keyword(string name, int row, int col)
             : base(name, row, col) { }
@@ -109,19 +115,10 @@ namespace TokenTypes
             : base(row, col) { }
     }
 
-    public class Operator : Token, ValueToken<string>
+    public class Operator : StringToken, ValueToken<string>
     {
-        private string value;
-        public string Value
-        {
-            get { return value; }
-        }
-
         public Operator(string symbol, int row, int col)
-            : base(row, col)
-        {
-            this.value = symbol;
-        }
+            : base(symbol, row, col) { }
     }
 
     public class EOF : Token
