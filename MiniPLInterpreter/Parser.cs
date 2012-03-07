@@ -102,22 +102,21 @@ namespace SyntaxAnalysis
                         var stmts = StatementList();
                         Match<KeywordToken>("end");
                         Match<KeywordToken>("for");
-                        Loop loop = new Loop(ident, range, stmts);
-                        return loop;
+                        return new Loop(ident, range, stmts);
                     case "read":
                         Keyword keyword = new Keyword(token.Value);
                         input_token = scanner.NextToken();
                         ident = new Variable(Identifier());
-                        return new Statement(keyword, ident);
+                        return new ReadStatement(keyword, ident);
                     case "print":
                         keyword = new Keyword(token.Value);
                         input_token = scanner.NextToken();
-                        return new Statement(keyword, Expression());
+                        return new ExpressionStatement(keyword, Expression());
                     case "assert":
                         keyword = new Keyword(token.Value);
                         input_token = scanner.NextToken();
                         Match<LeftParenthesis>();
-                        Statement stmt = new Statement(keyword, Expression());
+                        ExpressionStatement stmt = new ExpressionStatement(keyword, Expression());
                         Match<RightParenthesis>();
                         return stmt;
                     default:

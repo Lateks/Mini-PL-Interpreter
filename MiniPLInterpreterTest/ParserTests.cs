@@ -81,7 +81,7 @@ namespace MiniPLInterpreterTest
             string program = "print \"How many times?\";";
             Parser parser = new Parser(new Scanner(program));
             Program tree = (Program) parser.Parse();
-            Statement printstat = (Statement)tree.Children[0];
+            ExpressionStatement printstat = (ExpressionStatement)tree.Children[0];
 
             Assert.That(((Keyword) printstat.Keyword).Name, Is.EqualTo("print"));
             Assert.That(printstat.Expression, Is.InstanceOf<StringLiteral>());
@@ -94,7 +94,7 @@ namespace MiniPLInterpreterTest
             string program = "assert(!foobar);";
             Parser parser = new Parser(new Scanner(program));
             Program tree = (Program)parser.Parse();
-            Statement assert = (Statement)tree.Children[0];
+            ExpressionStatement assert = (ExpressionStatement)tree.Children[0];
             Assert.That(assert.Expression, Is.InstanceOf<UnaryNot>());
             Assert.That(((Variable)((UnaryNot)assert.Expression).Operand).Name, Is.EqualTo("foobar"));
         }
@@ -119,7 +119,7 @@ namespace MiniPLInterpreterTest
             string program = "assert(foo);";
             Parser parser = new Parser(new Scanner(program));
             Program tree = (Program)parser.Parse();
-            Statement assertion = (Statement)tree.Children[0];
+            ExpressionStatement assertion = (ExpressionStatement)tree.Children[0];
 
             Assert.That(((Keyword) assertion.Keyword).Name, Is.EqualTo("assert"));
             Assert.That(((Variable)assertion.Expression).Name, Is.EqualTo("foo"));
@@ -131,11 +131,11 @@ namespace MiniPLInterpreterTest
             string program = "read foo;";
             Parser parser = new Parser(new Scanner(program));
             Program tree = (Program)parser.Parse();
-            Statement readstat = (Statement)tree.Children[0];
+            ReadStatement readstat = (ReadStatement)tree.Children[0];
 
             Assert.That(((Keyword)readstat.Keyword).Name, Is.EqualTo("read"));
-            Assert.That(readstat.Expression, Is.InstanceOf<Variable>());
-            Assert.That(((Variable)readstat.Expression).Name, Is.EqualTo("foo"));
+            Assert.That(readstat.Variable, Is.InstanceOf<Variable>());
+            Assert.That(((Variable)readstat.Variable).Name, Is.EqualTo("foo"));
         }
 
         [Test]

@@ -5,220 +5,242 @@ using System.Text;
 
 namespace AST
 {
-    public interface Node
-    {
-    }
+    public interface Node { }
+
+    public interface Assignable { }
 
     public class Program : Node
     {
-        private List<Node> nodes;
         public List<Node> Children
         {
-            get { return nodes; }
+            get;
+            private set;
         }
 
         public Program(List<Node> statements)
         {
-            this.nodes = statements;
+            Children = statements;
         }
     }
 
-    public class Literal
+    public class Literal : Node
     {
-        private string value;
         public string Value
         {
-            get { return value; }
+            get;
+            private set;
         }
 
         public Literal(string value)
         {
-            this.value = value;
+            Value = value;
         }
     }
 
-    public class IntegerLiteral : Literal, Node
+    public class IntegerLiteral : Literal
     {
         public IntegerLiteral(string value) : base(value) { }
     }
 
-    public class StringLiteral : Literal, Node
+    public class StringLiteral : Literal
     {
         public StringLiteral(string value) : base(value) { }
     }
 
-    public interface Assignable {}
-
-    public class VariableDeclaration : Node, Assignable
-    {
-        private string name;
-        private string type;
-        public string Name
-        {
-            get { return name; }
-        }
-        public string Type
-        {
-            get { return type; }
-        }
-
-        public VariableDeclaration(string name, string type)
-        {
-            this.name = name;
-            this.type = type;
-        }
-    }
-
     public class Variable : Node, Assignable
     {
-        private string name;
         public string Name
         {
-            get { return name; }
+            get;
+            private set;
         }
         public Variable(string name)
         {
-            this.name = name;
+            Name = name;
         }
     }
 
     public class Keyword : Node
     {
-        private string name;
         public string Name
         {
-            get { return name; }
+            get;
+            private set;
         }
 
         public Keyword(string name)
         {
-            this.name = name;
+            Name = name;
         }
     }
 
     public class BinaryOp : Node
     {
-        private Node lhs;
-        private Node rhs;
-        private string opsymbol;
         public Node LeftOp
         {
-            get { return lhs; }
+            get;
+            private set;
         }
         public Node RightOp
         {
-            get { return rhs; }
+            get;
+            private set;
         }
         public string OpSymbol
         {
-            get { return opsymbol; }
+            get;
+            private set;
         }
 
         public BinaryOp(string opsymbol, Node lhs, Node rhs)
         {
-            this.opsymbol = opsymbol;
-            this.lhs = lhs;
-            this.rhs = rhs;
+            OpSymbol = opsymbol;
+            LeftOp = lhs;
+            RightOp = rhs;
         }
     }
 
     public class UnaryNot : Node
     {
-        Node operand;
         public Node Operand
         {
-            get { return operand; }
+            get;
+            private set;
         }
 
         public UnaryNot(Node operand)
         {
-            this.operand = operand;
-        }
-    }
-
-    public class Loop : Node
-    {
-        private Node var;
-        private Node range;
-        private List<Node> loop_body;
-        public Node Variable
-        {
-            get { return var; }
-        }
-        public Node Range
-        {
-            get { return range; }
-        }
-        public List<Node> LoopBody
-        {
-            get { return loop_body; }
-        }
-
-        public Loop(Variable var, Range range, List<Node> body)
-        {
-            this.var = var;
-            this.range = range;
-            this.loop_body = body;
+            Operand = operand;
         }
     }
 
     public class Range : Node
     {
-        private Node lhs;
-        private Node rhs;
         public Node Begin
         {
-            get { return lhs; }
+            get;
+            private set;
         }
         public Node End
         {
-            get { return rhs; }
+            get;
+            private set;
         }
 
         public Range(Node lhs, Node rhs)
         {
-            this.lhs = lhs;
-            this.rhs = rhs;
+            Begin = lhs;
+            End = rhs;
         }
     }
 
     public class Assignment : Node
     {
-        Node var;
-        Node expression;
         public Node Variable
         {
-            get { return var; }
+            get;
+            private set;
         }
         public Node Expression
         {
-            get { return expression; }
+            get;
+            private set;
         }
 
-        public Assignment(Assignable var, Node expression)
+        public Assignment(Assignable variable, Node expression)
         {
-            this.var = (Node) var;
-            this.expression = expression;
+            Variable = (Node) variable;
+            Expression = expression;
         }
     }
 
-    public class Statement : Node
+    public class KeywordStatement : Node
     {
-        private Node keyword;
-        private Node expression;
-        public Node Keyword
+        public Keyword Keyword
         {
-            get { return keyword; }
-        }
-        public Node Expression
-        {
-            get { return expression; }
+            get;
+            private set;
         }
 
-        public Statement(Keyword keyword, Node expression)
+        public KeywordStatement(Keyword keyword)
         {
-            this.keyword = keyword;
-            this.expression = expression;
+            Keyword = keyword;
+        }
+    }
+
+    public class ExpressionStatement : KeywordStatement
+    {
+        public Node Expression
+        {
+            get;
+            private set;
+        }
+
+        public ExpressionStatement(Keyword keyword, Node expression)
+            : base(keyword)
+        {
+            Expression = expression;
+        }
+    }
+
+    public class ReadStatement : KeywordStatement
+    {
+        public Variable Variable
+        {
+            get;
+            private set;
+        }
+
+        public ReadStatement(Keyword keyword, Variable variable)
+            : base(keyword)
+        {
+            Variable = variable;
+        }
+    }
+
+    public class VariableDeclaration : Node, Assignable
+    {
+        public string Name
+        {
+            get;
+            private set;
+        }
+        public string Type
+        {
+            get;
+            private set;
+        }
+
+        public VariableDeclaration(string name, string type)
+        {
+            Name = name;
+            Type = type;
+        }
+    }
+
+    public class Loop : Node
+    {
+        public Node Variable
+        {
+            get;
+            private set;
+        }
+        public Node Range
+        {
+            get;
+            private set;
+        }
+        public List<Node> LoopBody
+        {
+            get;
+            private set;
+        }
+
+        public Loop(Variable variable, Range range, List<Node> body)
+        {
+            Variable = variable;
+            Range = range;
+            LoopBody = body;
         }
     }
 }
