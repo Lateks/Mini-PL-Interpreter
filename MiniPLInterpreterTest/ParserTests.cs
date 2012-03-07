@@ -9,6 +9,45 @@ using Errors;
 namespace MiniPLInterpreterTest
 {
     [TestFixture]
+    class VariableDeclarationTests
+    {
+        [Datapoints]
+        public string[] types = {"int", "bool", "string"};
+
+        [Theory]
+        public void ValidVariableDeclarationTypes(string type)
+        {
+            string program = "var foo : " + type + ";";
+            Parser parser = new Parser(new Scanner(program));
+            Program tree = (Program)parser.Parse();
+            Assert.That(tree.Children[0], Is.InstanceOf<VariableDeclaration>());
+            VariableDeclaration var = (VariableDeclaration)tree.Children[0];
+            Assert.That(var.Name, Is.EqualTo("foo"));
+            Assert.That(var.Type, Is.EqualTo(type));
+        }
+
+        [Test]
+        public void VariableDeclarationWithoutTypeFails()
+        {
+            string program = "var foo;";
+            Parser parser = new Parser(new Scanner(program));
+            Assert.Throws<SyntaxError>(() => parser.Parse());
+
+            program = "var foo := 0;";
+            parser = new Parser(new Scanner(program));
+            Assert.Throws<SyntaxError>(() => parser.Parse());
+        }
+
+        [Test]
+        public void VariableDeclarationWithUnknownType()
+        {
+            string program = "var foo : mytype;";
+            Parser parser = new Parser(new Scanner(program));
+            Assert.Throws<SyntaxError>(() => parser.Parse());
+        }
+    }
+
+    [TestFixture]
     class ParserTests
     {
         [Test]
@@ -73,6 +112,20 @@ namespace MiniPLInterpreterTest
             Assert.That(assignment.Variable, Is.InstanceOf<VariableDeclaration>());
             Assert.That(((VariableDeclaration)assignment.Variable).Name, Is.EqualTo("foo12"));
             Assert.That(((VariableDeclaration)assignment.Variable).Type, Is.EqualTo("int"));
+            Assert.That(assignment.Expression, Is.InstanceOf<IntegerLiteral>());
+            Assert.That(((IntegerLiteral)assignment.Expression).Value, Is.EqualTo("0"));
+        }
+
+        [Test]
+        public void Assignment()
+        {
+            string program = "foo := 0;";
+            Parser parser = new Parser(new Scanner(program));
+            Program rootnode = (Program)parser.Parse();
+            Assert.That(rootnode.Children[0], Is.InstanceOf<Assignment>());
+            Assignment assignment = (Assignment)rootnode.Children[0];
+
+            Assert.That(((Variable)assignment.Variable).Name, Is.EqualTo("foo"));
             Assert.That(assignment.Expression, Is.InstanceOf<IntegerLiteral>());
             Assert.That(((IntegerLiteral)assignment.Expression).Value, Is.EqualTo("0"));
         }
