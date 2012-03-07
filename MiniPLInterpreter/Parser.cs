@@ -29,8 +29,7 @@ namespace SyntaxAnalysis
         {
             if (input_token is KeywordToken || input_token is Identifier)
             {
-                var root = new Program();
-                root.AddChildren(StatementList());
+                var root = new Program(StatementList());
                 Match<EOF>();
                 return root;
             }
@@ -104,20 +103,19 @@ namespace SyntaxAnalysis
                         Loop loop = new Loop(ident, range, stmts);
                         return loop;
                     case "read":
-                        Statement stmt = new Statement(new Keyword(token.Value));
+                        Keyword keyword = new Keyword(token.Value);
                         input_token = scanner.NextToken();
-                        stmt.AddChild(new Variable(Identifier()));
-                        return stmt;
+                        ident = new Variable(Identifier());
+                        return new Statement(keyword, ident);
                     case "print":
-                        stmt = new Statement(new Keyword(token.Value));
+                        keyword = new Keyword(token.Value);
                         input_token = scanner.NextToken();
-                        stmt.AddChild(Expression());
-                        return stmt;
+                        return new Statement(keyword, Expression());
                     case "assert":
-                        stmt = new Statement(new Keyword(token.Value));
+                        keyword = new Keyword(token.Value);
                         input_token = scanner.NextToken();
                         Match<LeftParenthesis>();
-                        stmt.AddChild(Expression());
+                        Statement stmt = new Statement(keyword, Expression());
                         Match<RightParenthesis>();
                         return stmt;
                     default:
@@ -128,9 +126,7 @@ namespace SyntaxAnalysis
             {
                 Identifier token = Match<Identifier>();
                 Match<AssignmentToken>();
-                Assignment assignment = new Assignment();
-                assignment.AddChildren(new Variable(token.Value), Expression());
-                return assignment;
+                return new Assignment(new Variable(token.Value), Expression());
             }
         }
 
@@ -144,12 +140,10 @@ namespace SyntaxAnalysis
 
         private Node Expression()
         {
-            if (input_token is BinaryOperator)
+            if (input_token is UnaryNotToken)
             {
-                Match<UnaryNotToken>();
-                UnaryNot op = new UnaryNot();
-                op.AddChild(Operand());
-                return op;
+                input_token = scanner.NextToken();
+                return new UnaryNot(Operand());
             }
             else
             {
@@ -163,8 +157,7 @@ namespace SyntaxAnalysis
             if (input_token is BinaryOperator)
             {
                 BinaryOperator op = Match<BinaryOperator>();
-                BinaryOp binop = new BinaryOp(op.Value);
-                binop.AddChildren(lhs, Operand());
+                BinaryOp binop = new BinaryOp(op.Value, lhs, Operand());
                 return binop;
             }
             return lhs;
@@ -215,9 +208,7 @@ namespace SyntaxAnalysis
             if (input_token is AssignmentToken)
             {
                 input_token = scanner.NextToken();
-                Assignment assignment = new Assignment();
-                assignment.AddChildren(variable, Expression());
-                return assignment;
+                return new Assignment(variable, Expression());
             }
             // otherwise produce epsilon
             return (Node) variable;

@@ -17,19 +17,9 @@ namespace AST
             get { return nodes; }
         }
 
-        public Program()
+        public Program(List<Node> statements)
         {
-            this.nodes = new List<Node>();
-        }
-
-        public void AddChild(Node child)
-        {
-            nodes.Add(child);
-        }
-
-        public void AddChildren(List<Node> children)
-        {
-            nodes.AddRange(children);
+            this.nodes = statements;
         }
     }
 
@@ -124,13 +114,9 @@ namespace AST
             get { return opsymbol; }
         }
 
-        public BinaryOp(string opsymbol)
+        public BinaryOp(string opsymbol, Node lhs, Node rhs)
         {
             this.opsymbol = opsymbol;
-        }
-
-        public void AddChildren(Node lhs, Node rhs)
-        {
             this.lhs = lhs;
             this.rhs = rhs;
         }
@@ -139,12 +125,14 @@ namespace AST
     public class UnaryNot : Node
     {
         Node operand;
-
-        public UnaryNot() { }
-
-        public void AddChild(Node child)
+        public Node Operand
         {
-            this.operand = child;
+            get { return operand; }
+        }
+
+        public UnaryNot(Node operand)
+        {
+            this.operand = operand;
         }
     }
 
@@ -207,9 +195,7 @@ namespace AST
             get { return expression; }
         }
 
-        public Assignment() { }
-        
-        public void AddChildren(Assignable var, Node expression)
+        public Assignment(Assignable var, Node expression)
         {
             this.var = (Node) var;
             this.expression = expression;
@@ -229,14 +215,9 @@ namespace AST
             get { return expression; }
         }
 
-        public Statement(Keyword keyword)
+        public Statement(Keyword keyword, Node expression)
         {
             this.keyword = keyword;
-            this.expression = null;
-        }
-
-        public void AddChild(Node expression)
-        {
             this.expression = expression;
         }
     }

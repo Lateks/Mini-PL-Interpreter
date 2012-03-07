@@ -59,6 +59,23 @@ namespace MiniPLInterpreterTest
         }
 
         [Test]
+        public void WholeProgram()
+        {
+            string program = "var nTimes : int := 0;\n" +
+                             "print \"How many times?\";\n" +
+                             "read nTimes;\n" +
+                             "var x : int;\n" +
+                             "for x in 0..nTimes-1 do\n" +
+                             "\tprint x;\n" +
+                             "\tprint \" : Hello, World!\n\";\n" +
+                             "end for;\n" +
+                             "assert (x = nTimes);";
+            Parser parser = new Parser(new Scanner(program));
+            Program tree = (Program)parser.Parse();
+            Assert.That(tree.Children.Count, Is.EqualTo(6));
+        }
+
+        [Test]
         public void PrintLiteral()
         {
             string program = "print \"How many times?\";";
@@ -69,6 +86,31 @@ namespace MiniPLInterpreterTest
             Assert.That(((Keyword) printstat.Keyword).Name, Is.EqualTo("print"));
             Assert.That(printstat.Expression, Is.InstanceOf<StringLiteral>());
             Assert.That(((StringLiteral)printstat.Expression).Value, Is.EqualTo("\"How many times?\""));
+        }
+
+        [Test]
+        public void UnaryNot()
+        {
+            string program = "assert(!foobar);";
+            Parser parser = new Parser(new Scanner(program));
+            Program tree = (Program)parser.Parse();
+            Statement assert = (Statement)tree.Children[0];
+            Assert.That(assert.Expression, Is.InstanceOf<UnaryNot>());
+            Assert.That(((Variable)((UnaryNot)assert.Expression).Operand).Name, Is.EqualTo("foobar"));
+        }
+
+        [Test]
+        public void BinaryOperator()
+        {
+            string program = "foo := 1 + 2;";
+            Parser parser = new Parser(new Scanner(program));
+            Program tree = (Program)parser.Parse();
+            Assignment assignment = (Assignment)tree.Children[0];
+            Assert.That(assignment.Expression, Is.InstanceOf<BinaryOp>());
+            BinaryOp plus = (BinaryOp)assignment.Expression;
+            Assert.That(plus.OpSymbol, Is.EqualTo("+"));
+            Assert.That(((IntegerLiteral)plus.LeftOp).Value, Is.EqualTo("1"));
+            Assert.That(((IntegerLiteral)plus.RightOp).Value, Is.EqualTo("2"));
         }
 
         [Test]
