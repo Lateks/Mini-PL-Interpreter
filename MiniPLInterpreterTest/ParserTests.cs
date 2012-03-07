@@ -72,6 +72,18 @@ namespace MiniPLInterpreterTest
         }
 
         [Test]
+        public void Assertion()
+        {
+            string program = "assert(foo);";
+            Parser parser = new Parser(new Scanner(program));
+            Program tree = (Program)parser.Parse();
+            Statement assertion = (Statement)tree.Children[0];
+
+            Assert.That(((Keyword) assertion.Keyword).Name, Is.EqualTo("assert"));
+            Assert.That(((Variable)assertion.Expression).Name, Is.EqualTo("foo"));
+        }
+
+        [Test]
         public void ReadVariable()
         {
             string program = "read foo;";

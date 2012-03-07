@@ -115,6 +115,7 @@ namespace SyntaxAnalysis
                         return stmt;
                     case "assert":
                         stmt = new Statement(new Keyword(token.Value));
+                        input_token = scanner.NextToken();
                         Match<LeftParenthesis>();
                         stmt.AddChild(Expression());
                         Match<RightParenthesis>();
