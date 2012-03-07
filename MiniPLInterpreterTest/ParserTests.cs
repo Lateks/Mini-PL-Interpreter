@@ -19,7 +19,7 @@ namespace MiniPLInterpreterTest
         {
             string program = "var foo : " + type + ";";
             Parser parser = new Parser(new Scanner(program));
-            Program tree = (Program)parser.Parse();
+            Program tree = parser.Parse();
             Assert.That(tree.Children[0], Is.InstanceOf<VariableDeclaration>());
             VariableDeclaration var = (VariableDeclaration)tree.Children[0];
             Assert.That(var.Name, Is.EqualTo("foo"));
@@ -71,7 +71,7 @@ namespace MiniPLInterpreterTest
                              "end for;\n" +
                              "assert (x = nTimes);";
             Parser parser = new Parser(new Scanner(program));
-            Program tree = (Program)parser.Parse();
+            Program tree = parser.Parse();
             Assert.That(tree.Children.Count, Is.EqualTo(6));
         }
 
@@ -80,7 +80,7 @@ namespace MiniPLInterpreterTest
         {
             string program = "print \"How many times?\";";
             Parser parser = new Parser(new Scanner(program));
-            Program tree = (Program) parser.Parse();
+            Program tree = parser.Parse();
             ExpressionStatement printstat = (ExpressionStatement)tree.Children[0];
 
             Assert.That(((Keyword) printstat.Keyword).Name, Is.EqualTo("print"));
@@ -93,7 +93,7 @@ namespace MiniPLInterpreterTest
         {
             string program = "assert(!foobar);";
             Parser parser = new Parser(new Scanner(program));
-            Program tree = (Program)parser.Parse();
+            Program tree = parser.Parse();
             ExpressionStatement assert = (ExpressionStatement)tree.Children[0];
             Assert.That(assert.Expression, Is.InstanceOf<UnaryNot>());
             Assert.That(((Variable)((UnaryNot)assert.Expression).Operand).Name, Is.EqualTo("foobar"));
@@ -104,7 +104,7 @@ namespace MiniPLInterpreterTest
         {
             string program = "foo := 1 + 2;";
             Parser parser = new Parser(new Scanner(program));
-            Program tree = (Program)parser.Parse();
+            Program tree = parser.Parse();
             Assignment assignment = (Assignment)tree.Children[0];
             Assert.That(assignment.Expression, Is.InstanceOf<BinaryOp>());
             BinaryOp plus = (BinaryOp)assignment.Expression;
@@ -118,7 +118,7 @@ namespace MiniPLInterpreterTest
         {
             string program = "assert(foo);";
             Parser parser = new Parser(new Scanner(program));
-            Program tree = (Program)parser.Parse();
+            Program tree = parser.Parse();
             ExpressionStatement assertion = (ExpressionStatement)tree.Children[0];
 
             Assert.That(((Keyword) assertion.Keyword).Name, Is.EqualTo("assert"));
@@ -130,7 +130,7 @@ namespace MiniPLInterpreterTest
         {
             string program = "read foo;";
             Parser parser = new Parser(new Scanner(program));
-            Program tree = (Program)parser.Parse();
+            Program tree = parser.Parse();
             ReadStatement readstat = (ReadStatement)tree.Children[0];
 
             Assert.That(((Keyword)readstat.Keyword).Name, Is.EqualTo("read"));
@@ -155,10 +155,8 @@ namespace MiniPLInterpreterTest
         {
             string program = "var foo12 : int := 0;";
             Parser parser = new Parser(new Scanner(program));
-            Node AST = parser.Parse();
-            Assert.That(AST, Is.InstanceOf<Program>());
-            Program rootnode = (Program)AST;
-            List<Node> nodes = rootnode.Children;
+            Program rootnode = parser.Parse();
+            List<Statement> nodes = rootnode.Children;
             Assert.That(nodes.Count, Is.EqualTo(1));
 
             Assert.That(nodes[0], Is.InstanceOf<Assignment>());
@@ -175,7 +173,7 @@ namespace MiniPLInterpreterTest
         {
             string program = "foo := 0;";
             Parser parser = new Parser(new Scanner(program));
-            Program rootnode = (Program)parser.Parse();
+            Program rootnode = parser.Parse();
             Assert.That(rootnode.Children[0], Is.InstanceOf<Assignment>());
             Assignment assignment = (Assignment)rootnode.Children[0];
 
@@ -192,7 +190,7 @@ namespace MiniPLInterpreterTest
                              "\tprint 1 + 1;\n" +
                              "end for;";
             Parser parser = new Parser(new Scanner(program));
-            Program rootnode = (Program)parser.Parse();
+            Program rootnode = parser.Parse();
             Assert.That(rootnode.Children.Count, Is.EqualTo(1));
             Loop forloop = (Loop)rootnode.Children[0];
 

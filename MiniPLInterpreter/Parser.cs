@@ -19,13 +19,13 @@ namespace SyntaxAnalysis
             this.scanner = scanner;
         }
 
-        public Node Parse()
+        public Program Parse()
         {
             this.input_token = scanner.NextToken();
             return Program();
         }
 
-        private Node Program()
+        private Program Program()
         {
             if (input_token is KeywordToken || input_token is Identifier)
             {
@@ -60,26 +60,26 @@ namespace SyntaxAnalysis
                     input_token.ToString());
         }
 
-        private List<Node> StatementList()
+        private List<Statement> StatementList()
         {
-            var nodes = new List<Node>();
+            var nodes = new List<Statement>();
             nodes.Add(Statement());
             Match<EndLine>();
             nodes.AddRange(StatementListTail());
             return nodes;
         }
 
-        private List<Node> StatementListTail()
+        private List<Statement> StatementListTail()
         {
             // Epsilon production if input token is in the Follow set.
             if (input_token is EOF || (input_token is KeywordToken &&
                 ((KeywordToken)input_token).Value == "end"))
-                return new List<Node>();
+                return new List<Statement>();
             else
                 return StatementList();
         }
 
-        private Node Statement()
+        private Statement Statement()
         {
             if (input_token is KeywordToken)
             {
@@ -139,7 +139,7 @@ namespace SyntaxAnalysis
             return new Range(range_lhs, range_rhs);
         }
 
-        private Node Expression()
+        private Expression Expression()
         {
             if (input_token is UnaryNotToken)
             {
@@ -148,12 +148,12 @@ namespace SyntaxAnalysis
             }
             else
             {
-                Node op = Operand();
+                Expression op = Operand();
                 return ExpressionTail(op);
             }
         }
 
-        private Node ExpressionTail(Node lhs)
+        private Expression ExpressionTail(Expression lhs)
         {
             if (input_token is BinaryOperator)
             {
@@ -164,7 +164,7 @@ namespace SyntaxAnalysis
             return lhs;
         }
 
-        private Node Operand()
+        private Expression Operand()
         {
             if (input_token is IntegerLiteralToken)
             {
@@ -184,7 +184,7 @@ namespace SyntaxAnalysis
             else if (input_token is LeftParenthesis)
             {
                 input_token = scanner.NextToken();
-                Node expr = Expression();
+                Expression expr = Expression();
                 Match<RightParenthesis>();
                 return expr;
             }
@@ -204,7 +204,7 @@ namespace SyntaxAnalysis
             return token.Value;
         }
 
-        private Node OptionalAssignment(Assignable variable)
+        private Statement OptionalAssignment(Assignable variable)
         {
             if (input_token is AssignmentToken)
             {
@@ -212,7 +212,7 @@ namespace SyntaxAnalysis
                 return new Assignment(variable, Expression());
             }
             // otherwise produce epsilon
-            return (Node) variable;
+            return (Statement) variable;
         }
     }
 }

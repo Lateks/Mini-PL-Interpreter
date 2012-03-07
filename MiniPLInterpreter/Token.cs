@@ -7,37 +7,36 @@ namespace TokenTypes
 {
     public class Token
     {
-        private int row;
-        private int col;
-
         public int Row
         {
-            get { return row; }
+            get;
+            private set;
         }
         public int Col
         {
-            get { return col; }
+            get;
+            private set;
         }
 
         public Token(int row, int col)
         {
-            this.row = row;
-            this.col = col;
+            Row = row;
+            Col = col;
         }
     }
 
     public class StringToken : Token
     {
-        private string value;
         public string Value
         {
-            get { return value; }
+            get;
+            private set;
         }
 
         public StringToken(string name, int row, int col)
             : base(row, col)
         {
-            this.value = name;
+            Value = name;
         }
     }
 

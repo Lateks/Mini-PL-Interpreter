@@ -9,21 +9,25 @@ namespace AST
 
     public interface Assignable { }
 
+    public interface Expression : Node { }
+
+    public interface Statement : Node { }
+
     public class Program : Node
     {
-        public List<Node> Children
+        public List<Statement> Children
         {
             get;
             private set;
         }
 
-        public Program(List<Node> statements)
+        public Program(List<Statement> statements)
         {
             Children = statements;
         }
     }
 
-    public class Literal : Node
+    public class Literal : Expression
     {
         public string Value
         {
@@ -47,7 +51,7 @@ namespace AST
         public StringLiteral(string value) : base(value) { }
     }
 
-    public class Variable : Node, Assignable
+    public class Variable : Expression, Assignable
     {
         public string Name
         {
@@ -74,14 +78,14 @@ namespace AST
         }
     }
 
-    public class BinaryOp : Node
+    public class BinaryOp : Expression
     {
-        public Node LeftOp
+        public Expression LeftOp
         {
             get;
             private set;
         }
-        public Node RightOp
+        public Expression RightOp
         {
             get;
             private set;
@@ -92,7 +96,7 @@ namespace AST
             private set;
         }
 
-        public BinaryOp(string opsymbol, Node lhs, Node rhs)
+        public BinaryOp(string opsymbol, Expression lhs, Expression rhs)
         {
             OpSymbol = opsymbol;
             LeftOp = lhs;
@@ -100,15 +104,15 @@ namespace AST
         }
     }
 
-    public class UnaryNot : Node
+    public class UnaryNot : Expression
     {
-        public Node Operand
+        public Expression Operand
         {
             get;
             private set;
         }
 
-        public UnaryNot(Node operand)
+        public UnaryNot(Expression operand)
         {
             Operand = operand;
         }
@@ -116,45 +120,45 @@ namespace AST
 
     public class Range : Node
     {
-        public Node Begin
+        public Expression Begin
         {
             get;
             private set;
         }
-        public Node End
+        public Expression End
         {
             get;
             private set;
         }
 
-        public Range(Node lhs, Node rhs)
+        public Range(Expression lhs, Expression rhs)
         {
             Begin = lhs;
             End = rhs;
         }
     }
 
-    public class Assignment : Node
+    public class Assignment : Statement
     {
-        public Node Variable
+        public Assignable Variable
         {
             get;
             private set;
         }
-        public Node Expression
+        public Expression Expression
         {
             get;
             private set;
         }
 
-        public Assignment(Assignable variable, Node expression)
+        public Assignment(Assignable variable, Expression expression)
         {
-            Variable = (Node) variable;
+            Variable = variable;
             Expression = expression;
         }
     }
 
-    public class KeywordStatement : Node
+    public class KeywordStatement : Statement
     {
         public Keyword Keyword
         {
@@ -170,13 +174,13 @@ namespace AST
 
     public class ExpressionStatement : KeywordStatement
     {
-        public Node Expression
+        public Expression Expression
         {
             get;
             private set;
         }
 
-        public ExpressionStatement(Keyword keyword, Node expression)
+        public ExpressionStatement(Keyword keyword, Expression expression)
             : base(keyword)
         {
             Expression = expression;
@@ -198,7 +202,7 @@ namespace AST
         }
     }
 
-    public class VariableDeclaration : Node, Assignable
+    public class VariableDeclaration : Statement, Assignable
     {
         public string Name
         {
@@ -218,7 +222,7 @@ namespace AST
         }
     }
 
-    public class Loop : Node
+    public class Loop : Statement
     {
         public Node Variable
         {
@@ -230,13 +234,13 @@ namespace AST
             get;
             private set;
         }
-        public List<Node> LoopBody
+        public List<Statement> LoopBody
         {
             get;
             private set;
         }
 
-        public Loop(Variable variable, Range range, List<Node> body)
+        public Loop(Variable variable, Range range, List<Statement> body)
         {
             Variable = variable;
             Range = range;
