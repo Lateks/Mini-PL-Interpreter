@@ -175,11 +175,14 @@ namespace LexicalAnalysis
                 return new RightParenthesis(row, col);
         }
 
-        private Operator MakeDotDotToken()
+        private RangeOperator MakeDotDotToken()
         {
-            string token = PopInput();
+            PopInput();
             if (InputLeft() && input.Peek().Equals('.'))
-                return new Operator(token + PopInput(), row, col);
+            {
+                PopInput();
+                return new RangeOperator(row, col);
+            }
             else
                 throw new LexicalError("Invalid token \".\" on row " +
                     row.ToString() + ", col " + col.ToString() + ".");

@@ -10,7 +10,7 @@ namespace Errors
         public LexicalError(string message) { }
     }
 
-    class SyntaxError : Exception
+    public class SyntaxError : Exception
     {
         public SyntaxError(string message) { }
     }

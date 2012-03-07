@@ -9,7 +9,7 @@ using AST;
 
 namespace SyntaxAnalysis
 {
-    class Parser
+    public class Parser
     {
         private Scanner scanner;
         private Token input_token;
@@ -17,7 +17,12 @@ namespace SyntaxAnalysis
         public Parser(Scanner scanner)
         {
             this.scanner = scanner;
+        }
+
+        public Node Parse()
+        {
             this.input_token = scanner.NextToken();
+            return Program();
         }
 
         private Node Program()
@@ -30,7 +35,7 @@ namespace SyntaxAnalysis
                 return root;
             }
             else
-                throw new SyntaxError("foobar");
+                throw new SyntaxError("Program must begin with a valid keyword or an identifier.");
         }
 
         // Checks that the current input symbol is of token type T
@@ -48,10 +53,10 @@ namespace SyntaxAnalysis
                     return temp;
                 }
                 else
-                    throw new SyntaxError("foobar");
+                    throw new SyntaxError("Value match failed.");
             }
             else
-                throw new SyntaxError("foobar");
+                throw new SyntaxError("Type match failed.");
         }
 
         private List<Node> StatementList()
@@ -65,7 +70,9 @@ namespace SyntaxAnalysis
 
         private List<Node> StatementListTail()
         {
-            if (input_token is EOF) // epsilon production
+            // Epsilon production if input token is in the Follow set.
+            if (input_token is EOF || (input_token is Keyword &&
+                ((Keyword)input_token).Value == "end"))
                 return new List<Node>();
             else
                 return StatementList();
@@ -113,7 +120,7 @@ namespace SyntaxAnalysis
                         Match<RightParenthesis>();
                         return stmt;
                     default:
-                        throw new SyntaxError("foobar");
+                        throw new SyntaxError("Invalid keyword " + token.Value + " starting a statement.");
                 }
             }
             else
@@ -129,7 +136,7 @@ namespace SyntaxAnalysis
         private Range RangeExpr()
         {
             var range_lhs = Expression();
-            Match<Operator>("..");
+            Match<RangeOperator>();
             var range_rhs = Expression();
             return new Range(range_lhs, range_rhs);
         }
@@ -187,7 +194,7 @@ namespace SyntaxAnalysis
                 return expr;
             }
             else
-                throw new SyntaxError("foobar");
+                throw new SyntaxError("Invalid operand " + input_token.ToString() + ".");
         }
 
         private string Identifier()

@@ -77,6 +77,12 @@ namespace TokenTypes
             : base(symbol, row, col) { }
     }
 
+    public class RangeOperator : Token
+    {
+        public RangeOperator(int row, int col)
+            : base(row, col) { }
+    }
+
     public class LeftParenthesis : Token
     {
         public LeftParenthesis(int row, int col)

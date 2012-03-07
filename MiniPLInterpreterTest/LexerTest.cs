@@ -40,7 +40,7 @@ namespace LexerTest
         public void DoubleDots()
         {
             var lexer = new Scanner("..");
-            Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo(".."));
+            Assert.That(lexer.NextToken(), Is.InstanceOf<RangeOperator>());
             lexer = new Scanner(".");
             Assert.Throws<LexicalError>(() => lexer.NextToken());
             Assert.That(lexer.Col, Is.EqualTo(1));

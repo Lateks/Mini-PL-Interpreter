@@ -11,7 +11,11 @@ namespace AST
 
     public class Program : Node
     {
-        List<Node> nodes;
+        private List<Node> nodes;
+        public List<Node> Children
+        {
+            get { return nodes; }
+        }
 
         public Program()
         {
@@ -32,6 +36,11 @@ namespace AST
     public class Literal
     {
         private string value;
+        public string Value
+        {
+            get { return value; }
+        }
+
         public Literal(string value)
         {
             this.value = value;
@@ -54,6 +63,14 @@ namespace AST
     {
         private string name;
         private string type;
+        public string Name
+        {
+            get { return name; }
+        }
+        public string Type
+        {
+            get { return type; }
+        }
 
         public VariableDeclaration(string name, string type)
         {
@@ -65,6 +82,10 @@ namespace AST
     public class Variable : Node, Assignable
     {
         private string name;
+        public string Name
+        {
+            get { return name; }
+        }
         public Variable(string name)
         {
             this.name = name;
@@ -74,6 +95,10 @@ namespace AST
     public class KeywordNode : Node
     {
         private string name;
+        public string Name
+        {
+            get { return name; }
+        }
 
         public KeywordNode(string name)
         {
@@ -86,6 +111,18 @@ namespace AST
         private Node lhs;
         private Node rhs;
         private string opsymbol;
+        public Node LeftOp
+        {
+            get { return lhs; }
+        }
+        public Node RightOp
+        {
+            get { return rhs; }
+        }
+        public string OpSymbol
+        {
+            get { return opsymbol; }
+        }
 
         public BinaryOp(string opsymbol)
         {
@@ -114,14 +151,26 @@ namespace AST
     public class Loop : Node
     {
         private Node var;
-        private List<Node> loop_body;
         private Node range;
+        private List<Node> loop_body;
+        public Node Variable
+        {
+            get { return var; }
+        }
+        public Node Range
+        {
+            get { return range; }
+        }
+        public List<Node> LoopBody
+        {
+            get { return loop_body; }
+        }
 
         public Loop(Variable var, Range range, List<Node> body)
         {
             this.var = var;
-            this.loop_body = body;
             this.range = range;
+            this.loop_body = body;
         }
     }
 
@@ -129,6 +178,14 @@ namespace AST
     {
         private Node lhs;
         private Node rhs;
+        public Node Begin
+        {
+            get { return lhs; }
+        }
+        public Node End
+        {
+            get { return rhs; }
+        }
 
         public Range(Node lhs, Node rhs)
         {
@@ -141,6 +198,14 @@ namespace AST
     {
         Node var;
         Node expression;
+        public Node Variable
+        {
+            get { return var; }
+        }
+        public Node Expression
+        {
+            get { return expression; }
+        }
 
         public Assignment() { }
         
@@ -155,6 +220,14 @@ namespace AST
     {
         private Node keyword;
         private Node expression;
+        public Node Keyword
+        {
+            get { return keyword; }
+        }
+        public Node Expression
+        {
+            get { return expression; }
+        }
 
         public Statement(KeywordNode keyword)
         {
