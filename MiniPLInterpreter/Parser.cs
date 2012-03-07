@@ -52,10 +52,12 @@ namespace SyntaxAnalysis
                     return temp;
                 }
                 else
-                    throw new SyntaxError("Value match failed.");
+                    throw new SyntaxError("Expected " + value + " but got " +
+                        ((StringToken)input_token).Value + ".");
             }
             else
-                throw new SyntaxError("Type match failed.");
+                throw new SyntaxError("Unexpected token: " +
+                    input_token.ToString());
         }
 
         private List<Node> StatementList()
@@ -188,7 +190,7 @@ namespace SyntaxAnalysis
                 return expr;
             }
             else
-                throw new SyntaxError("Invalid operand " + input_token.ToString() + ".");
+                throw new SyntaxError("Invalid operand: " + input_token.ToString());
         }
 
         private string Identifier()
