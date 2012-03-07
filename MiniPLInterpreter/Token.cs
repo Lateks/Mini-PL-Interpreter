@@ -41,15 +41,15 @@ namespace TokenTypes
         }
     }
 
-    public class IntegerLiteral : StringToken
+    public class IntegerLiteralToken : StringToken
     {
-        public IntegerLiteral(string value, int row, int col)
+        public IntegerLiteralToken(string value, int row, int col)
             : base(value, row, col) { }
     }
 
-    public class StringLiteral : StringToken
+    public class StringLiteralToken : StringToken
     {
-        public StringLiteral(string value, int row, int col)
+        public StringLiteralToken(string value, int row, int col)
             : base(value, row, col) { }
     }
 
@@ -59,13 +59,13 @@ namespace TokenTypes
             : base(name, row, col) { }
     }
 
-    public class Keyword : StringToken
+    public class KeywordToken : StringToken
     {
-        public Keyword(string name, int row, int col)
+        public KeywordToken(string name, int row, int col)
             : base(name, row, col) { }
     }
 
-    public class Type : Keyword
+    public class Type : KeywordToken
     {
         public Type(string name, int row, int col)
             : base(name, row, col) { }        
@@ -77,9 +77,9 @@ namespace TokenTypes
             : base(symbol, row, col) { }
     }
 
-    public class UnaryNot : Token
+    public class UnaryNotToken : Token
     {
-        public UnaryNot(int row, int col)
+        public UnaryNotToken(int row, int col)
             : base(row, col) { }
     }
 

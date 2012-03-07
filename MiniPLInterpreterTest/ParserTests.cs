@@ -27,9 +27,9 @@ namespace MiniPLInterpreterTest
             Program tree = (Program) parser.Parse();
             Statement printstat = (Statement)tree.Children[0];
 
-            Assert.That(((KeywordNode) printstat.Keyword).Name, Is.EqualTo("print"));
-            Assert.That(printstat.Expression, Is.InstanceOf<StringLiteralNode>());
-            Assert.That(((StringLiteralNode)printstat.Expression).Value, Is.EqualTo("\"How many times?\""));
+            Assert.That(((Keyword) printstat.Keyword).Name, Is.EqualTo("print"));
+            Assert.That(printstat.Expression, Is.InstanceOf<StringLiteral>());
+            Assert.That(((StringLiteral)printstat.Expression).Value, Is.EqualTo("\"How many times?\""));
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace MiniPLInterpreterTest
             Program tree = (Program)parser.Parse();
             Statement readstat = (Statement)tree.Children[0];
 
-            Assert.That(((KeywordNode)readstat.Keyword).Name, Is.EqualTo("read"));
+            Assert.That(((Keyword)readstat.Keyword).Name, Is.EqualTo("read"));
             Assert.That(readstat.Expression, Is.InstanceOf<Variable>());
             Assert.That(((Variable)readstat.Expression).Name, Is.EqualTo("foo"));
         }
@@ -58,7 +58,7 @@ namespace MiniPLInterpreterTest
         }
 
         [Test]
-        public void Assignment()
+        public void VariableDeclarationAndAssignment()
         {
             string program = "var foo12 : int := 0;";
             Parser parser = new Parser(new Scanner(program));
@@ -73,8 +73,8 @@ namespace MiniPLInterpreterTest
             Assert.That(assignment.Variable, Is.InstanceOf<VariableDeclaration>());
             Assert.That(((VariableDeclaration)assignment.Variable).Name, Is.EqualTo("foo12"));
             Assert.That(((VariableDeclaration)assignment.Variable).Type, Is.EqualTo("int"));
-            Assert.That(assignment.Expression, Is.InstanceOf<IntegerLiteralNode>());
-            Assert.That(((IntegerLiteralNode)assignment.Expression).Value, Is.EqualTo("0"));
+            Assert.That(assignment.Expression, Is.InstanceOf<IntegerLiteral>());
+            Assert.That(((IntegerLiteral)assignment.Expression).Value, Is.EqualTo("0"));
         }
 
         [Test]
@@ -90,11 +90,11 @@ namespace MiniPLInterpreterTest
             Loop forloop = (Loop)rootnode.Children[0];
 
             Assert.That(((Variable)forloop.Variable).Name, Is.EqualTo("i"));
-            Assert.That(((IntegerLiteralNode)((Range) forloop.Range).Begin).Value, Is.EqualTo("0"));
+            Assert.That(((IntegerLiteral)((Range) forloop.Range).Begin).Value, Is.EqualTo("0"));
             BinaryOp minus = (BinaryOp)((Range) forloop.Range).End;
             Assert.That(minus.OpSymbol, Is.EqualTo("-"));
             Assert.That(((Variable)minus.LeftOp).Name, Is.EqualTo("length"));
-            Assert.That(((IntegerLiteralNode)minus.RightOp).Value, Is.EqualTo("1"));
+            Assert.That(((IntegerLiteral)minus.RightOp).Value, Is.EqualTo("1"));
             Assert.That(forloop.LoopBody.Count, Is.EqualTo(2));
         }
     }

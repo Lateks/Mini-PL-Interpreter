@@ -164,7 +164,7 @@ namespace LexicalAnalysis
             if (input.Peek().Equals('!'))
             {
                 PopInput();
-                return new UnaryNot(row, col);
+                return new UnaryNotToken(row, col);
             }
             return new BinaryOperator(PopInput(), row, col);
         }
@@ -204,12 +204,12 @@ namespace LexicalAnalysis
             return new TypeDeclaration(row, col);
         }
 
-        private IntegerLiteral MakeIntegerLiteralToken()
+        private IntegerLiteralToken MakeIntegerLiteralToken()
         {
             string token = "";
             while (InputLeft() && Char.IsDigit(input.Peek()))
                 token += PopInput();
-            return new IntegerLiteral(token, row, col);
+            return new IntegerLiteralToken(token, row, col);
         }
 
         private Token MakeIdentifierOrKeywordToken()
@@ -221,11 +221,11 @@ namespace LexicalAnalysis
             if (types.Contains(token))
                 return new TokenTypes.Type(token, row, col);
             if (keywords.Contains(token))
-                return new Keyword(token, row, col);
+                return new KeywordToken(token, row, col);
             return new Identifier(token, row, col);
         }
 
-        private StringLiteral MakeStringLiteralToken()
+        private StringLiteralToken MakeStringLiteralToken()
         {
             string token = PopInput();
             while (InputLeft() && !(input.Peek().Equals('"')))
@@ -235,7 +235,7 @@ namespace LexicalAnalysis
                     token += PopInput();
             if (!InputLeft())
                 throw new LexicalError("Reached end of input while scanning for a string literal.");
-            return new StringLiteral(token + PopInput(), row, col);
+            return new StringLiteralToken(token + PopInput(), row, col);
         }
 
         private string GetEscapeCharacter()

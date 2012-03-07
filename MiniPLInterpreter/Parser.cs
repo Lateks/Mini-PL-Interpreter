@@ -27,7 +27,7 @@ namespace SyntaxAnalysis
 
         private Node Program()
         {
-            if (input_token is Keyword || input_token is Identifier)
+            if (input_token is KeywordToken || input_token is Identifier)
             {
                 var root = new Program();
                 root.AddChildren(StatementList());
@@ -71,8 +71,8 @@ namespace SyntaxAnalysis
         private List<Node> StatementListTail()
         {
             // Epsilon production if input token is in the Follow set.
-            if (input_token is EOF || (input_token is Keyword &&
-                ((Keyword)input_token).Value == "end"))
+            if (input_token is EOF || (input_token is KeywordToken &&
+                ((KeywordToken)input_token).Value == "end"))
                 return new List<Node>();
             else
                 return StatementList();
@@ -80,9 +80,9 @@ namespace SyntaxAnalysis
 
         private Node Statement()
         {
-            if (input_token is Keyword)
+            if (input_token is KeywordToken)
             {
-                var token = (Keyword)input_token;
+                var token = (KeywordToken)input_token;
                 switch (token.Value)
                 {
                     case "var":
@@ -95,26 +95,26 @@ namespace SyntaxAnalysis
                     case "for":
                         input_token = scanner.NextToken();
                         Variable ident = new Variable(Identifier());
-                        Match<Keyword>("in");
+                        Match<KeywordToken>("in");
                         Range range = RangeExpr();
-                        Match<Keyword>("do");
+                        Match<KeywordToken>("do");
                         var stmts = StatementList();
-                        Match<Keyword>("end");
-                        Match<Keyword>("for");
+                        Match<KeywordToken>("end");
+                        Match<KeywordToken>("for");
                         Loop loop = new Loop(ident, range, stmts);
                         return loop;
                     case "read":
-                        Statement stmt = new Statement(new KeywordNode(token.Value));
+                        Statement stmt = new Statement(new Keyword(token.Value));
                         input_token = scanner.NextToken();
                         stmt.AddChild(new Variable(Identifier()));
                         return stmt;
                     case "print":
-                        stmt = new Statement(new KeywordNode(token.Value));
+                        stmt = new Statement(new Keyword(token.Value));
                         input_token = scanner.NextToken();
                         stmt.AddChild(Expression());
                         return stmt;
                     case "assert":
-                        stmt = new Statement(new KeywordNode(token.Value));
+                        stmt = new Statement(new Keyword(token.Value));
                         Match<LeftParenthesis>();
                         stmt.AddChild(Expression());
                         Match<RightParenthesis>();
@@ -145,8 +145,8 @@ namespace SyntaxAnalysis
         {
             if (input_token is BinaryOperator)
             {
-                Match<UnaryNot>();
-                UnaryOpNot op = new UnaryOpNot();
+                Match<UnaryNotToken>();
+                UnaryNot op = new UnaryNot();
                 op.AddChild(Operand());
                 return op;
             }
@@ -171,15 +171,15 @@ namespace SyntaxAnalysis
 
         private Node Operand()
         {
-            if (input_token is IntegerLiteral)
+            if (input_token is IntegerLiteralToken)
             {
-                IntegerLiteral token = Match<IntegerLiteral>();
-                return new IntegerLiteralNode(token.Value);
+                IntegerLiteralToken token = Match<IntegerLiteralToken>();
+                return new IntegerLiteral(token.Value);
             }
-            else if (input_token is StringLiteral)
+            else if (input_token is StringLiteralToken)
             {
-                StringLiteral token = Match<StringLiteral>();
-                return new StringLiteralNode(token.Value);
+                StringLiteralToken token = Match<StringLiteralToken>();
+                return new StringLiteral(token.Value);
             }
             else if (input_token is Identifier)
             {

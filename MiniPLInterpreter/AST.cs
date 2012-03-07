@@ -47,14 +47,14 @@ namespace AST
         }
     }
 
-    public class IntegerLiteralNode : Literal, Node
+    public class IntegerLiteral : Literal, Node
     {
-        public IntegerLiteralNode(string value) : base(value) { }
+        public IntegerLiteral(string value) : base(value) { }
     }
 
-    public class StringLiteralNode : Literal, Node
+    public class StringLiteral : Literal, Node
     {
-        public StringLiteralNode(string value) : base(value) { }
+        public StringLiteral(string value) : base(value) { }
     }
 
     public interface Assignable {}
@@ -92,7 +92,7 @@ namespace AST
         }
     }
 
-    public class KeywordNode : Node
+    public class Keyword : Node
     {
         private string name;
         public string Name
@@ -100,7 +100,7 @@ namespace AST
             get { return name; }
         }
 
-        public KeywordNode(string name)
+        public Keyword(string name)
         {
             this.name = name;
         }
@@ -136,11 +136,11 @@ namespace AST
         }
     }
 
-    public class UnaryOpNot : Node
+    public class UnaryNot : Node
     {
         Node operand;
 
-        public UnaryOpNot() { }
+        public UnaryNot() { }
 
         public void AddChild(Node child)
         {
@@ -229,7 +229,7 @@ namespace AST
             get { return expression; }
         }
 
-        public Statement(KeywordNode keyword)
+        public Statement(Keyword keyword)
         {
             this.keyword = keyword;
             this.expression = null;
