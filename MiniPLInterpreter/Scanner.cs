@@ -193,12 +193,15 @@ namespace LexicalAnalysis
                     row.ToString() + ", col " + col.ToString() + ".");
         }
 
-        private BinaryOperator MakeColonOrAssignmentToken()
+        private Token MakeColonOrAssignmentToken()
         {
             string token = PopInput();
             if (InputLeft() && input.Peek().Equals('='))
+            {
                 token += PopInput();
-            return new BinaryOperator(token, row, col);
+                return new AssignmentToken(row, col);
+            }
+            return new TypeDeclaration(row, col);
         }
 
         private IntegerLiteral MakeIntegerLiteralToken()

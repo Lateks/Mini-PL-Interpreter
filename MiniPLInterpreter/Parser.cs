@@ -88,7 +88,7 @@ namespace SyntaxAnalysis
                     case "var":
                         input_token = scanner.NextToken();
                         string variable = Identifier();
-                        Match<BinaryOperator>(":");
+                        Match<TypeDeclaration>();
                         string type = Type();
                         var var = new VariableDeclaration(variable, type);
                         return OptionalAssignment(var);
@@ -126,7 +126,7 @@ namespace SyntaxAnalysis
             else
             {
                 Identifier token = Match<Identifier>();
-                Match<BinaryOperator>(":=");
+                Match<AssignmentToken>();
                 Assignment assignment = new Assignment();
                 assignment.AddChildren(new Variable(token.Value), Expression());
                 return assignment;
@@ -145,7 +145,7 @@ namespace SyntaxAnalysis
         {
             if (input_token is BinaryOperator)
             {
-                Match<BinaryOperator>("!");
+                Match<UnaryNot>();
                 UnaryOpNot op = new UnaryOpNot();
                 op.AddChild(Operand());
                 return op;
@@ -211,7 +211,7 @@ namespace SyntaxAnalysis
 
         private Node OptionalAssignment(Assignable variable)
         {
-            if (input_token is BinaryOperator && ((BinaryOperator)input_token).Value == ":=")
+            if (input_token is AssignmentToken)
             {
                 input_token = scanner.NextToken();
                 Assignment assignment = new Assignment();

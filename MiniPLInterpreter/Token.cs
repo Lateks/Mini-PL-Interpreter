@@ -107,6 +107,18 @@ namespace TokenTypes
             : base(row, col) { }
     }
 
+    public class AssignmentToken : Token
+    {
+        public AssignmentToken(int row, int col)
+            : base(row, col) { }
+    }
+
+    public class TypeDeclaration : Token
+    {
+        public TypeDeclaration(int row, int col)
+            : base(row, col) { }
+    }
+
     public class EOF : Token
     {
         public EOF(int row, int col) : base(row, col) { }

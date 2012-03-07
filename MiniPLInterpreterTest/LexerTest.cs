@@ -136,9 +136,9 @@ namespace LexerTest
         public void AssignmentAndColon()
         {
             var lexer = new Scanner(":");
-            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo(":"));
+            Assert.That(lexer.NextToken(), Is.InstanceOf<TypeDeclaration>());
             lexer = new Scanner(":=");
-            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo(":="));
+            Assert.That(lexer.NextToken(), Is.InstanceOf<AssignmentToken>());
         }
 
         [Test]
@@ -155,9 +155,9 @@ namespace LexerTest
             var lexer = new Scanner("var x : int := 4 + (2 * \"foo\");");
             Assert.That(((Keyword) lexer.NextToken()).Value, Is.EqualTo("var"));
             Assert.That(((Identifier) lexer.NextToken()).Value, Is.EqualTo("x"));
-            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo(":"));
+            Assert.That(lexer.NextToken(), Is.InstanceOf<TypeDeclaration>());
             Assert.That(((Keyword) lexer.NextToken()).Value, Is.EqualTo("int"));
-            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo(":="));
+            Assert.That(lexer.NextToken(), Is.InstanceOf<AssignmentToken>());
             Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo("4"));
             Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo("+"));
             Assert.That(lexer.NextToken(), Is.InstanceOf<LeftParenthesis>());
