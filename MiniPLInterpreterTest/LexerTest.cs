@@ -116,9 +116,9 @@ namespace LexerTest
         public void DivisionSymbolIsNotConfusedWithAComment()
         {
             var lexer = new Scanner("/");
-            Assert.That(lexer.NextToken(), Is.InstanceOf<Operator>());
+            Assert.That(lexer.NextToken(), Is.InstanceOf<BinaryOperator>());
             lexer = new Scanner("// .. / ..\n /");
-            Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo("/"));
+            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo("/"));
             Assert.That(lexer.Col, Is.EqualTo(2));
             Assert.That(lexer.Row, Is.EqualTo(2));
         }
@@ -126,18 +126,19 @@ namespace LexerTest
         [Test]
         public void Operators()
         {
-            var lexer = new Scanner("+ =");
-            Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo("+"));
-            Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo("="));
+            var lexer = new Scanner("+ = !");
+            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo("+"));
+            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo("="));
+            Assert.That(lexer.NextToken(), Is.InstanceOf<UnaryNot>());
         }
 
         [Test]
         public void AssignmentAndColon()
         {
             var lexer = new Scanner(":");
-            Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo(":"));
+            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo(":"));
             lexer = new Scanner(":=");
-            Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo(":="));
+            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo(":="));
         }
 
         [Test]
@@ -154,14 +155,14 @@ namespace LexerTest
             var lexer = new Scanner("var x : int := 4 + (2 * \"foo\");");
             Assert.That(((Keyword) lexer.NextToken()).Value, Is.EqualTo("var"));
             Assert.That(((Identifier) lexer.NextToken()).Value, Is.EqualTo("x"));
-            Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo(":"));
+            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo(":"));
             Assert.That(((Keyword) lexer.NextToken()).Value, Is.EqualTo("int"));
-            Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo(":="));
+            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo(":="));
             Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo("4"));
-            Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo("+"));
+            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo("+"));
             Assert.That(lexer.NextToken(), Is.InstanceOf<LeftParenthesis>());
             Assert.That(((IntegerLiteral) lexer.NextToken()).Value, Is.EqualTo("2"));
-            Assert.That(((Operator) lexer.NextToken()).Value, Is.EqualTo("*"));
+            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo("*"));
             Assert.That(((StringLiteral) lexer.NextToken()).Value, Is.EqualTo("\"foo\""));
             Assert.That(lexer.NextToken(), Is.InstanceOf<RightParenthesis>());
             Assert.That(lexer.NextToken(), Is.InstanceOf<EndLine>());

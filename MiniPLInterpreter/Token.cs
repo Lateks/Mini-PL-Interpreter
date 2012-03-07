@@ -71,10 +71,16 @@ namespace TokenTypes
             : base(name, row, col) { }        
     }
 
-    public class Operator : StringToken
+    public class BinaryOperator : StringToken
     {
-        public Operator(string symbol, int row, int col)
+        public BinaryOperator(string symbol, int row, int col)
             : base(symbol, row, col) { }
+    }
+
+    public class UnaryNot : Token
+    {
+        public UnaryNot(int row, int col)
+            : base(row, col) { }
     }
 
     public class RangeOperator : Token

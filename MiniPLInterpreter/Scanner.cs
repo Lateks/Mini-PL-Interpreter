@@ -159,9 +159,14 @@ namespace LexicalAnalysis
             return input.Count > 0;
         }
 
-        private Operator MakeOperatorToken()
+        private Token MakeOperatorToken()
         {
-            return new Operator(PopInput(), row, col);
+            if (input.Peek().Equals('!'))
+            {
+                PopInput();
+                return new UnaryNot(row, col);
+            }
+            return new BinaryOperator(PopInput(), row, col);
         }
 
         private Token MakeSymbolToken()
@@ -188,12 +193,12 @@ namespace LexicalAnalysis
                     row.ToString() + ", col " + col.ToString() + ".");
         }
 
-        private Operator MakeColonOrAssignmentToken()
+        private BinaryOperator MakeColonOrAssignmentToken()
         {
             string token = PopInput();
             if (InputLeft() && input.Peek().Equals('='))
                 token += PopInput();
-            return new Operator(token, row, col);
+            return new BinaryOperator(token, row, col);
         }
 
         private IntegerLiteral MakeIntegerLiteralToken()
