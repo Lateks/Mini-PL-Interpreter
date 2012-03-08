@@ -95,7 +95,7 @@ namespace SyntaxAnalysis
                         return OptionalAssignment(var);
                     case "for":
                         input_token = scanner.NextToken();
-                        Variable ident = new Variable(Identifier());
+                        VariableReference ident = new VariableReference(Identifier());
                         Match<KeywordToken>("in");
                         Range range = RangeExpr();
                         Match<KeywordToken>("do");
@@ -106,7 +106,7 @@ namespace SyntaxAnalysis
                     case "read":
                         Keyword keyword = new Keyword(token.Value);
                         input_token = scanner.NextToken();
-                        ident = new Variable(Identifier());
+                        ident = new VariableReference(Identifier());
                         return new ReadStatement(keyword, ident);
                     case "print":
                         keyword = new Keyword(token.Value);
@@ -127,7 +127,7 @@ namespace SyntaxAnalysis
             {
                 Identifier token = Match<Identifier>();
                 Match<AssignmentToken>();
-                return new Assignment(new Variable(token.Value), Expression());
+                return new Assignment(new VariableReference(token.Value), Expression());
             }
         }
 
@@ -180,7 +180,7 @@ namespace SyntaxAnalysis
             else if (input_token is Identifier)
             {
                 Identifier token = Match<Identifier>();
-                return new Variable(token.Value);
+                return new VariableReference(token.Value);
             }
             else if (input_token is LeftParenthesis)
             {
@@ -205,7 +205,7 @@ namespace SyntaxAnalysis
             return token.Value;
         }
 
-        private Statement OptionalAssignment(Assignable variable)
+        private Statement OptionalAssignment(Variable variable)
         {
             if (input_token is AssignmentToken)
             {

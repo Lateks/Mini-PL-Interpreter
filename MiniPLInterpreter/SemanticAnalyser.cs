@@ -74,29 +74,64 @@ namespace MiniPlInterpreter
             symboltable.define(symbol);
         }
 
-        public void visit(Variable node)
+        public void visit(VariableReference node)
         {
             if (symboltable.resolve(node.Name) == null)
                 throw new SemanticError("Reference to undefined identifier " + node.Name + ".");
         }
 
+        public void visit(Loop node)
+        {
+            if (symboltable.resolve(node.Variable.Name).Type != "int")
+                throw new SemanticError("Loop variable " + node.Variable.Name + " is not an int.");
+        }
+
         public void visit(ArithmeticOp node)
         {
+            // resolve and compare types of lhs and rhs
+            // check that type is int
         }
 
         public void visit(LogicalOp node)
         {
+            // resolve and compare types of lhs and rhs
+            // check that type is bool
+        }
+
+        public void visit(Range node)
+        {
+            // check that lhs and rhs are ints
+        }
+
+        public void visit(Assignment node)
+        {
+            string variable_type = symboltable.resolve(node.Variable.Name).Type;
+            // check expression type
+            // compare types of var and expression
+        }
+
+        public void visit(UnaryNot node)
+        {
+            // check that expression is of boolean type
+        }
+
+        public void visit(ExpressionStatement node)
+        {
+            // resolve expression type
+            if (node.Keyword.Name == "assert")
+            {
+                // exception if type is not bool
+            }
+            else // keyword is "print"
+            {
+                // exception if type is not string or int
+            }
         }
 
         public void visit(Program node) { }
         public void visit(IntegerLiteral node) { }
         public void visit(StringLiteral node) { }
         public void visit(Keyword node) { }
-        public void visit(UnaryNot node) { }
-        public void visit(Loop node) { }
-        public void visit(Range node) { }
-        public void visit(Assignment node) { }
-        public void visit(ExpressionStatement node) { }
         public void visit(ReadStatement node) { }
     }
 }

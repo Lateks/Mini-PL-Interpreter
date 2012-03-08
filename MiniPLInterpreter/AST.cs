@@ -11,8 +11,6 @@ namespace AST
         void accept(NodeVisitor visitor);
     }
 
-    public interface Assignable : Node { }
-
     public interface Expression : Node { }
 
     public interface Statement : Node { }
@@ -76,7 +74,7 @@ namespace AST
         }
     }
 
-    public class Variable : Expression, Assignable
+    public abstract class Variable : Node
     {
         public string Name
         {
@@ -89,7 +87,36 @@ namespace AST
             Name = name;
         }
 
-        public void accept(NodeVisitor visitor)
+        public abstract void accept(NodeVisitor visitor);
+    }
+
+    public class VariableReference : Variable, Expression
+    {
+
+        public VariableReference(string name)
+            : base(name) { }
+
+        public override void accept(NodeVisitor visitor)
+        {
+            visitor.visit(this);
+        }
+    }
+
+    public class VariableDeclaration : Variable, Statement
+    {
+        public string Type
+        {
+            get;
+            private set;
+        }
+
+        public VariableDeclaration(string name, string type)
+            : base(name)
+        {
+            Type = type;
+        }
+
+        public override void accept(NodeVisitor visitor)
         {
             visitor.visit(this);
         }
@@ -217,7 +244,7 @@ namespace AST
 
     public class Assignment : Statement
     {
-        public Assignable Variable
+        public Variable Variable
         {
             get;
             private set;
@@ -228,7 +255,7 @@ namespace AST
             private set;
         }
 
-        public Assignment(Assignable variable, Expression expression)
+        public Assignment(Variable variable, Expression expression)
         {
             Variable = variable;
             Expression = expression;
@@ -281,13 +308,13 @@ namespace AST
 
     public class ReadStatement : KeywordStatement
     {
-        public Variable Variable
+        public VariableReference Variable
         {
             get;
             private set;
         }
 
-        public ReadStatement(Keyword keyword, Variable variable)
+        public ReadStatement(Keyword keyword, VariableReference variable)
             : base(keyword)
         {
             Variable = variable;
@@ -300,39 +327,14 @@ namespace AST
         }
     }
 
-    public class VariableDeclaration : Statement, Assignable
-    {
-        public string Name
-        {
-            get;
-            private set;
-        }
-        public string Type
-        {
-            get;
-            private set;
-        }
-
-        public VariableDeclaration(string name, string type)
-        {
-            Name = name;
-            Type = type;
-        }
-
-        public void accept(NodeVisitor visitor)
-        {
-            visitor.visit(this);
-        }
-    }
-
     public class Loop : Statement
     {
-        public Node Variable
+        public VariableReference Variable
         {
             get;
             private set;
         }
-        public Node Range
+        public Range Range
         {
             get;
             private set;
@@ -343,7 +345,7 @@ namespace AST
             private set;
         }
 
-        public Loop(Variable variable, Range range, List<Statement> body)
+        public Loop(VariableReference variable, Range range, List<Statement> body)
         {
             Variable = variable;
             Range = range;
