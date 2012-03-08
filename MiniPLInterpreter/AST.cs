@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MiniPlInterpreter;
 
 namespace AST
 {
-    public interface Node { }
+    public interface Node
+    {
+        void accept(NodeVisitor visitor);
+    }
 
-    public interface Assignable { }
+    public interface Assignable : Node { }
 
     public interface Expression : Node { }
 
@@ -25,9 +29,18 @@ namespace AST
         {
             Children = statements;
         }
+
+        public void accept(NodeVisitor visitor)
+        {
+            foreach (Statement child in Children)
+            {
+                child.accept(visitor);
+                visitor.visit(this);
+            }
+        }
     }
 
-    public class Literal : Expression
+    public class Literal
     {
         public string Value
         {
@@ -41,14 +54,25 @@ namespace AST
         }
     }
 
-    public class IntegerLiteral : Literal
+    public class IntegerLiteral : Literal, Expression
     {
         public IntegerLiteral(string value) : base(value) { }
+
+
+        public void accept(NodeVisitor visitor)
+        {
+            visitor.visit(this);
+        }
     }
 
-    public class StringLiteral : Literal
+    public class StringLiteral : Literal, Expression
     {
         public StringLiteral(string value) : base(value) { }
+
+        public void accept(NodeVisitor visitor)
+        {
+            visitor.visit(this);
+        }
     }
 
     public class Variable : Expression, Assignable
@@ -58,9 +82,15 @@ namespace AST
             get;
             private set;
         }
+
         public Variable(string name)
         {
             Name = name;
+        }
+
+        public void accept(NodeVisitor visitor)
+        {
+            visitor.visit(this);
         }
     }
 
@@ -75,6 +105,11 @@ namespace AST
         public Keyword(string name)
         {
             Name = name;
+        }
+
+        public void accept(NodeVisitor visitor)
+        {
+            visitor.visit(this);
         }
     }
 
@@ -102,6 +137,13 @@ namespace AST
             LeftOp = lhs;
             RightOp = rhs;
         }
+
+        public void accept(NodeVisitor visitor)
+        {
+            LeftOp.accept(visitor);
+            RightOp.accept(visitor);
+            visitor.visit(this);
+        }
     }
 
     public class UnaryNot : Expression
@@ -115,6 +157,12 @@ namespace AST
         public UnaryNot(Expression operand)
         {
             Operand = operand;
+        }
+
+        public void accept(NodeVisitor visitor)
+        {
+            Operand.accept(visitor);
+            visitor.visit(this);
         }
     }
 
@@ -136,6 +184,13 @@ namespace AST
             Begin = lhs;
             End = rhs;
         }
+
+        public void accept(NodeVisitor visitor)
+        {
+            Begin.accept(visitor);
+            End.accept(visitor);
+            visitor.visit(this);
+        }
     }
 
     public class Assignment : Statement
@@ -156,9 +211,16 @@ namespace AST
             Variable = variable;
             Expression = expression;
         }
+
+        public void accept(NodeVisitor visitor)
+        {
+            Variable.accept(visitor);
+            Expression.accept(visitor);
+            visitor.visit(this);
+        }
     }
 
-    public class KeywordStatement : Statement
+    public class KeywordStatement
     {
         public Keyword Keyword
         {
@@ -172,7 +234,7 @@ namespace AST
         }
     }
 
-    public class ExpressionStatement : KeywordStatement
+    public class ExpressionStatement : KeywordStatement, Statement
     {
         public Expression Expression
         {
@@ -185,9 +247,15 @@ namespace AST
         {
             Expression = expression;
         }
+
+        public void accept(NodeVisitor visitor)
+        {
+            Expression.accept(visitor);
+            visitor.visit(this);
+        }
     }
 
-    public class ReadStatement : KeywordStatement
+    public class ReadStatement : KeywordStatement, Statement
     {
         public Variable Variable
         {
@@ -199,6 +267,12 @@ namespace AST
             : base(keyword)
         {
             Variable = variable;
+        }
+
+        public void accept(NodeVisitor visitor)
+        {
+            Variable.accept(visitor);
+            visitor.visit(this);
         }
     }
 
@@ -219,6 +293,11 @@ namespace AST
         {
             Name = name;
             Type = type;
+        }
+
+        public void accept(NodeVisitor visitor)
+        {
+            visitor.visit(this);
         }
     }
 
@@ -245,6 +324,19 @@ namespace AST
             Variable = variable;
             Range = range;
             LoopBody = body;
+        }
+
+        public void accept(NodeVisitor visitor)
+        {
+            Variable.accept(visitor);
+            Range.accept(visitor);
+
+            foreach (Statement node in LoopBody)
+            {
+                node.accept(visitor);
+            }
+
+            visitor.visit(this);
         }
     }
 }

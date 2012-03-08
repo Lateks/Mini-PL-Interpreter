@@ -6,7 +6,7 @@ using AST;
 
 namespace MiniPlInterpreter
 {
-    interface NodeVisitor
+    public interface NodeVisitor
     {
         void visit(Program node);
         void visit(IntegerLiteral node);
