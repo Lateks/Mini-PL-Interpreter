@@ -145,9 +145,6 @@ namespace MiniPlInterpreter
         public void visit(ExpressionStatement node)
         {
             string exprType;
-            //if (node.Expression is Variable)
-            //    exprType = symboltable.resolve(((Variable)node.Expression).Name).Type;
-            //else
             exprType = operandtypes.Pop();
 
             if (node.Keyword.Name == "assert" && exprType != "bool")
