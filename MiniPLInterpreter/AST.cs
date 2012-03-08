@@ -40,7 +40,7 @@ namespace AST
         }
     }
 
-    public class Literal
+    public abstract class Literal : Expression
     {
         public string Value
         {
@@ -52,24 +52,25 @@ namespace AST
         {
             Value = value;
         }
+
+        public abstract void accept(NodeVisitor visitor);
     }
 
-    public class IntegerLiteral : Literal, Expression
+    public class IntegerLiteral : Literal
     {
         public IntegerLiteral(string value) : base(value) { }
 
-
-        public void accept(NodeVisitor visitor)
+        public override void accept(NodeVisitor visitor)
         {
             visitor.visit(this);
         }
     }
 
-    public class StringLiteral : Literal, Expression
+    public class StringLiteral : Literal
     {
         public StringLiteral(string value) : base(value) { }
 
-        public void accept(NodeVisitor visitor)
+        public override void accept(NodeVisitor visitor)
         {
             visitor.visit(this);
         }
@@ -220,7 +221,7 @@ namespace AST
         }
     }
 
-    public class KeywordStatement
+    public abstract class KeywordStatement : Statement
     {
         public Keyword Keyword
         {
@@ -232,9 +233,11 @@ namespace AST
         {
             Keyword = keyword;
         }
+
+        public abstract void accept(NodeVisitor visitor);
     }
 
-    public class ExpressionStatement : KeywordStatement, Statement
+    public class ExpressionStatement : KeywordStatement
     {
         public Expression Expression
         {
@@ -248,14 +251,14 @@ namespace AST
             Expression = expression;
         }
 
-        public void accept(NodeVisitor visitor)
+        public override void accept(NodeVisitor visitor)
         {
             Expression.accept(visitor);
             visitor.visit(this);
         }
     }
 
-    public class ReadStatement : KeywordStatement, Statement
+    public class ReadStatement : KeywordStatement
     {
         public Variable Variable
         {
@@ -269,7 +272,7 @@ namespace AST
             Variable = variable;
         }
 
-        public void accept(NodeVisitor visitor)
+        public override void accept(NodeVisitor visitor)
         {
             Variable.accept(visitor);
             visitor.visit(this);
