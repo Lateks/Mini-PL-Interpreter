@@ -48,6 +48,30 @@ namespace MiniPLInterpreterTest
     }
 
     [TestFixture]
+    class KeywordTests
+    {
+        [Datapoints]
+        public string[] types = {"var", "assert", "for", "int", "bool", "string",
+                                    "in", "do", "read", "print", "end"};
+
+        [Theory]
+        public void KeywordInVariableDeclaration(string keyword)
+        {
+            string program = "var " + keyword + " : int;";
+            Parser parser = new Parser(new Scanner(program));
+            Assert.Throws<SyntaxError>(() => parser.Parse());
+        }
+
+        [Theory]
+        public void KeywordAsVariableName(string keyword)
+        {
+            string program = keyword + " := 0;";
+            Parser parser = new Parser(new Scanner(program));
+            Assert.Throws<SyntaxError>(() => parser.Parse());
+        }
+    }
+
+    [TestFixture]
     class ParserTests
     {
         [Test]
