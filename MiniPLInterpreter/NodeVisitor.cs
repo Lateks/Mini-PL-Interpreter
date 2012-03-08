@@ -14,7 +14,8 @@ namespace MiniPlInterpreter
         void visit(VariableDeclaration node);
         void visit(Variable node);
         void visit(Keyword node);
-        void visit(BinaryOp node);
+        void visit(ArithmeticOp node);
+        void visit(LogicalOp node);
         void visit(UnaryNot node);
         void visit(Loop node);
         void visit(Range node);

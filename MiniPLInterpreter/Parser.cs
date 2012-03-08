@@ -158,8 +158,9 @@ namespace SyntaxAnalysis
             if (input_token is BinaryOperator)
             {
                 BinaryOperator op = Match<BinaryOperator>();
-                BinaryOp binop = new BinaryOp(op.Value, lhs, Operand());
-                return binop;
+                if (op.Value == "&" || op.Value == "=")
+                    return new LogicalOp(op.Value, lhs, Operand());
+                return new ArithmeticOp(op.Value, lhs, Operand());
             }
             return lhs;
         }

@@ -114,7 +114,7 @@ namespace AST
         }
     }
 
-    public class BinaryOp : Expression
+    public abstract class BinaryOp : Expression
     {
         public Expression LeftOp
         {
@@ -139,7 +139,28 @@ namespace AST
             RightOp = rhs;
         }
 
-        public void accept(NodeVisitor visitor)
+        public abstract void accept(NodeVisitor visitor);
+    }
+
+    public class ArithmeticOp : BinaryOp
+    {
+        public ArithmeticOp(string opsymbol, Expression lhs, Expression rhs)
+            : base(opsymbol, lhs, rhs) { }
+
+        public override void accept(NodeVisitor visitor)
+        {
+            LeftOp.accept(visitor);
+            RightOp.accept(visitor);
+            visitor.visit(this);
+        }
+    }
+
+    public class LogicalOp : BinaryOp
+    {
+        public LogicalOp(string opsymbol, Expression lhs, Expression rhs)
+            : base(opsymbol, lhs, rhs) { }
+
+        public override void accept(NodeVisitor visitor)
         {
             LeftOp.accept(visitor);
             RightOp.accept(visitor);

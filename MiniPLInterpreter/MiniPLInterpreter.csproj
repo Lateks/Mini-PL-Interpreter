@@ -47,6 +47,7 @@
     <Compile Include="NodeVisitor.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Errors.cs" />
+    <Compile Include="SemanticAnalyser.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="Interpreter.cs" />
     <Compile Include="Scanner.cs" />
