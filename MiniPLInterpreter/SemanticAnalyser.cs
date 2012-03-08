@@ -27,7 +27,14 @@ namespace MiniPlInterpreter
 
         public Symbol resolve(string name)
         {
-            return symboltable[name];
+            try
+            {
+                return symboltable[name];
+            }
+            catch (KeyNotFoundException e)
+            {
+                return null;
+            }
         }
     }
 
@@ -54,10 +61,12 @@ namespace MiniPlInterpreter
     public class TypeCheckingVisitor : NodeVisitor
     {
         SymbolTable symboltable;
+        Stack<string> operandtypes;
 
         public TypeCheckingVisitor()
         {
             symboltable = new SymbolTable();
+            operandtypes = new Stack<string>();
         }
 
         public SymbolTable BuildSymbolTableAndTypeCheck(Program node)
@@ -76,8 +85,11 @@ namespace MiniPlInterpreter
 
         public void visit(VariableReference node)
         {
-            if (symboltable.resolve(node.Name) == null)
+            Symbol var = symboltable.resolve(node.Name);
+            if (var == null)
                 throw new SemanticError("Reference to undefined identifier " + node.Name + ".");
+            else
+                operandtypes.Push(var.Type);
         }
 
         public void visit(Loop node)
@@ -88,50 +100,82 @@ namespace MiniPlInterpreter
 
         public void visit(ArithmeticOp node)
         {
-            // resolve and compare types of lhs and rhs
-            // check that type is int
+            string rightoptype = operandtypes.Pop();
+            string leftoptype = operandtypes.Pop();
+            if (rightoptype == "int" && leftoptype == "int")
+                operandtypes.Push("int");
+            else
+                throw new SemanticError("Non-integer arguments to arithmetic operator.");
         }
 
         public void visit(LogicalOp node)
         {
-            // resolve and compare types of lhs and rhs
-            // check that type is bool
+            // operands may be of any valid type
+            operandtypes.Pop();
+            operandtypes.Pop();
+            operandtypes.Push("bool");
         }
 
         public void visit(Range node)
         {
-            // check that lhs and rhs are ints
+            string rightoptype = operandtypes.Pop();
+            string leftoptype = operandtypes.Pop();
+            if (rightoptype != "int" || leftoptype != "int")
+                throw new SemanticError("Invalid argument types for range operator (..).");
         }
 
         public void visit(Assignment node)
         {
-            string variable_type = symboltable.resolve(node.Variable.Name).Type;
-            // check expression type
-            // compare types of var and expression
+            if (node.Variable is VariableReference)
+                operandtypes.Pop();
+            string variableType = symboltable.resolve(node.Variable.Name).Type;
+            string expressionType = operandtypes.Pop();
+            if (variableType != expressionType)
+                throw new SemanticError("Incompatible types in assignment.");
         }
 
         public void visit(UnaryNot node)
         {
-            // check that expression is of boolean type
+            if (operandtypes.Pop() == "bool")
+                operandtypes.Push("bool");
+            else
+                throw new SemanticError("Invalid argument type for unary not operator (!).");
         }
 
         public void visit(ExpressionStatement node)
         {
-            // resolve expression type
-            if (node.Keyword.Name == "assert")
+            string exprType;
+            //if (node.Expression is Variable)
+            //    exprType = symboltable.resolve(((Variable)node.Expression).Name).Type;
+            //else
+            exprType = operandtypes.Pop();
+
+            if (node.Keyword.Name == "assert" && exprType != "bool")
+                throw new SemanticError("Invalid argument type for assert statement.");
+            else if (node.Keyword.Name == "print" && exprType == "bool")
+                throw new SemanticError("Invalid argument type for print statement.");
+        }
+
+        public void visit(IntegerLiteral node)
+        {
+            try
             {
-                // exception if type is not bool
+                Convert.ToInt32(node.Value);
+                operandtypes.Push("int");
             }
-            else // keyword is "print"
+            catch (OverflowException e)
             {
-                // exception if type is not string or int
+                throw new SemanticError("Integer overflow: " + node.Value);
             }
         }
 
-        public void visit(Program node) { }
-        public void visit(IntegerLiteral node) { }
-        public void visit(StringLiteral node) { }
+        public void visit(StringLiteral node)
+        {
+            operandtypes.Push("string");
+        }
+
         public void visit(Keyword node) { }
         public void visit(ReadStatement node) { }
+        public void visit(Program node) { }
     }
 }
