@@ -110,9 +110,10 @@ namespace MiniPlInterpreter
 
         public void visit(LogicalOp node)
         {
-            // operands may be of any valid type
-            operandtypes.Pop();
-            operandtypes.Pop();
+            string optype1 = operandtypes.Pop();
+            string optype2 = operandtypes.Pop();
+            if (node.OpSymbol == "&" && (optype1 != "bool" || optype2 != "bool"))
+                throw new SemanticError("Non-boolean arguments to logical and operator (&).");
             operandtypes.Push("bool");
         }
 

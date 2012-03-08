@@ -12,6 +12,31 @@ using Errors;
 namespace MiniPLInterpreterTest
 {
     [TestFixture]
+    class PrintTest
+    {
+        [Datapoint]
+        string stringtype = "string";
+
+        [Datapoint]
+        string inttype = "int";
+
+        [Theory]
+        public void PrintString(string type)
+        {
+            var statementlist = new List<Statement>();
+            var variabledecl = new VariableDeclaration("foo", type);
+            statementlist.Add(variabledecl);
+            var variable = new VariableReference("foo");
+            var print = new ExpressionStatement(new Keyword("print"), variable);
+            statementlist.Add(print);
+            var parsetree = new Program(statementlist);
+
+            var symbolTableBuilder = new TypeCheckingVisitor();
+            Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+    }
+
+    [TestFixture]
     class SemanticAnalysisTest
     {
         List<Statement> statementlist;
@@ -41,34 +66,69 @@ namespace MiniPLInterpreterTest
         [Test]
         public void ArithmeticOperationTest()
         {
-            var variable = new VariableDeclaration("foo", "int");
             var integer = new IntegerLiteral("9");
             var plus = new ArithmeticOp("+", integer, integer);
             var times = new ArithmeticOp("*", plus, integer);
             var div = new ArithmeticOp("/", integer, integer);
             var minus = new ArithmeticOp("-", times, div);
+            var variable = new VariableDeclaration("foo", "int");
             var assignment = new Assignment(variable, minus);
             statementlist.Add(assignment);
             var parsetree = new Program(statementlist);
 
-            var symbolTable = symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree);
-            Assert.That(symbolTable.resolve("foo"), Is.InstanceOf<Symbol>());
-            Assert.That(symbolTable.resolve("foo").Type, Is.EqualTo("int"));
+            Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
         }
 
         [Test]
-        public void PrintString()
+        public void AssertionTest()
         {
-            var variabledecl = new VariableDeclaration("foo", "string");
-            statementlist.Add(variabledecl);
-            var variable = new VariableReference("foo");
-            var print = new ExpressionStatement(new Keyword("print"), variable);
-            statementlist.Add(print);
+            var integer = new IntegerLiteral("1");
+            var equal = new LogicalOp("=", integer, integer);
+            var assertion = new ExpressionStatement(new Keyword("assert"), equal);
+            statementlist.Add(assertion);
             var parsetree = new Program(statementlist);
 
-            var symbolTable = symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree);
-            Assert.That(symbolTable.resolve("foo"), Is.InstanceOf<Symbol>());
-            Assert.That(symbolTable.resolve("foo").Type, Is.EqualTo("string"));
+            Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void LogicalOpEquals()
+        {
+            var integer = new IntegerLiteral("1");
+            var stringlit = new StringLiteral("\"foobar\"");
+            var equal = new LogicalOp("=", integer, stringlit);
+            var assert = new ExpressionStatement(new Keyword("assert"), equal);
+            statementlist.Add(assert);
+            var parsetree = new Program(statementlist);
+
+            Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void LogicalOpAnd()
+        {
+            var integer = new IntegerLiteral("1");
+            var stringlit = new StringLiteral("\"foobar\"");
+            var equal = new LogicalOp("=", integer, stringlit);
+            var and = new LogicalOp("&", equal, equal);
+            var assert = new ExpressionStatement(new Keyword("assert"), and);
+            statementlist.Add(assert);
+            var parsetree = new Program(statementlist);
+
+            Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void UnaryNot()
+        {
+            var integer = new IntegerLiteral("42");
+            var and = new LogicalOp("=", integer, integer);
+            var not = new UnaryNot(and);
+            var assert = new ExpressionStatement(new Keyword("assert"), and);
+            statementlist.Add(assert);
+            var parsetree = new Program(statementlist);
+
+            Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
         }
     }
 
@@ -119,6 +179,133 @@ namespace MiniPLInterpreterTest
             var plus = new ArithmeticOp("+", stringlit, stringlit);
             var print = new ExpressionStatement(new Keyword("print"), plus);
             statementlist.Add(print);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void PrintBool()
+        {
+            var integer1 = new IntegerLiteral("1");
+            var integer2 = new IntegerLiteral("2");
+            var equal = new LogicalOp("=", integer1, integer2);
+            var print = new ExpressionStatement(new Keyword("print"), equal);
+            statementlist.Add(print);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void IntegerOverflow()
+        {
+            var integer = new IntegerLiteral("9999999999999999999999999999");
+            var print = new ExpressionStatement(new Keyword("print"), integer);
+            statementlist.Add(print);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void NonBooleanArgumentsToAnd()
+        {
+            var integer = new IntegerLiteral("5");
+            var equal = new LogicalOp("=", integer, integer);
+            var and = new LogicalOp("&", equal, integer);
+            var assert = new ExpressionStatement(new Keyword("assert"), and);
+            statementlist.Add(assert);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void IntegerArgumentToNot()
+        {
+            var integer = new IntegerLiteral("5");
+            var not = new UnaryNot(integer);
+            var assert = new ExpressionStatement(new Keyword("assert"), not);
+            statementlist.Add(assert);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void StringArgumentToNot()
+        {
+            var stringlit = new StringLiteral("\"foobar\"");
+            var not = new UnaryNot(stringlit);
+            var assert = new ExpressionStatement(new Keyword("assert"), not);
+            statementlist.Add(assert);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+    }
+
+    [TestFixture]
+    class LoopTest
+    {
+        List<Statement> statementlist;
+        TypeCheckingVisitor symbolTableBuilder;
+
+        [SetUp]
+        public void SetUp()
+        {
+            statementlist = new List<Statement>();
+            symbolTableBuilder = new TypeCheckingVisitor();
+        }
+
+        [Datapoint]
+        string stringtype = "string";
+
+        [Datapoint]
+        string booltype = "bool";
+
+        [Theory]
+        public void NonIntegerLoopVariable(string type)
+        {
+            var variabledecl = new VariableDeclaration("foo", type);
+            var variable = new VariableReference("foo");
+            var integer = new IntegerLiteral("5");
+            var range = new Range(integer, integer);
+            var loop = new Loop(variable, range, new List<Statement>());
+            statementlist.Add(variabledecl);
+            statementlist.Add(loop);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void ValidLoop()
+        {
+            var integer1 = new IntegerLiteral("1");
+            var integer2 = new IntegerLiteral("5");
+            var range = new Range(integer1, integer2);
+            var variabledecl = new VariableDeclaration("foo", "int");
+            var variable = new VariableReference("foo");
+            var loop = new Loop(variable, range, new List<Statement>());
+            statementlist.Add(variabledecl);
+            statementlist.Add(loop);
+            var parsetree = new Program(statementlist);
+
+            Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void InvalidRange()
+        {
+            var stringlit = new StringLiteral("foo");
+            var range = new Range(stringlit, stringlit);
+            var variabledecl = new VariableDeclaration("foo", "int");
+            var variable = new VariableReference("foo");
+            var loop = new Loop(variable, range, new List<Statement>());
+            statementlist.Add(variabledecl);
+            statementlist.Add(loop);
             var parsetree = new Program(statementlist);
 
             Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
