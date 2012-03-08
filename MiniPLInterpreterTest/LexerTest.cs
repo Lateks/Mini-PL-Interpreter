@@ -7,21 +7,48 @@ using Errors;
 namespace LexerTest
 {
     [TestFixture]
-    public class LexerTests
+    public class KeywordTest
     {
         [Datapoints]
         public string[] keywords = {"var", "for", "end", "in", "do", "read",
                                        "print", "int", "string", "bool", "assert"};
 
         [Theory]
-        public void Keywords(string input)
+        public void Keywords(string keyword)
         {
-            var lexer = new Scanner(input);
+            var lexer = new Scanner(keyword);
             Token next = lexer.NextToken();
             Assert.That(next, Is.InstanceOf<KeywordToken>());
-            Assert.That(((KeywordToken)next).Value, Is.EqualTo(input));
+            Assert.That(((KeywordToken)next).Value, Is.EqualTo(keyword));
+        }
+    }
+
+    [TestFixture]
+    public class OperatorTest
+    {
+        [Datapoints]
+        public string[] binaryOperators = { "+", "-", "*", "/", "&", "=" };
+
+        [Theory]
+        public void BinaryOperators(string binop)
+        {
+            var lexer = new Scanner(binop);
+            Token token = lexer.NextToken();
+            Assert.That(token, Is.InstanceOf<BinaryOperator>());
+            Assert.That(((BinaryOperator)token).Value, Is.EqualTo(binop));
         }
 
+        [Test]
+        public void UnaryNot()
+        {
+            var lexer = new Scanner("!");
+            Assert.That(lexer.NextToken(), Is.InstanceOf<UnaryNotToken>());
+        }
+    }
+
+    [TestFixture]
+    public class LexerTests
+    {
         [Test]
         public void IntegerConstants()
         {
@@ -121,15 +148,6 @@ namespace LexerTest
             Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo("/"));
             Assert.That(lexer.Col, Is.EqualTo(2));
             Assert.That(lexer.Row, Is.EqualTo(2));
-        }
-
-        [Test]
-        public void Operators()
-        {
-            var lexer = new Scanner("+ = !");
-            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo("+"));
-            Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo("="));
-            Assert.That(lexer.NextToken(), Is.InstanceOf<UnaryNotToken>());
         }
 
         [Test]
