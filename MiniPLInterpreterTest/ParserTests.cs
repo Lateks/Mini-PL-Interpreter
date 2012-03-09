@@ -157,7 +157,6 @@ namespace MiniPLInterpreterTest
             Program tree = parser.Parse();
             ReadStatement readstat = (ReadStatement)tree.Children[0];
 
-            Assert.That(readstat.Keyword, Is.EqualTo("read"));
             Assert.That(readstat.Variable, Is.InstanceOf<VariableReference>());
             Assert.That(((VariableReference)readstat.Variable).Name, Is.EqualTo("foo"));
         }

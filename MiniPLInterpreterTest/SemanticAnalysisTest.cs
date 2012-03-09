@@ -12,8 +12,18 @@ using Errors;
 namespace MiniPLInterpreterTest
 {
     [TestFixture]
-    class PrintTest
+    class PrintAndReadTest
     {
+        List<Statement> statementlist;
+        TypeCheckingVisitor symbolTableBuilder;
+
+        [SetUp]
+        public void SetUp()
+        {
+            statementlist = new List<Statement>();
+            symbolTableBuilder = new TypeCheckingVisitor();
+        }
+
         [Datapoint]
         string stringtype = "string";
 
@@ -21,9 +31,8 @@ namespace MiniPLInterpreterTest
         string inttype = "int";
 
         [Theory]
-        public void PrintString(string type)
+        public void ValidPrint(string type)
         {
-            var statementlist = new List<Statement>();
             var variabledecl = new VariableDeclaration("foo", type);
             statementlist.Add(variabledecl);
             var variable = new VariableReference("foo");
@@ -31,8 +40,46 @@ namespace MiniPLInterpreterTest
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
-            var symbolTableBuilder = new TypeCheckingVisitor();
             Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void PrintBool()
+        {
+            var integer1 = new IntegerLiteral("1");
+            var integer2 = new IntegerLiteral("2");
+            var equal = new LogicalOp("=", integer1, integer2);
+            var print = new ExpressionStatement("print", equal);
+            statementlist.Add(print);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Theory]
+        public void ValidRead(string type)
+        {
+            var variabledecl = new VariableDeclaration("foo", type);
+            statementlist.Add(variabledecl);
+            var variable = new VariableReference("foo");
+            var print = new ExpressionStatement("read", variable);
+            statementlist.Add(print);
+            var parsetree = new Program(statementlist);
+
+            Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void ReadBool()
+        {
+            var variabledecl = new VariableDeclaration("foo", "bool");
+            statementlist.Add(variabledecl);
+            var variable = new VariableReference("foo");
+            var print = new ReadStatement(variable);
+            statementlist.Add(print);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
         }
     }
 
@@ -185,19 +232,6 @@ namespace MiniPLInterpreterTest
         }
 
         [Test]
-        public void PrintBool()
-        {
-            var integer1 = new IntegerLiteral("1");
-            var integer2 = new IntegerLiteral("2");
-            var equal = new LogicalOp("=", integer1, integer2);
-            var print = new ExpressionStatement("print", equal);
-            statementlist.Add(print);
-            var parsetree = new Program(statementlist);
-
-            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
-        }
-
-        [Test]
         public void IntegerOverflow()
         {
             var integer = new IntegerLiteral("9999999999999999999999999999");
@@ -269,11 +303,31 @@ namespace MiniPLInterpreterTest
         public void NonIntegerLoopVariable(string type)
         {
             var variabledecl = new VariableDeclaration("foo", type);
+            statementlist.Add(variabledecl);
             var variable = new VariableReference("foo");
             var integer = new IntegerLiteral("5");
             var range = new Range(integer, integer);
-            var loop = new Loop(variable, range, new List<Statement>());
-            statementlist.Add(variabledecl);
+            var variabledecl2 = new VariableDeclaration("bar", "int");
+            var loopbody = new List<Statement>();
+            loopbody.Add(variabledecl2);
+            var loop = new Loop(variable, range, loopbody);
+            statementlist.Add(loop);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Theory]
+        public void SeveralVariableDeclarationsBeforeLoop(string type)
+        {
+            var intdeclaration = new VariableDeclaration("foo", "int");
+            var otherdeclaration = new VariableDeclaration("bar", type);
+            var variableref = new VariableReference("bar");
+            var integer = new IntegerLiteral("5");
+            var range = new Range(integer, integer);
+            var loop = new Loop(variableref, range, new List<Statement>());
+            statementlist.Add(intdeclaration);
+            statementlist.Add(otherdeclaration);
             statementlist.Add(loop);
             var parsetree = new Program(statementlist);
 

@@ -104,12 +104,11 @@ namespace SyntaxAnalysis
                         Match<KeywordToken>("for");
                         return new Loop(ident, range, stmts);
                     case "read":
-                        string keyword = token.Value;
                         input_token = scanner.NextToken();
                         ident = new VariableReference(Identifier());
-                        return new ReadStatement(keyword, ident);
+                        return new ReadStatement(ident);
                     case "print":
-                        keyword = token.Value;
+                        string keyword = token.Value;
                         input_token = scanner.NextToken();
                         return new ExpressionStatement(keyword, Expression());
                     case "assert":

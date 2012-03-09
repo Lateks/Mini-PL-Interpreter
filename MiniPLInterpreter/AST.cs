@@ -33,8 +33,8 @@ namespace AST
             foreach (Statement child in Children)
             {
                 child.accept(visitor);
-                visitor.visit(this);
             }
+            visitor.visit(this);
         }
     }
 
@@ -230,6 +230,10 @@ namespace AST
             get;
             private set;
         }
+        public string VarName
+        {
+            get { return Variable.Name; }
+        }
         public Expression Expression
         {
             get;
@@ -250,24 +254,13 @@ namespace AST
         }
     }
 
-    public abstract class KeywordStatement : Statement
+    public class ExpressionStatement : Statement
     {
         public string Keyword
         {
             get;
             private set;
         }
-
-        public KeywordStatement(string keyword)
-        {
-            Keyword = keyword;
-        }
-
-        public abstract void accept(NodeVisitor visitor);
-    }
-
-    public class ExpressionStatement : KeywordStatement
-    {
         public Expression Expression
         {
             get;
@@ -275,33 +268,36 @@ namespace AST
         }
 
         public ExpressionStatement(string keyword, Expression expression)
-            : base(keyword)
         {
+            Keyword = keyword;
             Expression = expression;
         }
 
-        public override void accept(NodeVisitor visitor)
+        public void accept(NodeVisitor visitor)
         {
             Expression.accept(visitor);
             visitor.visit(this);
         }
     }
 
-    public class ReadStatement : KeywordStatement
+    public class ReadStatement : Statement
     {
         public VariableReference Variable
         {
             get;
             private set;
         }
+        public string VarName
+        {
+            get { return Variable.Name; }
+        }
 
-        public ReadStatement(string keyword, VariableReference variable)
-            : base(keyword)
+        public ReadStatement(VariableReference variable)
         {
             Variable = variable;
         }
 
-        public override void accept(NodeVisitor visitor)
+        public void accept(NodeVisitor visitor)
         {
             Variable.accept(visitor);
             visitor.visit(this);
@@ -314,6 +310,10 @@ namespace AST
         {
             get;
             private set;
+        }
+        public string VarName
+        {
+            get { return Variable.Name; }
         }
         public Range Range
         {

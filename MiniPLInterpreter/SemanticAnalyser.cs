@@ -31,7 +31,7 @@ namespace MiniPlInterpreter
             {
                 return symboltable[name];
             }
-            catch (KeyNotFoundException e)
+            catch (KeyNotFoundException)
             {
                 return null;
             }
@@ -81,6 +81,7 @@ namespace MiniPlInterpreter
                 throw new SemanticError("Variable " + node.Name + " is already defined.");
             Symbol symbol = new Symbol(node.Name, node.Type);
             symboltable.define(symbol);
+            operandtypes.Push(node.Type);
         }
 
         public void visit(VariableReference node)
@@ -94,7 +95,8 @@ namespace MiniPlInterpreter
 
         public void visit(Loop node)
         {
-            if (symboltable.resolve(node.Variable.Name).Type != "int")
+            operandtypes.Clear();
+            if (symboltable.resolve(node.VarName).Type != "int")
                 throw new SemanticError("Loop variable " + node.Variable.Name + " is not an int.");
         }
 
@@ -127,10 +129,9 @@ namespace MiniPlInterpreter
 
         public void visit(Assignment node)
         {
-            if (node.Variable is VariableReference)
-                operandtypes.Pop();
-            string variableType = symboltable.resolve(node.Variable.Name).Type;
             string expressionType = operandtypes.Pop();
+            string variableType = operandtypes.Pop();
+            operandtypes.Clear();
             if (variableType != expressionType)
                 throw new SemanticError("Incompatible types in assignment.");
         }
@@ -145,9 +146,8 @@ namespace MiniPlInterpreter
 
         public void visit(ExpressionStatement node)
         {
-            string exprType;
-            exprType = operandtypes.Pop();
-
+            string exprType = operandtypes.Pop();
+            operandtypes.Clear();
             if (node.Keyword == "assert" && exprType != "bool")
                 throw new SemanticError("Invalid argument type for assert statement.");
             else if (node.Keyword == "print" && exprType == "bool")
@@ -161,7 +161,7 @@ namespace MiniPlInterpreter
                 Convert.ToInt32(node.Value);
                 operandtypes.Push("int");
             }
-            catch (OverflowException e)
+            catch (OverflowException)
             {
                 throw new SemanticError("Integer overflow: " + node.Value);
             }
@@ -172,7 +172,14 @@ namespace MiniPlInterpreter
             operandtypes.Push("string");
         }
 
-        public void visit(ReadStatement node) { }
+        public void visit(ReadStatement node)
+        {
+            string vartype = operandtypes.Pop();
+            operandtypes.Clear();
+            if (vartype == "bool")
+                throw new SemanticError("Invalid argument type for read statement.");
+        }
+
         public void visit(Program node) { }
     }
 }
