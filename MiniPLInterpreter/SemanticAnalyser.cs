@@ -148,9 +148,9 @@ namespace MiniPlInterpreter
             string exprType;
             exprType = operandtypes.Pop();
 
-            if (node.Keyword.Name == "assert" && exprType != "bool")
+            if (node.Keyword == "assert" && exprType != "bool")
                 throw new SemanticError("Invalid argument type for assert statement.");
-            else if (node.Keyword.Name == "print" && exprType == "bool")
+            else if (node.Keyword == "print" && exprType == "bool")
                 throw new SemanticError("Invalid argument type for print statement.");
         }
 
@@ -172,7 +172,6 @@ namespace MiniPlInterpreter
             operandtypes.Push("string");
         }
 
-        public void visit(Keyword node) { }
         public void visit(ReadStatement node) { }
         public void visit(Program node) { }
     }

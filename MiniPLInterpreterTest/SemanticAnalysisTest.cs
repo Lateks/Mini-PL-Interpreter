@@ -27,7 +27,7 @@ namespace MiniPLInterpreterTest
             var variabledecl = new VariableDeclaration("foo", type);
             statementlist.Add(variabledecl);
             var variable = new VariableReference("foo");
-            var print = new ExpressionStatement(new Keyword("print"), variable);
+            var print = new ExpressionStatement("print", variable);
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
@@ -84,7 +84,7 @@ namespace MiniPLInterpreterTest
         {
             var integer = new IntegerLiteral("1");
             var equal = new LogicalOp("=", integer, integer);
-            var assertion = new ExpressionStatement(new Keyword("assert"), equal);
+            var assertion = new ExpressionStatement("assert", equal);
             statementlist.Add(assertion);
             var parsetree = new Program(statementlist);
 
@@ -97,7 +97,7 @@ namespace MiniPLInterpreterTest
             var integer = new IntegerLiteral("1");
             var stringlit = new StringLiteral("\"foobar\"");
             var equal = new LogicalOp("=", integer, stringlit);
-            var assert = new ExpressionStatement(new Keyword("assert"), equal);
+            var assert = new ExpressionStatement("assert", equal);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -111,7 +111,7 @@ namespace MiniPLInterpreterTest
             var stringlit = new StringLiteral("\"foobar\"");
             var equal = new LogicalOp("=", integer, stringlit);
             var and = new LogicalOp("&", equal, equal);
-            var assert = new ExpressionStatement(new Keyword("assert"), and);
+            var assert = new ExpressionStatement("assert", and);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -124,7 +124,7 @@ namespace MiniPLInterpreterTest
             var integer = new IntegerLiteral("42");
             var and = new LogicalOp("=", integer, integer);
             var not = new UnaryNot(and);
-            var assert = new ExpressionStatement(new Keyword("assert"), and);
+            var assert = new ExpressionStatement("assert", and);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -177,7 +177,7 @@ namespace MiniPLInterpreterTest
         {
             var stringlit = new StringLiteral("\"foobar\"");
             var plus = new ArithmeticOp("+", stringlit, stringlit);
-            var print = new ExpressionStatement(new Keyword("print"), plus);
+            var print = new ExpressionStatement("print", plus);
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
@@ -190,7 +190,7 @@ namespace MiniPLInterpreterTest
             var integer1 = new IntegerLiteral("1");
             var integer2 = new IntegerLiteral("2");
             var equal = new LogicalOp("=", integer1, integer2);
-            var print = new ExpressionStatement(new Keyword("print"), equal);
+            var print = new ExpressionStatement("print", equal);
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
@@ -201,7 +201,7 @@ namespace MiniPLInterpreterTest
         public void IntegerOverflow()
         {
             var integer = new IntegerLiteral("9999999999999999999999999999");
-            var print = new ExpressionStatement(new Keyword("print"), integer);
+            var print = new ExpressionStatement("print", integer);
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
@@ -214,7 +214,7 @@ namespace MiniPLInterpreterTest
             var integer = new IntegerLiteral("5");
             var equal = new LogicalOp("=", integer, integer);
             var and = new LogicalOp("&", equal, integer);
-            var assert = new ExpressionStatement(new Keyword("assert"), and);
+            var assert = new ExpressionStatement("assert", and);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -226,7 +226,7 @@ namespace MiniPLInterpreterTest
         {
             var integer = new IntegerLiteral("5");
             var not = new UnaryNot(integer);
-            var assert = new ExpressionStatement(new Keyword("assert"), not);
+            var assert = new ExpressionStatement("assert", not);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -238,7 +238,7 @@ namespace MiniPLInterpreterTest
         {
             var stringlit = new StringLiteral("\"foobar\"");
             var not = new UnaryNot(stringlit);
-            var assert = new ExpressionStatement(new Keyword("assert"), not);
+            var assert = new ExpressionStatement("assert", not);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 

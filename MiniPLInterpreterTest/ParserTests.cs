@@ -107,7 +107,7 @@ namespace MiniPLInterpreterTest
             Program tree = parser.Parse();
             ExpressionStatement printstat = (ExpressionStatement)tree.Children[0];
 
-            Assert.That(((Keyword) printstat.Keyword).Name, Is.EqualTo("print"));
+            Assert.That(printstat.Keyword, Is.EqualTo("print"));
             Assert.That(printstat.Expression, Is.InstanceOf<StringLiteral>());
             Assert.That(((StringLiteral)printstat.Expression).Value, Is.EqualTo("\"How many times?\""));
         }
@@ -145,7 +145,7 @@ namespace MiniPLInterpreterTest
             Program tree = parser.Parse();
             ExpressionStatement assertion = (ExpressionStatement)tree.Children[0];
 
-            Assert.That(((Keyword) assertion.Keyword).Name, Is.EqualTo("assert"));
+            Assert.That(assertion.Keyword, Is.EqualTo("assert"));
             Assert.That(((VariableReference)assertion.Expression).Name, Is.EqualTo("foo"));
         }
 
@@ -157,7 +157,7 @@ namespace MiniPLInterpreterTest
             Program tree = parser.Parse();
             ReadStatement readstat = (ReadStatement)tree.Children[0];
 
-            Assert.That(((Keyword)readstat.Keyword).Name, Is.EqualTo("read"));
+            Assert.That(readstat.Keyword, Is.EqualTo("read"));
             Assert.That(readstat.Variable, Is.InstanceOf<VariableReference>());
             Assert.That(((VariableReference)readstat.Variable).Name, Is.EqualTo("foo"));
         }

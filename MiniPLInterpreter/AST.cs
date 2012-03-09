@@ -122,25 +122,6 @@ namespace AST
         }
     }
 
-    public class Keyword : Node
-    {
-        public string Name
-        {
-            get;
-            private set;
-        }
-
-        public Keyword(string name)
-        {
-            Name = name;
-        }
-
-        public void accept(NodeVisitor visitor)
-        {
-            visitor.visit(this);
-        }
-    }
-
     public abstract class BinaryOp : Expression
     {
         public Expression LeftOp
@@ -271,13 +252,13 @@ namespace AST
 
     public abstract class KeywordStatement : Statement
     {
-        public Keyword Keyword
+        public string Keyword
         {
             get;
             private set;
         }
 
-        public KeywordStatement(Keyword keyword)
+        public KeywordStatement(string keyword)
         {
             Keyword = keyword;
         }
@@ -293,7 +274,7 @@ namespace AST
             private set;
         }
 
-        public ExpressionStatement(Keyword keyword, Expression expression)
+        public ExpressionStatement(string keyword, Expression expression)
             : base(keyword)
         {
             Expression = expression;
@@ -314,7 +295,7 @@ namespace AST
             private set;
         }
 
-        public ReadStatement(Keyword keyword, VariableReference variable)
+        public ReadStatement(string keyword, VariableReference variable)
             : base(keyword)
         {
             Variable = variable;
