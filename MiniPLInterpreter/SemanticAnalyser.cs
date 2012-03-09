@@ -7,13 +7,9 @@ using Errors;
 
 namespace MiniPlInterpreter
 {
-    public class SemanticAnalyser
-    {
-    }
-
     public class SymbolTable
     {
-        Dictionary<string, Symbol> symboltable;
+        private Dictionary<string, Symbol> symboltable;
 
         public SymbolTable()
         {
@@ -81,7 +77,6 @@ namespace MiniPlInterpreter
                 throw new SemanticError("Variable " + node.Name + " is already defined.");
             Symbol symbol = new Symbol(node.Name, node.Type);
             symboltable.define(symbol);
-            operandtypes.Push(node.Type);
         }
 
         public void visit(VariableReference node)
@@ -95,9 +90,8 @@ namespace MiniPlInterpreter
 
         public void visit(Loop node)
         {
-            operandtypes.Clear();
             if (symboltable.resolve(node.VarName).Type != "int")
-                throw new SemanticError("Loop variable " + node.Variable.Name + " is not an int.");
+                throw new SemanticError("Loop variable " + node.VarName + " is not an int.");
         }
 
         public void visit(ArithmeticOp node)
@@ -130,7 +124,11 @@ namespace MiniPlInterpreter
         public void visit(Assignment node)
         {
             string expressionType = operandtypes.Pop();
-            string variableType = operandtypes.Pop();
+            string variableType;
+            if (node.Variable is VariableReference)
+                variableType = operandtypes.Pop();
+            else
+                variableType = symboltable.resolve(node.VarName).Type;
             operandtypes.Clear();
             if (variableType != expressionType)
                 throw new SemanticError("Incompatible types in assignment.");
@@ -147,7 +145,6 @@ namespace MiniPlInterpreter
         public void visit(ExpressionStatement node)
         {
             string exprType = operandtypes.Pop();
-            operandtypes.Clear();
             if (node.Keyword == "assert" && exprType != "bool")
                 throw new SemanticError("Invalid argument type for assert statement.");
             else if (node.Keyword == "print" && exprType == "bool")
@@ -175,7 +172,6 @@ namespace MiniPlInterpreter
         public void visit(ReadStatement node)
         {
             string vartype = operandtypes.Pop();
-            operandtypes.Clear();
             if (vartype == "bool")
                 throw new SemanticError("Invalid argument type for read statement.");
         }

@@ -7,16 +7,43 @@ namespace Errors
 {
     public class LexicalError : Exception
     {
-        public LexicalError(string message) { }
+        public string Message
+        {
+            get;
+            private set;
+        }
+
+        public LexicalError(string message)
+        {
+            Message = message;
+        }
     }
 
     public class SyntaxError : Exception
     {
-        public SyntaxError(string message) { }
+        public string Message
+        {
+            get;
+            private set;
+        }
+
+        public SyntaxError(string message)
+        {
+            Message = message;
+        }
     }
 
     public class SemanticError : Exception
     {
-        public SemanticError(string message) { }
+        public string Message
+        {
+            get;
+            private set;
+        }
+
+        public SemanticError(string message)
+        {
+            Message = message;
+        }
     }
 }

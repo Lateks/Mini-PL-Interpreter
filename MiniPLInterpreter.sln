@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPLInterpreter", "MiniPLInterpreter\MiniPLInterpreter.csproj", "{9C8D972D-3D36-4487-83C6-AD2FAAD27100}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPLInterpreterTest", "MiniPLInterpreterTest\MiniPLInterpreterTest.csproj", "{1382F4BB-63F1-4A4F-B1FF-5B1174F0152B}"
+EndProject
+Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "InterpreterUML", "InterpreterUML\InterpreterUML.modelproj", "{6670577E-F5BE-40B7-B916-E6316389990E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,16 @@ Global
 		{1382F4BB-63F1-4A4F-B1FF-5B1174F0152B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1382F4BB-63F1-4A4F-B1FF-5B1174F0152B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1382F4BB-63F1-4A4F-B1FF-5B1174F0152B}.Release|x86.ActiveCfg = Release|Any CPU
+		{6670577E-F5BE-40B7-B916-E6316389990E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6670577E-F5BE-40B7-B916-E6316389990E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6670577E-F5BE-40B7-B916-E6316389990E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6670577E-F5BE-40B7-B916-E6316389990E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6670577E-F5BE-40B7-B916-E6316389990E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6670577E-F5BE-40B7-B916-E6316389990E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6670577E-F5BE-40B7-B916-E6316389990E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6670577E-F5BE-40B7-B916-E6316389990E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6670577E-F5BE-40B7-B916-E6316389990E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6670577E-F5BE-40B7-B916-E6316389990E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

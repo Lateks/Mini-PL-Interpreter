@@ -1,0 +1,1054 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="5cadbd80-8b3e-4b89-9e38-023b6874c4e8"
+  name="InterpreterUML" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <profileInstances>
+    <packageHasProfileInstances
+      Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b">
+      <profileInstance
+        Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791"
+        name="StandardProfileL2" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances
+      Id="29349502-908c-4fda-9054-c48619c59ed0">
+      <profileInstance
+        Id="532ea607-fb19-44b8-8502-3351b05452be"
+        name="StandardProfileL3" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <packageHasNamedElement>
+      <Interface
+        Id="0dd2e24b-4d9a-4010-97f2-6e059f44887b"
+        name="Expression"
+        isAbstract="false"
+        isLeaf="false">
+        <generalsInternal>
+          <generalization
+            Id="e0a103a9-d96c-4d2c-9ed9-a06e69a644d5"
+            isSubstitutable="false">
+            <interfaceMoniker
+              Id="ca7dc685-f0c5-40b6-9aa0-76693b60c171"
+              LastKnownName="Node"
+              LastKnownLocation="InterpreterUML.uml" />
+          </generalization>
+        </generalsInternal>
+      </Interface>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <Interface
+        Id="3f80c69e-5191-4880-94d8-4d42102d6e27"
+        name="Statement"
+        isAbstract="false"
+        isLeaf="false">
+        <generalsInternal>
+          <generalization
+            Id="77e63a9e-5bab-4a71-ad9d-4702731fdf32"
+            isSubstitutable="false">
+            <interfaceMoniker
+              Id="ca7dc685-f0c5-40b6-9aa0-76693b60c171"
+              LastKnownName="Node"
+              LastKnownLocation="InterpreterUML.uml" />
+          </generalization>
+        </generalsInternal>
+      </Interface>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <Interface
+        Id="ca7dc685-f0c5-40b6-9aa0-76693b60c171"
+        name="Node"
+        isAbstract="false"
+        isLeaf="false">
+        <ownedOperations>
+          <operation
+            Id="f3f92b2d-96d7-420c-8a22-0ace599332c4"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="true"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="70f2466f-f6b5-4180-adeb-b41fcf4ab737"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperations>
+      </Interface>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="fa7ea405-3303-432d-a638-4a3e2f7bdcdf"
+        name="Literal"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="0e354fed-1311-4223-bc1b-7117da200cee">
+            <interfaceMoniker
+              Id="0dd2e24b-4d9a-4010-97f2-6e059f44887b"
+              LastKnownName="Expression"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="ab714e08-01e0-4d47-862b-3775deee4585"
+            name="string Value"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="5ced9bf5-a07f-4a50-b567-1113261a3d15"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="61c5fcf5-2cd0-4e68-b2bf-2d39d20e41e2"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="615aa2dd-d847-484e-9e1e-735b44763a6a"
+        name="Program"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="e3733e0a-f76e-4251-b2de-fa01e0184d9b">
+            <interfaceMoniker
+              Id="ca7dc685-f0c5-40b6-9aa0-76693b60c171"
+              LastKnownName="Node"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="163473a7-7d79-455e-864f-b45b3e5579da"
+            name="List&lt;Statement&gt; Children"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="c2161650-2c4b-48d4-ac98-d3f715adc2b9"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="945a6094-155b-49ba-8556-2ef5770fbb9e"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="829cdeb0-1ff7-40c3-ad65-cd4648474e62"
+        name="StringLiteral"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <generalsInternal>
+          <generalization
+            Id="aa60aac7-cc69-4c67-aff8-41ef726363ab"
+            isSubstitutable="false">
+            <classMoniker
+              Id="fa7ea405-3303-432d-a638-4a3e2f7bdcdf"
+              LastKnownName="Literal"
+              LastKnownLocation="InterpreterUML.uml" />
+          </generalization>
+        </generalsInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="232bb5a7-3f3f-4206-801d-3c8fc4203cec"
+            name="string Value"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="f09da8e0-692a-47a3-81a3-55df69bac379"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="c942259c-5945-4a0c-808c-4b6ed2fd5391"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="d02062f5-0c70-4e8d-a470-2d95274855f1"
+        name="IntegerLiteral"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <generalsInternal>
+          <generalization
+            Id="b3dc4c90-21ac-4577-9853-558757c2a014"
+            isSubstitutable="false">
+            <classMoniker
+              Id="fa7ea405-3303-432d-a638-4a3e2f7bdcdf"
+              LastKnownName="Literal"
+              LastKnownLocation="InterpreterUML.uml" />
+          </generalization>
+        </generalsInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="3aa9aca0-102c-47a9-b340-82de740c3c11"
+            name="string Value"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="9a83f275-61c9-4928-a42e-b82dfd6ad7b1"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="bed12c6c-bcaa-4569-8cd1-42e4fa1c8556"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="53806b9a-25c7-4182-adca-911563ee2607"
+        name="Variable"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="6dea9559-d36d-4331-b517-846b0e981b03">
+            <interfaceMoniker
+              Id="ca7dc685-f0c5-40b6-9aa0-76693b60c171"
+              LastKnownName="Node"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="8fe67c18-4110-4189-86b3-850233a51111"
+            name="string Name"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="325dbc29-2fe4-4b46-b3c3-96f6637d9e35"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="df295cde-4a57-4688-a273-03fd16342a57"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <enumeration
+        Id="ca8f16ad-bb58-4ce2-bdff-cf359e6a0217"
+        name="Enumeration1"
+        isAbstract="false"
+        isLeaf="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="1054e11f-c863-43d1-8fb0-2ff5bf67a2f1"
+        name="VariableReference"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="ca5d69ff-9def-456d-84f9-7444963a0323">
+            <interfaceMoniker
+              Id="0dd2e24b-4d9a-4010-97f2-6e059f44887b"
+              LastKnownName="Expression"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <generalsInternal>
+          <generalization
+            Id="9ac79a02-317b-40d2-97b5-a34e69fd7ea5"
+            isSubstitutable="false">
+            <classMoniker
+              Id="53806b9a-25c7-4182-adca-911563ee2607"
+              LastKnownName="Variable"
+              LastKnownLocation="InterpreterUML.uml" />
+          </generalization>
+        </generalsInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="32a9717d-70d0-4c04-8794-0d15d1ed7301"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="3afff039-9cd8-448f-98f2-6453442889b5"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <enumeration
+        Id="c02cc87f-a392-410b-a58f-b72411be4838"
+        name="Enumeration2"
+        isAbstract="false"
+        isLeaf="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="98914b98-f751-4630-9d86-9a802b238048"
+        name="VariableDeclaration"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="fdd72b63-1a37-48bc-b9d9-75bcdabcd22c">
+            <interfaceMoniker
+              Id="3f80c69e-5191-4880-94d8-4d42102d6e27"
+              LastKnownName="Statement"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <generalsInternal>
+          <generalization
+            Id="4ca1e8c8-7358-4af7-9004-d3063580e2d2"
+            isSubstitutable="false">
+            <classMoniker
+              Id="53806b9a-25c7-4182-adca-911563ee2607"
+              LastKnownName="Variable"
+              LastKnownLocation="InterpreterUML.uml" />
+          </generalization>
+        </generalsInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="4d2f0b39-9d19-4123-b1a6-208df6b1df08"
+            name="string Type"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="a8f04d82-188c-4393-b5c1-826b84cea505"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="63521652-52ee-414a-9636-b662f79eff9e"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="e115055e-ca35-46a0-97bd-7fe54e5be0b3"
+        name="BinaryOp"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="50d8ec8b-f515-4858-b868-fe238eab93d4">
+            <interfaceMoniker
+              Id="0dd2e24b-4d9a-4010-97f2-6e059f44887b"
+              LastKnownName="Expression"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="f18d0414-1017-4614-b8c9-d6ec54df2392"
+            name="Expression LeftOp"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+          <property
+            Id="966e7d67-db60-49f2-973c-37a900d16956"
+            name="Expression RightOp"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+          <property
+            Id="1bb85fd3-c29d-451f-b447-20657084ac02"
+            name="string OpSymbol"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="4ac55b89-f92d-44da-af1d-7561efa6d846"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="1c53ef7c-6d96-4dfd-b8f4-1ec751c337d4"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <enumeration
+        Id="0f74a73a-6b83-4355-b50b-bdad6c871f7c"
+        name="Enumeration3"
+        isAbstract="false"
+        isLeaf="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="b6cff8d7-cc34-4a5c-b509-51c26dfba669"
+        name="ArithmeticOp"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="61dbf50f-9aaf-4666-9407-f3d100b011aa"
+        name="LogicalOp"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="e72b55e8-42a7-40a5-8aa2-ad9ea72f40dd"
+        name="ArithmeticOp"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <generalsInternal>
+          <generalization
+            Id="4dc24af2-ccfd-4dee-b568-3cddcf2fcf0a"
+            isSubstitutable="false">
+            <classMoniker
+              Id="e115055e-ca35-46a0-97bd-7fe54e5be0b3"
+              LastKnownName="BinaryOp"
+              LastKnownLocation="InterpreterUML.uml" />
+          </generalization>
+        </generalsInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="ded4851c-6b66-4686-8d97-59c1144b8056"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="2e7a0ad5-d8f1-45d8-83d4-20331baae115"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="42279149-fcf2-4c0a-978f-5d8d0034bf0f"
+        name="LogicalOp"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <generalsInternal>
+          <generalization
+            Id="a0f79eed-cf31-46ea-ba49-cc2b6a8c137c"
+            isSubstitutable="false">
+            <classMoniker
+              Id="e115055e-ca35-46a0-97bd-7fe54e5be0b3"
+              LastKnownName="BinaryOp"
+              LastKnownLocation="InterpreterUML.uml" />
+          </generalization>
+        </generalsInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="8ce73f30-381d-4e21-8e7e-0a16204eea69"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="81fc43a9-64a5-461f-85d4-1bf516c350a4"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="9aee3f2d-4c58-4631-af12-c44d47414da0"
+        name="UnaryNot"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="e6caa3e6-2c7f-468c-a086-80bb89525b66">
+            <interfaceMoniker
+              Id="0dd2e24b-4d9a-4010-97f2-6e059f44887b"
+              LastKnownName="Expression"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="ea14061f-4c57-400d-9322-66662dc0383e"
+            name="Expression Operand"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="b52a8424-fa0a-434a-b73a-02a5136420c8"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="de98952a-dbe8-4b07-b94d-98f98eb2b760"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="76d93691-34e2-4b83-9e88-657e5afb4a84"
+        name="Range"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="a5988b60-e375-4b9e-869e-9bf0a30cf935">
+            <interfaceMoniker
+              Id="ca7dc685-f0c5-40b6-9aa0-76693b60c171"
+              LastKnownName="Node"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="25231926-dab1-49dc-a1ed-d262dc27489e"
+            name="Expression Begin"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+          <property
+            Id="f47a7788-c42c-40ba-9a26-6800cca0d4a2"
+            name="Expression End"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="69fec553-31ec-47e5-9736-5904a0e5f511"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="6c8deaad-36b4-4071-8b0b-118232ac7021"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="2fb4302c-a346-43a8-80df-c72a0de24fd9"
+        name="Assignment"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="66273aea-c920-4700-a50f-729bbf60703e">
+            <interfaceMoniker
+              Id="3f80c69e-5191-4880-94d8-4d42102d6e27"
+              LastKnownName="Statement"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="de0140c7-4d3a-4431-a32a-92598508425c"
+            name="Variable Variable"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+          <property
+            Id="22a786e0-b393-4638-bb98-70c2ff810489"
+            name="Expression Expression"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+          <property
+            Id="b813642b-95da-4401-9abc-cb080ccd0760"
+            name="string VarName"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="3b8ed5be-940d-4ec3-b24d-4e6ca3d8802c"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="655cfd32-15aa-414c-8dac-29e56dd2ccc7"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="ad09ac97-6722-4314-96ca-42980d3fb50d"
+        name="ExpressionStatement"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="b60af228-690f-44d0-a34c-615ff604eb0c">
+            <interfaceMoniker
+              Id="3f80c69e-5191-4880-94d8-4d42102d6e27"
+              LastKnownName="Statement"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="1f9b1b71-526a-45d5-a08e-e13a78d780f8"
+            name="string Keyword"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+          <property
+            Id="9df4a146-8c9a-4e4c-91cf-4d16c3abc80a"
+            name="Expression Expression"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="95892122-19f6-444d-91e0-f401bd78ebbc"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="2723d4d1-332b-4281-a95c-3d97293ba34d"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="6ec4db14-4903-44fa-a512-9bb077efbeb9"
+        name="ReadStatement"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="0ac06fc7-f3de-45a5-9c76-1bba8e25d7aa">
+            <interfaceMoniker
+              Id="3f80c69e-5191-4880-94d8-4d42102d6e27"
+              LastKnownName="Statement"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="00848ba1-7486-4469-af70-723a3eb46cd0"
+            name="VariableReference Variable"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+          <property
+            Id="aef59976-4d87-4b27-8284-b72cad7cd9f4"
+            name="string VarName"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="8732f373-a342-4765-8c81-2e99f091a885"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="fee08313-624b-4d2f-9b52-24c3e268014d"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="95098992-47b4-4552-b8f4-0105c44ad64c"
+        name="Loop"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="115c54a3-871e-408e-855c-c326366f16b7">
+            <interfaceMoniker
+              Id="3f80c69e-5191-4880-94d8-4d42102d6e27"
+              LastKnownName="Statement"
+              LastKnownLocation="InterpreterUML.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property
+            Id="bc686d4f-18fd-441b-b85a-18c67f5ad737"
+            name="List&lt;Statement&gt; LoopBody"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+          <property
+            Id="ec20db42-22c1-4220-94e7-d45f41bc320f"
+            name="Range Range"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+          <property
+            Id="f6d01e7e-e559-4211-8265-0333b6dcdb2e"
+            name="VariableReference Variable"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+          <property
+            Id="a247712b-695d-4bad-bac1-23300012ca64"
+            name="string VarName"
+            isLeaf="false"
+            isStatic="false"
+            isReadOnly="false"
+            isUnique="false"
+            isDerived="false"
+            isDerivedUnion="false"
+            aggregation="None"
+            isComposite="false" />
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation
+            Id="cdd845a9-7d56-46cd-b9b1-7e1a881b7449"
+            name="accept"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="2892e2ec-a622-4937-a47f-66cede0cbda7"
+                  name="NodeVisitor visitor"
+                  direction="In"
+                  isUnique="false" />
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </packageHasNamedElement>
+  </packagedElements>
+  <primitiveType
+    Id="220a3521-e091-4221-bae9-3ef9018e845c"
+    name="Integer"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="8943dc84-709e-4f62-b15a-a3273aa6f165"
+    name="Boolean"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="59259974-6d55-42c6-b7bd-763d77ac8ef9"
+    name="String"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="3ab42e7d-4969-445a-b209-471f5cb8209c"
+    name="UnlimitedNatural"
+    isAbstract="false"
+    isLeaf="false" />
+</modelStoreModel>
