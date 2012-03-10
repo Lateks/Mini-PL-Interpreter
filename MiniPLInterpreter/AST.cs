@@ -337,12 +337,6 @@ namespace AST
         {
             Variable.accept(visitor);
             Range.accept(visitor);
-
-            foreach (Statement node in LoopBody)
-            {
-                node.accept(visitor);
-            }
-
             visitor.visit(this);
         }
     }

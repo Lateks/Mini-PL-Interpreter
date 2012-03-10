@@ -92,6 +92,9 @@ namespace MiniPlInterpreter
         {
             if (symboltable.resolve(node.VarName).Type != "int")
                 throw new SemanticError("Loop variable " + node.VarName + " is not an int.");
+
+            foreach (Statement statement in node.LoopBody)
+                statement.accept(this);
         }
 
         public void visit(ArithmeticOp node)

@@ -93,6 +93,14 @@ namespace MiniPlInterpreter
 
         public void visit(Loop node)
         {
+            // Note: In theory variable declarations are never allowed inside loops
+            // because there is only one scope (the same variable cannot be declared
+            // several times -- which it would be if the loop was iterated over several times).
+            // In practice you can write a for loop that only goes through one iteration
+            // in which case a variable declaration inside the loop body does not cause
+            // problems. Unfortunately at the static type checking phase we have no
+            // idea how many times the loop body will be iterated over, so this check must
+            // be done at runtime.
             throw new NotImplementedException();
         }
 
