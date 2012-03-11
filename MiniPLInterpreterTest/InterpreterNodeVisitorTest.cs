@@ -325,4 +325,33 @@ namespace MiniPLInterpreterTest
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(true));
         }
     }
+
+    [TestFixture]
+    class TestLoop
+    {
+        [Test]
+        public void LoopTest()
+        {
+            var loopvardecl = new VariableDeclaration("loopvariable", "int");
+            var loopvarref = new VariableReference("loopvariable");
+            var range = new Range(new IntegerLiteral("2"), new IntegerLiteral("5"));
+            var loopbody = new List<Statement>();
+            var resultdecl = new VariableDeclaration("result", "int");
+            var resultref = new VariableReference("result");
+            loopbody.Add(new Assignment(resultref,
+                new ArithmeticOp("+", resultref, loopvarref)));
+            var program = new List<Statement>();
+            program.Add(resultdecl);
+            program.Add(loopvardecl);
+            program.Add(new Loop(loopvarref, range, loopbody));
+
+            var symboltable = new SymbolTable();
+            symboltable.define(new Symbol("loopvariable", "int"));
+            symboltable.define(new Symbol("result", "int"));
+            var interpreter = new InterpretingNodeVisitor(symboltable);
+
+            interpreter.run(new Program(program));
+            Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(14));
+        }
+    }
 }
