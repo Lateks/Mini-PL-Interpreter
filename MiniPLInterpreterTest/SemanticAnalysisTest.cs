@@ -148,15 +148,14 @@ namespace MiniPLInterpreterTest
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
-            Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
         }
 
         [Test]
         public void LogicalOpAnd()
         {
             var integer = new IntegerLiteral("1");
-            var stringlit = new StringLiteral("\"foobar\"");
-            var equal = new LogicalOp("=", integer, stringlit);
+            var equal = new LogicalOp("=", integer, integer);
             var and = new LogicalOp("&", equal, equal);
             var assert = new ExpressionStatement("assert", and);
             statementlist.Add(assert);

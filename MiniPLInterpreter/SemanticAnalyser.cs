@@ -117,6 +117,9 @@ namespace MiniPlInterpreter
             string optype2 = operandtypes.Pop();
             if (node.OpSymbol == "&" && (optype1 != "bool" || optype2 != "bool"))
                 throw new SemanticError("Non-boolean arguments to logical and operator (&).");
+            if (node.OpSymbol == "=" && (optype1 != optype2))
+                throw new SemanticError("Logical operator \"=\" cannot be applied to types \"" +
+                    optype1 + "\" and \"" + optype2 + "\".");
             operandtypes.Push("bool");
         }
 
