@@ -154,7 +154,7 @@ namespace MiniPlInterpreter
                 else // TODO: write a better error message (e.g. row/col information?)
                     throw new AssertionFailed("Assertion failed.");
             }
-            else // keyword is "print"
+            if (node.Keyword == "print")
                 Console.WriteLine(value);
         }
 
