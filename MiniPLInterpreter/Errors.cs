@@ -22,4 +22,16 @@ namespace Errors
         public SemanticError(string message)
             : base(message) { }
     }
+
+    public class AssertionFailed : Exception
+    {
+        public AssertionFailed(string message)
+            : base(message) { }
+    }
+
+    public class ReadError : Exception
+    {
+        public ReadError(string message)
+            : base(message) { }
+    }
 }

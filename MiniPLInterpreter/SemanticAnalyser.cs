@@ -93,8 +93,12 @@ namespace MiniPlInterpreter
             if (symboltable.resolve(node.VarName).Type != "int")
                 throw new SemanticError("Loop variable " + node.VarName + " is not an int.");
 
-            foreach (Statement statement in node.LoopBody)
-                statement.accept(this);
+            for (int i = 0; i < 2; i++)
+            { // Check twice to prevent variable declarations inside the loop body
+              // (would cause problems because of singular scope).
+                foreach (Statement statement in node.LoopBody)
+                    statement.accept(this);
+            }
         }
 
         public void visit(ArithmeticOp node)

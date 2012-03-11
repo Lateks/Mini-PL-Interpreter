@@ -4,20 +4,30 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using AST;
+using Errors;
 
 namespace MiniPlInterpreter
 {
     public class InterpretingNodeVisitor : NodeVisitor
     {
         private SymbolTable symboltable;
-        private Hashtable valuetable;
         private Stack operands;
+        public Hashtable Valuetable
+        {
+            get;
+            private set;
+        }
 
         public InterpretingNodeVisitor(SymbolTable symboltable)
         {
             this.symboltable = symboltable;
-            this.valuetable = new Hashtable();
+            Valuetable = new Hashtable();
             this.operands = new Stack();
+        }
+
+        public void run(Program program)
+        {
+            program.accept(this);
         }
 
         public void visit(Program node) { }
@@ -33,7 +43,15 @@ namespace MiniPlInterpreter
             operands.Push(node.Value);
         }
 
-        public void visit(VariableDeclaration node) { }
+        public void visit(VariableDeclaration node)
+        { // set default values
+            if (node.Type == "int")
+                Valuetable[symboltable.resolve(node.Name)] = 0;
+            else if (node.Type == "bool")
+                Valuetable[symboltable.resolve(node.Name)] = false;
+            else
+                Valuetable[symboltable.resolve(node.Name)] = "";
+        }
 
         public void visit(VariableReference node)
         {
@@ -67,13 +85,13 @@ namespace MiniPlInterpreter
             if (value is T)
                 return value;
             else
-                return (T) valuetable[value];
+                return (T) Valuetable[value];
         }
 
         public void visit(LogicalOp node)
         {
-            bool secondop = pop<bool>();
-            bool firstop = pop<bool>();
+            dynamic secondop = operands.Pop();
+            dynamic firstop = operands.Pop();
             switch (node.OpSymbol)
             {
                 case "=":
@@ -93,23 +111,21 @@ namespace MiniPlInterpreter
 
         public void visit(Loop node)
         {
-            // Note: In theory variable declarations are never allowed inside loops
-            // because there is only one scope (the same variable cannot be declared
-            // several times -- which it would be if the loop was iterated over several times).
-            // In practice you can write a for loop that only goes through one iteration
-            // in which case a variable declaration inside the loop body does not cause
-            // problems. Unfortunately at the static type checking phase we have no
-            // idea how many times the loop body will be iterated over, so this check must
-            // be done at runtime.
-            throw new NotImplementedException();
+            int end = pop<int>();
+            int begin = pop<int>();
+            Symbol loopvariable = pop<Symbol>();
+
+            for (int i = begin; i <= end; i++)
+            {
+                Valuetable[loopvariable] = i;
+                foreach (Statement statement in node.LoopBody)
+                {
+                    statement.accept(this);
+                }
+            }
         }
 
-        public void visit(Range node)
-        {
-            int begin = pop<int>();
-            int end = pop<int>();
-            operands.Push(Enumerable.Range(begin, end - begin + 1));
-        }
+        public void visit(Range node) { /*no op, range operands already in stack*/ }
 
         public void visit(Assignment node)
         {
@@ -119,7 +135,7 @@ namespace MiniPlInterpreter
                 variable = pop<Symbol>();
             else
                 variable = symboltable.resolve(node.VarName);
-            valuetable[variable] = value;
+            Valuetable[variable] = value;
         }
 
         public void visit(ExpressionStatement node)
@@ -127,15 +143,16 @@ namespace MiniPlInterpreter
             dynamic expression = operands.Pop();
             dynamic value;
             if (expression is Symbol)
-                value = valuetable[expression];
+                value = Valuetable[expression];
             else
                 value = expression;
 
             if (node.Keyword == "assert" && !value)
             {
-                throw new NotImplementedException();
-                // TODO: write a better message
-                // throw an exception to be caught by main
+                if (expression is Symbol)
+                    throw new AssertionFailed("Assertion failed: " + expression + " is false.");
+                else // TODO: write a better error message (e.g. row/col information?)
+                    throw new AssertionFailed("Assertion failed.");
             }
             else // keyword is "print"
                 Console.WriteLine(value);
@@ -143,28 +160,27 @@ namespace MiniPlInterpreter
 
         public void visit(ReadStatement node)
         {
-            throw new NotImplementedException();
             Symbol variable = pop<Symbol>();
-            string input = Console.ReadLine(); // need to implement reading single words
+            string input = Console.ReadLine(); // TODO: implement reading single words
             if (variable.Type == "int")
             {
                 try
                 {
                     int value = Convert.ToInt32(input);
-                    valuetable[variable] = value;
+                    Valuetable[variable] = value;
                 }
                 catch (FormatException)
                 {
-                    // throw an exception to be caught by Main
+                    throw new ReadError("Could not convert input \"" + input + "\" to int.");
                 }
                 catch (OverflowException)
                 {
-                    // throw an exception to be caught by Main
+                    throw new ReadError("Integer overflow when converting input \"" + input + "\" to int.");
                 }
             }
             else // string variable
             {
-                // ...
+                Valuetable[variable] = input;
             }
         }
     }

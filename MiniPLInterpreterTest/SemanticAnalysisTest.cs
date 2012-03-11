@@ -364,6 +364,25 @@ namespace MiniPLInterpreterTest
 
             Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
         }
+
+        [Test]
+        public void CannotDeclareVariablesInsideLoop()
+        {
+            var integer1 = new IntegerLiteral("1");
+            var integer2 = new IntegerLiteral("5");
+            var range = new Range(integer1, integer2);
+            var variabledecl = new VariableDeclaration("foo", "int");
+            var variable = new VariableReference("foo");
+            var loopbodydecl = new VariableDeclaration("bar", "int");
+            var loopbody = new List<Statement>();
+            loopbody.Add(loopbodydecl);
+            var loop = new Loop(variable, range, loopbody);
+            statementlist.Add(variabledecl);
+            statementlist.Add(loop);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
     }
 
     [TestFixture]
