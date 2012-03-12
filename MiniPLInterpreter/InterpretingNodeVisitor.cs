@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using AST;
 using Errors;
+using System.Diagnostics;
 
 namespace MiniPlInterpreter
 {
     public class InterpretingNodeVisitor : NodeVisitor
     {
         private SymbolTable symboltable;
+        private InputReader inputreader;
         private Hashtable nodevalues; // for storing evaluated values of nodes
         public Hashtable Valuetable
         {
@@ -21,6 +23,7 @@ namespace MiniPlInterpreter
         public InterpretingNodeVisitor(SymbolTable symboltable)
         {
             this.symboltable = symboltable;
+            inputreader = new InputReader();
             Valuetable = new Hashtable();
             nodevalues = new Hashtable();
         }
@@ -62,6 +65,7 @@ namespace MiniPlInterpreter
         {
             int firstop = fetch<int>(node.LeftOp);
             int secondop = fetch<int>(node.RightOp);
+
             switch (node.OpSymbol)
             {
                 case "+":
@@ -92,6 +96,7 @@ namespace MiniPlInterpreter
         {
             dynamic firstop = nodevalues[node.LeftOp];
             dynamic secondop = nodevalues[node.RightOp];
+
             switch (node.OpSymbol)
             {
                 case "=":
@@ -125,7 +130,7 @@ namespace MiniPlInterpreter
             }
         }
 
-        public void visit(Range node) { /*no op, range operands already in stack*/ }
+        public void visit(Range node) { }
 
         public void visit(Assignment node)
         {
@@ -161,7 +166,7 @@ namespace MiniPlInterpreter
         public void visit(ReadStatement node)
         {
             Symbol variable = fetch<Symbol>(node.Variable);
-            string input = Console.ReadLine(); // TODO: implement reading single words
+            string input = inputreader.ReadWord();
             if (variable.Type == "int")
             {
                 try
@@ -182,6 +187,26 @@ namespace MiniPlInterpreter
             {
                 Valuetable[variable] = input;
             }
+        }
+    }
+
+    public class InputReader
+    {
+        string readbuffer;
+        static char[] splitters = { '\t', '\r', '\n', ' ', '\v', '\f' };
+
+        public InputReader()
+        {
+            this.readbuffer = "";
+        }
+
+        public string ReadWord()
+        {
+            if (readbuffer == "")
+                readbuffer = Console.ReadLine().Trim();
+            var split = readbuffer.Split(splitters, 2, StringSplitOptions.RemoveEmptyEntries);
+            readbuffer = split[1];
+            return split[0];
         }
     }
 }
