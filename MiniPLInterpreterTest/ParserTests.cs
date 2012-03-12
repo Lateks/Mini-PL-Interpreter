@@ -109,7 +109,7 @@ namespace MiniPLInterpreterTest
 
             Assert.That(printstat.Keyword, Is.EqualTo("print"));
             Assert.That(printstat.Expression, Is.InstanceOf<StringLiteral>());
-            Assert.That(((StringLiteral)printstat.Expression).Value, Is.EqualTo("\"How many times?\""));
+            Assert.That(((StringLiteral)printstat.Expression).Value, Is.EqualTo("How many times?"));
         }
 
         [Test]

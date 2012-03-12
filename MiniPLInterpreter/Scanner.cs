@@ -227,7 +227,8 @@ namespace LexicalAnalysis
 
         private StringLiteralToken MakeStringLiteralToken()
         {
-            string token = PopInput();
+            PopInput(); // discard delimiting quotes
+            string token = "";
             while (InputLeft() && !(input.Peek().Equals('"')))
                 if (input.Peek().Equals('\\'))
                     token += GetEscapeCharacter();
@@ -235,7 +236,8 @@ namespace LexicalAnalysis
                     token += PopInput();
             if (!InputLeft())
                 throw new LexicalError("Reached end of input while scanning for a string literal.");
-            return new StringLiteralToken(token + PopInput(), Row, Col);
+            PopInput();
+            return new StringLiteralToken(token, Row, Col);
         }
 
         private string GetEscapeCharacter()

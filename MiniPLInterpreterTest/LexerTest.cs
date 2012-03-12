@@ -89,12 +89,12 @@ namespace LexerTest
         public void StringLiterals()
         {
             var lexer = new Scanner("\"foo 42\"");
-            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("\"foo 42\""));
+            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("foo 42"));
             Assert.That(lexer.NextToken(), Is.InstanceOf<EOF>());
             lexer = new Scanner("\"foo\\n\"");
-            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("\"foo\\n\""));
+            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("foo\\n"));
             lexer = new Scanner("\"foo\\\"...\\\"\"");
-            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("\"foo\\\"...\\\"\""));
+            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("foo\\\"...\\\""));
             lexer = new Scanner("\"foo\\\"");
             Assert.Throws<LexicalError>(() => lexer.NextToken());
             lexer = new Scanner("\"foo\\");
@@ -181,7 +181,7 @@ namespace LexerTest
             Assert.That(lexer.NextToken(), Is.InstanceOf<LeftParenthesis>());
             Assert.That(((IntegerLiteralToken) lexer.NextToken()).Value, Is.EqualTo("2"));
             Assert.That(((BinaryOperator) lexer.NextToken()).Value, Is.EqualTo("*"));
-            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("\"foo\""));
+            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("foo"));
             Assert.That(lexer.NextToken(), Is.InstanceOf<RightParenthesis>());
             Assert.That(lexer.NextToken(), Is.InstanceOf<EndLine>());
         }
