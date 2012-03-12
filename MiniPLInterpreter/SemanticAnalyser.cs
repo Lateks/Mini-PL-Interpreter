@@ -103,9 +103,9 @@ namespace MiniPlInterpreter
 
         public void visit(ArithmeticOp node)
         {
-            string rightoptype = operandtypes.Pop();
-            string leftoptype = operandtypes.Pop();
-            if (rightoptype == "int" && leftoptype == "int")
+            string optype1 = operandtypes.Pop();
+            string optype2 = operandtypes.Pop();
+            if (optype1 == "int" && optype2 == "int")
                 operandtypes.Push("int");
             else
                 throw new SemanticError("Non-integer arguments to arithmetic operator.");

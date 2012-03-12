@@ -11,7 +11,7 @@ namespace MiniPlInterpreter
     public class InterpretingNodeVisitor : NodeVisitor
     {
         private SymbolTable symboltable;
-        private Stack operands;
+        private Hashtable nodevalues; // for storing evaluated values of nodes
         public Hashtable Valuetable
         {
             get;
@@ -22,7 +22,7 @@ namespace MiniPlInterpreter
         {
             this.symboltable = symboltable;
             Valuetable = new Hashtable();
-            this.operands = new Stack();
+            nodevalues = new Hashtable();
         }
 
         public void run(Program program)
@@ -35,12 +35,12 @@ namespace MiniPlInterpreter
         public void visit(IntegerLiteral node)
         {
             int literal = Convert.ToInt32(node.Value);
-            operands.Push(literal);
+            nodevalues[node] = literal;
         }
 
         public void visit(StringLiteral node)
         {
-            operands.Push(node.Value);
+            nodevalues[node] = node.Value;
         }
 
         public void visit(VariableDeclaration node)
@@ -55,33 +55,33 @@ namespace MiniPlInterpreter
 
         public void visit(VariableReference node)
         {
-            operands.Push(symboltable.resolve(node.Name));
+            nodevalues[node] = symboltable.resolve(node.Name);
         }
 
         public void visit(ArithmeticOp node)
         {
-            int secondop = pop<int>();
-            int firstop = pop<int>();
+            int firstop = fetch<int>(node.LeftOp);
+            int secondop = fetch<int>(node.RightOp);
             switch (node.OpSymbol)
             {
                 case "+":
-                    operands.Push(firstop + secondop);
+                    nodevalues[node] = firstop + secondop;
                     break;
                 case "-":
-                    operands.Push(firstop - secondop);
+                    nodevalues[node] = firstop - secondop;
                     break;
                 case "*":
-                    operands.Push(firstop * secondop);
+                    nodevalues[node] = firstop * secondop;
                     break;
                 case "/":
-                    operands.Push(firstop / secondop);
+                    nodevalues[node] = firstop / secondop;
                     break;
             }
         }
 
-        T pop<T>()
+        T fetch<T>(Node key)
         {
-            dynamic value = operands.Pop();
+            dynamic value = nodevalues[key];
             if (value is T)
                 return value;
             else
@@ -90,30 +90,30 @@ namespace MiniPlInterpreter
 
         public void visit(LogicalOp node)
         {
-            dynamic secondop = operands.Pop();
-            dynamic firstop = operands.Pop();
+            dynamic firstop = nodevalues[node.LeftOp];
+            dynamic secondop = nodevalues[node.RightOp];
             switch (node.OpSymbol)
             {
                 case "=":
-                    operands.Push(firstop == secondop);
+                    nodevalues[node] = firstop == secondop;
                     break;
                 case "&":
-                    operands.Push(firstop && secondop);
+                    nodevalues[node] = firstop && secondop;
                     break;
             }
         }
 
         public void visit(UnaryNot node)
         {
-            bool operand = pop<bool>();
-            operands.Push(!operand);
+            bool operand = fetch<bool>(node.Operand);
+            nodevalues[node] = !operand;
         }
 
         public void visit(Loop node)
         {
-            int end = pop<int>();
-            int begin = pop<int>();
-            Symbol loopvariable = pop<Symbol>();
+            int begin = fetch<int>(node.Range.Begin);
+            int end = fetch<int>(node.Range.End);
+            Symbol loopvariable = fetch<Symbol>(node.Variable);
 
             for (int i = begin; i <= end; i++)
             {
@@ -129,10 +129,10 @@ namespace MiniPlInterpreter
 
         public void visit(Assignment node)
         {
-            dynamic value = operands.Pop();
+            dynamic value = nodevalues[node.Expression];
             Symbol variable;
             if (node.Variable is VariableReference)
-                variable = pop<Symbol>();
+                variable = fetch<Symbol>(node.Variable);
             else
                 variable = symboltable.resolve(node.VarName);
             Valuetable[variable] = value;
@@ -140,7 +140,7 @@ namespace MiniPlInterpreter
 
         public void visit(ExpressionStatement node)
         {
-            dynamic expression = operands.Pop();
+            dynamic expression = nodevalues[node.Expression];
             dynamic value;
             if (expression is Symbol)
                 value = Valuetable[expression];
@@ -160,7 +160,7 @@ namespace MiniPlInterpreter
 
         public void visit(ReadStatement node)
         {
-            Symbol variable = pop<Symbol>();
+            Symbol variable = fetch<Symbol>(node.Variable);
             string input = Console.ReadLine(); // TODO: implement reading single words
             if (variable.Type == "int")
             {
