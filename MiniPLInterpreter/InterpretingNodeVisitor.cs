@@ -155,8 +155,9 @@ namespace MiniPLInterpreter
             if (node.Keyword == "assert" && !value)
             {
                 if (expression is Symbol)
-                    throw new MiniPLAssertionFailed("Assertion failed: " + expression + " is false.");
-                else // TODO: write a better error message (e.g. row/col information?)
+                    throw new MiniPLAssertionFailed("Assertion failed: " +
+                        ((Symbol) expression).Name + " is false.");
+                else // TODO: write a better error message (e.g. row information?)
                     throw new MiniPLAssertionFailed("Assertion failed.");
             }
             if (node.Keyword == "print")

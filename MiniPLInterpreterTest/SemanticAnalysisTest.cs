@@ -33,10 +33,10 @@ namespace MiniPLInterpreterTest
         [Theory]
         public void ValidPrint(string type)
         {
-            var variabledecl = new VariableDeclaration("foo", type);
+            var variabledecl = new VariableDeclaration("foo", type, 0);
             statementlist.Add(variabledecl);
-            var variable = new VariableReference("foo");
-            var print = new ExpressionStatement("print", variable);
+            var variable = new VariableReference("foo", 0);
+            var print = new ExpressionStatement("print", variable, 0);
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
@@ -46,10 +46,10 @@ namespace MiniPLInterpreterTest
         [Test]
         public void PrintBool()
         {
-            var integer1 = new IntegerLiteral("1");
-            var integer2 = new IntegerLiteral("2");
-            var equal = new LogicalOp("=", integer1, integer2);
-            var print = new ExpressionStatement("print", equal);
+            var integer1 = new IntegerLiteral("1", 0);
+            var integer2 = new IntegerLiteral("2", 0);
+            var equal = new LogicalOp("=", integer1, integer2, 0);
+            var print = new ExpressionStatement("print", equal, 0);
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
@@ -59,10 +59,10 @@ namespace MiniPLInterpreterTest
         [Theory]
         public void ValidRead(string type)
         {
-            var variabledecl = new VariableDeclaration("foo", type);
+            var variabledecl = new VariableDeclaration("foo", type, 0);
             statementlist.Add(variabledecl);
-            var variable = new VariableReference("foo");
-            var print = new ExpressionStatement("read", variable);
+            var variable = new VariableReference("foo", 0);
+            var print = new ExpressionStatement("read", variable, 0);
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
@@ -72,10 +72,10 @@ namespace MiniPLInterpreterTest
         [Test]
         public void ReadBool()
         {
-            var variabledecl = new VariableDeclaration("foo", "bool");
+            var variabledecl = new VariableDeclaration("foo", "bool", 0);
             statementlist.Add(variabledecl);
-            var variable = new VariableReference("foo");
-            var print = new ReadStatement(variable);
+            var variable = new VariableReference("foo", 0);
+            var print = new ReadStatement(variable, 0);
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
@@ -99,9 +99,9 @@ namespace MiniPLInterpreterTest
         [Test]
         public void IntAssignmentTest()
         {
-            var variable = new VariableDeclaration("foo", "int");
-            var integer = new IntegerLiteral("4");
-            var assignment = new Assignment(variable, integer);
+            var variable = new VariableDeclaration("foo", "int", 0);
+            var integer = new IntegerLiteral("4", 0);
+            var assignment = new Assignment(variable, integer, 0);
             statementlist.Add(assignment);
             var parsetree = new Program(statementlist);
 
@@ -113,13 +113,13 @@ namespace MiniPLInterpreterTest
         [Test]
         public void ArithmeticOperationTest()
         {
-            var integer = new IntegerLiteral("9");
-            var plus = new ArithmeticOp("+", integer, integer);
-            var times = new ArithmeticOp("*", plus, integer);
-            var div = new ArithmeticOp("/", integer, integer);
-            var minus = new ArithmeticOp("-", times, div);
-            var variable = new VariableDeclaration("foo", "int");
-            var assignment = new Assignment(variable, minus);
+            var integer = new IntegerLiteral("9", 0);
+            var plus = new ArithmeticOp("+", integer, integer, 0);
+            var times = new ArithmeticOp("*", plus, integer, 0);
+            var div = new ArithmeticOp("/", integer, integer, 0);
+            var minus = new ArithmeticOp("-", times, div, 0);
+            var variable = new VariableDeclaration("foo", "int", 0);
+            var assignment = new Assignment(variable, minus, 0);
             statementlist.Add(assignment);
             var parsetree = new Program(statementlist);
 
@@ -129,9 +129,9 @@ namespace MiniPLInterpreterTest
         [Test]
         public void AssertionTest()
         {
-            var integer = new IntegerLiteral("1");
-            var equal = new LogicalOp("=", integer, integer);
-            var assertion = new ExpressionStatement("assert", equal);
+            var integer = new IntegerLiteral("1", 0);
+            var equal = new LogicalOp("=", integer, integer, 0);
+            var assertion = new ExpressionStatement("assert", equal, 0);
             statementlist.Add(assertion);
             var parsetree = new Program(statementlist);
 
@@ -141,10 +141,10 @@ namespace MiniPLInterpreterTest
         [Test]
         public void LogicalOpEquals()
         {
-            var integer = new IntegerLiteral("1");
-            var stringlit = new StringLiteral("\"foobar\"");
-            var equal = new LogicalOp("=", integer, stringlit);
-            var assert = new ExpressionStatement("assert", equal);
+            var integer = new IntegerLiteral("1", 0);
+            var stringlit = new StringLiteral("\"foobar\"", 0);
+            var equal = new LogicalOp("=", integer, stringlit, 0);
+            var assert = new ExpressionStatement("assert", equal, 0);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -154,10 +154,10 @@ namespace MiniPLInterpreterTest
         [Test]
         public void LogicalOpAnd()
         {
-            var integer = new IntegerLiteral("1");
-            var equal = new LogicalOp("=", integer, integer);
-            var and = new LogicalOp("&", equal, equal);
-            var assert = new ExpressionStatement("assert", and);
+            var integer = new IntegerLiteral("1", 0);
+            var equal = new LogicalOp("=", integer, integer, 0);
+            var and = new LogicalOp("&", equal, equal, 0);
+            var assert = new ExpressionStatement("assert", and, 0);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -167,10 +167,10 @@ namespace MiniPLInterpreterTest
         [Test]
         public void UnaryNot()
         {
-            var integer = new IntegerLiteral("42");
-            var and = new LogicalOp("=", integer, integer);
-            var not = new UnaryNot(and);
-            var assert = new ExpressionStatement("assert", and);
+            var integer = new IntegerLiteral("42", 0);
+            var and = new LogicalOp("=", integer, integer, 0);
+            var not = new UnaryNot(and, 0);
+            var assert = new ExpressionStatement("assert", and, 0);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -194,9 +194,9 @@ namespace MiniPLInterpreterTest
         [Test]
         public void UndefinedVariable()
         {
-            var variable = new VariableReference("foo");
-            var integer = new IntegerLiteral("42");
-            var assignment = new Assignment(variable, integer);
+            var variable = new VariableReference("foo", 0);
+            var integer = new IntegerLiteral("42", 0);
+            var assignment = new Assignment(variable, integer, 0);
             statementlist.Add(assignment);
             var parsetree = new Program(statementlist);
 
@@ -206,12 +206,12 @@ namespace MiniPLInterpreterTest
         [Test]
         public void FaultyArithmetic()
         {
-            var variable = new VariableDeclaration("foo", "int");
-            var integer = new IntegerLiteral("42");
-            var stringlit = new StringLiteral("\"foobar\"");
-            var plus = new ArithmeticOp("+", integer, integer);
-            var times = new ArithmeticOp("*", stringlit, plus);
-            var assignment = new Assignment(variable, times);
+            var variable = new VariableDeclaration("foo", "int", 0);
+            var integer = new IntegerLiteral("42", 0);
+            var stringlit = new StringLiteral("\"foobar\"", 0);
+            var plus = new ArithmeticOp("+", integer, integer, 0);
+            var times = new ArithmeticOp("*", stringlit, plus, 0);
+            var assignment = new Assignment(variable, times, 0);
             statementlist.Add(assignment);
             var parsetree = new Program(statementlist);
 
@@ -221,9 +221,9 @@ namespace MiniPLInterpreterTest
         [Test]
         public void StringArithmetic()
         {
-            var stringlit = new StringLiteral("\"foobar\"");
-            var plus = new ArithmeticOp("+", stringlit, stringlit);
-            var print = new ExpressionStatement("print", plus);
+            var stringlit = new StringLiteral("\"foobar\"", 0);
+            var plus = new ArithmeticOp("+", stringlit, stringlit, 0);
+            var print = new ExpressionStatement("print", plus, 0);
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
@@ -233,8 +233,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void IntegerOverflow()
         {
-            var integer = new IntegerLiteral("9999999999999999999999999999");
-            var print = new ExpressionStatement("print", integer);
+            var integer = new IntegerLiteral("9999999999999999999999999999", 0);
+            var print = new ExpressionStatement("print", integer, 0);
             statementlist.Add(print);
             var parsetree = new Program(statementlist);
 
@@ -244,10 +244,10 @@ namespace MiniPLInterpreterTest
         [Test]
         public void NonBooleanArgumentsToAnd()
         {
-            var integer = new IntegerLiteral("5");
-            var equal = new LogicalOp("=", integer, integer);
-            var and = new LogicalOp("&", equal, integer);
-            var assert = new ExpressionStatement("assert", and);
+            var integer = new IntegerLiteral("5", 0);
+            var equal = new LogicalOp("=", integer, integer, 0);
+            var and = new LogicalOp("&", equal, integer, 0);
+            var assert = new ExpressionStatement("assert", and, 0);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -257,9 +257,9 @@ namespace MiniPLInterpreterTest
         [Test]
         public void IntegerArgumentToNot()
         {
-            var integer = new IntegerLiteral("5");
-            var not = new UnaryNot(integer);
-            var assert = new ExpressionStatement("assert", not);
+            var integer = new IntegerLiteral("5", 0);
+            var not = new UnaryNot(integer, 0);
+            var assert = new ExpressionStatement("assert", not, 0);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -269,9 +269,9 @@ namespace MiniPLInterpreterTest
         [Test]
         public void StringArgumentToNot()
         {
-            var stringlit = new StringLiteral("\"foobar\"");
-            var not = new UnaryNot(stringlit);
-            var assert = new ExpressionStatement("assert", not);
+            var stringlit = new StringLiteral("\"foobar\"", 0);
+            var not = new UnaryNot(stringlit, 0);
+            var assert = new ExpressionStatement("assert", not, 0);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 
@@ -301,15 +301,15 @@ namespace MiniPLInterpreterTest
         [Theory]
         public void NonIntegerLoopVariable(string type)
         {
-            var variabledecl = new VariableDeclaration("foo", type);
+            var variabledecl = new VariableDeclaration("foo", type, 0);
             statementlist.Add(variabledecl);
-            var variable = new VariableReference("foo");
-            var integer = new IntegerLiteral("5");
-            var range = new Range(integer, integer);
-            var variabledecl2 = new VariableDeclaration("bar", "int");
+            var variable = new VariableReference("foo", 0);
+            var integer = new IntegerLiteral("5", 0);
+            var range = new Range(integer, integer, 0);
+            var variabledecl2 = new VariableDeclaration("bar", "int", 0);
             var loopbody = new List<Statement>();
             loopbody.Add(variabledecl2);
-            var loop = new Loop(variable, range, loopbody);
+            var loop = new Loop(variable, range, loopbody, 0);
             statementlist.Add(loop);
             var parsetree = new Program(statementlist);
 
@@ -319,12 +319,12 @@ namespace MiniPLInterpreterTest
         [Theory]
         public void SeveralVariableDeclarationsBeforeLoop(string type)
         {
-            var intdeclaration = new VariableDeclaration("foo", "int");
-            var otherdeclaration = new VariableDeclaration("bar", type);
-            var variableref = new VariableReference("bar");
-            var integer = new IntegerLiteral("5");
-            var range = new Range(integer, integer);
-            var loop = new Loop(variableref, range, new List<Statement>());
+            var intdeclaration = new VariableDeclaration("foo", "int", 0);
+            var otherdeclaration = new VariableDeclaration("bar", type, 0);
+            var variableref = new VariableReference("bar", 0);
+            var integer = new IntegerLiteral("5", 0);
+            var range = new Range(integer, integer, 0);
+            var loop = new Loop(variableref, range, new List<Statement>(), 0);
             statementlist.Add(intdeclaration);
             statementlist.Add(otherdeclaration);
             statementlist.Add(loop);
@@ -336,12 +336,12 @@ namespace MiniPLInterpreterTest
         [Test]
         public void ValidLoop()
         {
-            var integer1 = new IntegerLiteral("1");
-            var integer2 = new IntegerLiteral("5");
-            var range = new Range(integer1, integer2);
-            var variabledecl = new VariableDeclaration("foo", "int");
-            var variable = new VariableReference("foo");
-            var loop = new Loop(variable, range, new List<Statement>());
+            var integer1 = new IntegerLiteral("1", 0);
+            var integer2 = new IntegerLiteral("5", 0);
+            var range = new Range(integer1, integer2, 0);
+            var variabledecl = new VariableDeclaration("foo", "int", 0);
+            var variable = new VariableReference("foo", 0);
+            var loop = new Loop(variable, range, new List<Statement>(), 0);
             statementlist.Add(variabledecl);
             statementlist.Add(loop);
             var parsetree = new Program(statementlist);
@@ -352,11 +352,11 @@ namespace MiniPLInterpreterTest
         [Test]
         public void InvalidRange()
         {
-            var stringlit = new StringLiteral("foo");
-            var range = new Range(stringlit, stringlit);
-            var variabledecl = new VariableDeclaration("foo", "int");
-            var variable = new VariableReference("foo");
-            var loop = new Loop(variable, range, new List<Statement>());
+            var stringlit = new StringLiteral("foo", 0);
+            var range = new Range(stringlit, stringlit, 0);
+            var variabledecl = new VariableDeclaration("foo", "int", 0);
+            var variable = new VariableReference("foo", 0);
+            var loop = new Loop(variable, range, new List<Statement>(), 0);
             statementlist.Add(variabledecl);
             statementlist.Add(loop);
             var parsetree = new Program(statementlist);
@@ -367,15 +367,15 @@ namespace MiniPLInterpreterTest
         [Test]
         public void CannotDeclareVariablesInsideLoop()
         {
-            var integer1 = new IntegerLiteral("1");
-            var integer2 = new IntegerLiteral("5");
-            var range = new Range(integer1, integer2);
-            var variabledecl = new VariableDeclaration("foo", "int");
-            var variable = new VariableReference("foo");
-            var loopbodydecl = new VariableDeclaration("bar", "int");
+            var integer1 = new IntegerLiteral("1", 0);
+            var integer2 = new IntegerLiteral("5", 0);
+            var range = new Range(integer1, integer2, 0);
+            var variabledecl = new VariableDeclaration("foo", "int", 0);
+            var variable = new VariableReference("foo", 0);
+            var loopbodydecl = new VariableDeclaration("bar", "int", 0);
             var loopbody = new List<Statement>();
             loopbody.Add(loopbodydecl);
-            var loop = new Loop(variable, range, loopbody);
+            var loop = new Loop(variable, range, loopbody, 0);
             statementlist.Add(variabledecl);
             statementlist.Add(loop);
             var parsetree = new Program(statementlist);

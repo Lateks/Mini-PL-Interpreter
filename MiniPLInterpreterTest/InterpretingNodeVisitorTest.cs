@@ -24,13 +24,13 @@ namespace MiniPLInterpreterTest
         [TestFixtureSetUp]
         public void FixtureSetUp()
         {
-            var op1decl = new VariableDeclaration("op1", "int");
-            var op2decl = new VariableDeclaration("op2", "int");
-            resultdecl = new VariableDeclaration("result", "int");
-            op1assignment = new Assignment(op1decl, new IntegerLiteral("5"));
-            op2assignment = new Assignment(op2decl, new IntegerLiteral("2"));
-            op1 = new VariableReference("op1");
-            op2 = new VariableReference("op2");
+            var op1decl = new VariableDeclaration("op1", "int", 0);
+            var op2decl = new VariableDeclaration("op2", "int", 0);
+            resultdecl = new VariableDeclaration("result", "int", 0);
+            op1assignment = new Assignment(op1decl, new IntegerLiteral("5", 0), 0);
+            op2assignment = new Assignment(op2decl, new IntegerLiteral("2", 0), 0);
+            op1 = new VariableReference("op1", 0);
+            op2 = new VariableReference("op2", 0);
         }
 
         [SetUp]
@@ -51,8 +51,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void Multiplication()
         {
-            var multop = new ArithmeticOp("*", op1, op2);
-            var assignment = new Assignment(resultdecl, multop);
+            var multop = new ArithmeticOp("*", op1, op2, 0);
+            var assignment = new Assignment(resultdecl, multop, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -62,8 +62,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void Addition()
         {
-            var addop = new ArithmeticOp("+", op1, op2);
-            var assignment = new Assignment(resultdecl, addop);
+            var addop = new ArithmeticOp("+", op1, op2, 0);
+            var assignment = new Assignment(resultdecl, addop, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -73,8 +73,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void Subtraction()
         {
-            var subop = new ArithmeticOp("-", op1, op2);
-            var assignment = new Assignment(resultdecl, subop);
+            var subop = new ArithmeticOp("-", op1, op2, 0);
+            var assignment = new Assignment(resultdecl, subop, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -84,8 +84,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void Division()
         {
-            var divop = new ArithmeticOp("/", op1, op2);
-            var assignment = new Assignment(resultdecl, divop);
+            var divop = new ArithmeticOp("/", op1, op2, 0);
+            var assignment = new Assignment(resultdecl, divop, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -106,9 +106,9 @@ namespace MiniPLInterpreterTest
         [TestFixtureSetUp]
         public void FixtureSetUp()
         {
-            resultdecl = new VariableDeclaration("result", "int");
-            op1 = new IntegerLiteral("5");
-            op2 = new IntegerLiteral("2");
+            resultdecl = new VariableDeclaration("result", "int", 0);
+            op1 = new IntegerLiteral("5", 0);
+            op2 = new IntegerLiteral("2", 0);
         }
 
         [SetUp]
@@ -124,8 +124,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void Multiplication()
         {
-            var multop = new ArithmeticOp("*", op1, op2);
-            var assignment = new Assignment(resultdecl, multop);
+            var multop = new ArithmeticOp("*", op1, op2, 0);
+            var assignment = new Assignment(resultdecl, multop, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -135,8 +135,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void Addition()
         {
-            var addop = new ArithmeticOp("+", op1, op2);
-            var assignment = new Assignment(resultdecl, addop);
+            var addop = new ArithmeticOp("+", op1, op2, 0);
+            var assignment = new Assignment(resultdecl, addop, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -146,8 +146,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void Subtraction()
         {
-            var subop = new ArithmeticOp("-", op1, op2);
-            var assignment = new Assignment(resultdecl, subop);
+            var subop = new ArithmeticOp("-", op1, op2, 0);
+            var assignment = new Assignment(resultdecl, subop, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -157,8 +157,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void Division()
         {
-            var divop = new ArithmeticOp("/", op1, op2);
-            var assignment = new Assignment(resultdecl, divop);
+            var divop = new ArithmeticOp("/", op1, op2, 0);
+            var assignment = new Assignment(resultdecl, divop, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -189,8 +189,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void SuccessfulAssert()
         {
-            var boolean = new LogicalOp("=", new IntegerLiteral("5"), new IntegerLiteral("5"));
-            var assertion = new ExpressionStatement("assert", boolean);
+            var boolean = new LogicalOp("=", new IntegerLiteral("5", 0), new IntegerLiteral("5", 0), 0);
+            var assertion = new ExpressionStatement("assert", boolean, 0);
             program.Add(assertion);
 
             Assert.DoesNotThrow(() => interpreter.Run(new Program(program)));
@@ -199,8 +199,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void FailedAssert()
         {
-            var boolean = new LogicalOp("=", new IntegerLiteral("4"), new IntegerLiteral("5"));
-            var assertion = new ExpressionStatement("assert", boolean);
+            var boolean = new LogicalOp("=", new IntegerLiteral("4", 0), new IntegerLiteral("5", 0), 0);
+            var assertion = new ExpressionStatement("assert", boolean, 0);
             program.Add(assertion);
 
             Assert.Throws<MiniPLAssertionFailed>(() => interpreter.Run(new Program(program)));
@@ -221,15 +221,15 @@ namespace MiniPLInterpreterTest
             program = new List<Statement>();
             symboltable = new SymbolTable();
             symboltable.define(new Symbol("result", "bool"));
-            result = new VariableDeclaration("result", "bool");
+            result = new VariableDeclaration("result", "bool", 0);
             interpreter = new InterpretingNodeVisitor(symboltable);
         }
 
         [Test]
         public void StringEquals()
         {
-            var equals = new LogicalOp("=", new StringLiteral("foo"), new StringLiteral("foo"));
-            var assignment = new Assignment(result, equals);
+            var equals = new LogicalOp("=", new StringLiteral("foo", 0), new StringLiteral("foo", 0), 0);
+            var assignment = new Assignment(result, equals, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -239,8 +239,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void StringDoesNotEqual()
         {
-            var equals = new LogicalOp("=", new StringLiteral("bar"), new StringLiteral("foo"));
-            var assignment = new Assignment(result, equals);
+            var equals = new LogicalOp("=", new StringLiteral("bar", 0), new StringLiteral("foo", 0), 0);
+            var assignment = new Assignment(result, equals, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -250,8 +250,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void IntEquals()
         {
-            var equals = new LogicalOp("=", new IntegerLiteral("5"), new IntegerLiteral("5"));
-            var assignment = new Assignment(result, equals);
+            var equals = new LogicalOp("=", new IntegerLiteral("5", 0), new IntegerLiteral("5", 0), 0);
+            var assignment = new Assignment(result, equals, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -261,8 +261,8 @@ namespace MiniPLInterpreterTest
         [Test]
         public void IntDoesNotEqual()
         {
-            var equals = new LogicalOp("=", new IntegerLiteral("4"), new IntegerLiteral("5"));
-            var assignment = new Assignment(result, equals);
+            var equals = new LogicalOp("=", new IntegerLiteral("4", 0), new IntegerLiteral("5", 0), 0);
+            var assignment = new Assignment(result, equals, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -272,9 +272,9 @@ namespace MiniPLInterpreterTest
         [Test]
         public void BoolEquals()
         {
-            var boolean = new LogicalOp("=", new IntegerLiteral("4"), new IntegerLiteral("5"));
-            var equals = new LogicalOp("=", boolean, boolean);
-            var assignment = new Assignment(result, equals);
+            var boolean = new LogicalOp("=", new IntegerLiteral("4", 0), new IntegerLiteral("5", 0), 0);
+            var equals = new LogicalOp("=", boolean, boolean, 0);
+            var assignment = new Assignment(result, equals, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -284,10 +284,10 @@ namespace MiniPLInterpreterTest
         [Test]
         public void BoolDoesNotEqual()
         {
-            var falseboolean = new LogicalOp("=", new IntegerLiteral("4"), new IntegerLiteral("5"));
-            var trueboolean = new LogicalOp("=", new IntegerLiteral("5"), new IntegerLiteral("5"));
-            var equals = new LogicalOp("=", falseboolean, trueboolean);
-            var assignment = new Assignment(result, equals);
+            var falseboolean = new LogicalOp("=", new IntegerLiteral("4", 0), new IntegerLiteral("5", 0), 0);
+            var trueboolean = new LogicalOp("=", new IntegerLiteral("5", 0), new IntegerLiteral("5", 0), 0);
+            var equals = new LogicalOp("=", falseboolean, trueboolean, 0);
+            var assignment = new Assignment(result, equals, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -297,15 +297,15 @@ namespace MiniPLInterpreterTest
         [Test]
         public void FalseAnd()
         {
-            var falseboolean = new LogicalOp("=", new IntegerLiteral("4"), new IntegerLiteral("5"));
-            var trueboolean = new LogicalOp("=", new IntegerLiteral("4"), new IntegerLiteral("5"));
-            var and1 = new LogicalOp("&", falseboolean, trueboolean);
-            var and2 = new LogicalOp("&", falseboolean, falseboolean);
-            var assignment1 = new Assignment(result, and1);
+            var falseboolean = new LogicalOp("=", new IntegerLiteral("4", 0), new IntegerLiteral("5", 0), 0);
+            var trueboolean = new LogicalOp("=", new IntegerLiteral("4", 0), new IntegerLiteral("5", 0), 0);
+            var and1 = new LogicalOp("&", falseboolean, trueboolean, 0);
+            var and2 = new LogicalOp("&", falseboolean, falseboolean, 0);
+            var assignment1 = new Assignment(result, and1, 0);
             program.Add(assignment1);
-            var result2 = new VariableDeclaration("result2", "bool");
+            var result2 = new VariableDeclaration("result2", "bool", 0);
             symboltable.define(new Symbol("result2", "bool"));
-            var assignment2 = new Assignment(result2, and2);
+            var assignment2 = new Assignment(result2, and2, 0);
             program.Add(assignment2);
 
             interpreter.Run(new Program(program));
@@ -316,9 +316,9 @@ namespace MiniPLInterpreterTest
         [Test]
         public void TrueAnd()
         {
-            var trueboolean = new LogicalOp("=", new IntegerLiteral("4"), new IntegerLiteral("4"));
-            var and = new LogicalOp("&", trueboolean, trueboolean);
-            var assignment = new Assignment(result, and);
+            var trueboolean = new LogicalOp("=", new IntegerLiteral("4", 0), new IntegerLiteral("4", 0), 0);
+            var and = new LogicalOp("&", trueboolean, trueboolean, 0);
+            var assignment = new Assignment(result, and, 0);
             program.Add(assignment);
 
             interpreter.Run(new Program(program));
@@ -332,18 +332,18 @@ namespace MiniPLInterpreterTest
         [Test]
         public void LoopTest()
         {
-            var loopvardecl = new VariableDeclaration("loopvariable", "int");
-            var loopvarref = new VariableReference("loopvariable");
-            var range = new Range(new IntegerLiteral("2"), new IntegerLiteral("5"));
+            var loopvardecl = new VariableDeclaration("loopvariable", "int", 0);
+            var loopvarref = new VariableReference("loopvariable", 0);
+            var range = new Range(new IntegerLiteral("2", 0), new IntegerLiteral("5", 0), 0);
             var loopbody = new List<Statement>();
-            var resultdecl = new VariableDeclaration("result", "int");
-            var resultref = new VariableReference("result");
+            var resultdecl = new VariableDeclaration("result", "int", 0);
+            var resultref = new VariableReference("result", 0);
             loopbody.Add(new Assignment(resultref,
-                new ArithmeticOp("+", resultref, loopvarref)));
+                new ArithmeticOp("+", resultref, loopvarref, 0), 0));
             var program = new List<Statement>();
             program.Add(resultdecl);
             program.Add(loopvardecl);
-            program.Add(new Loop(loopvarref, range, loopbody));
+            program.Add(new Loop(loopvarref, range, loopbody, 0));
 
             var symboltable = new SymbolTable();
             symboltable.define(new Symbol("loopvariable", "int"));

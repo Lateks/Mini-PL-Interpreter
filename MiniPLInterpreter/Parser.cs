@@ -52,14 +52,15 @@ namespace SyntaxAnalysis
                     return temp;
                 }
                 else
-                    throw new SyntaxError("Expected " + value + " but got " +
-                        ((StringToken)input_token).Value + " before col " +
+                    throw new SyntaxError("Expected \"" + value + "\" but got \"" +
+                        ((StringToken)input_token).Value + "\" before col " +
                         input_token.Col + " on row " + input_token.Row + ".");
             }
             else
-                throw new SyntaxError("Unexpected token \"" +
-                    input_token.ToString() + "\" before col " + input_token.Col
-                    + " on row " + input_token.Row + ".");
+                throw new SyntaxError("Unexpected token of type " +
+                    input_token.GetType().Name + " before col " + input_token.Col
+                    + " on row " + input_token.Row + ". Expected token of type " +
+                    typeof(T).Name + ".");
         }
 
         private List<Statement> StatementList()
@@ -93,31 +94,31 @@ namespace SyntaxAnalysis
                         string variable = Identifier();
                         Match<TypeDeclaration>();
                         string type = Type();
-                        var var = new VariableDeclaration(variable, type);
+                        var var = new VariableDeclaration(variable, type, token.Row);
                         return OptionalAssignment(var);
                     case "for":
                         input_token = scanner.NextToken();
-                        VariableReference ident = new VariableReference(Identifier());
+                        VariableReference ident = new VariableReference(Identifier(), token.Row);
                         Match<KeywordToken>("in");
                         Range range = RangeExpr();
                         Match<KeywordToken>("do");
                         var stmts = StatementList();
                         Match<KeywordToken>("end");
                         Match<KeywordToken>("for");
-                        return new Loop(ident, range, stmts);
+                        return new Loop(ident, range, stmts, token.Row);
                     case "read":
                         input_token = scanner.NextToken();
-                        ident = new VariableReference(Identifier());
-                        return new ReadStatement(ident);
+                        ident = new VariableReference(Identifier(), token.Row);
+                        return new ReadStatement(ident, token.Row);
                     case "print":
                         string keyword = token.Value;
                         input_token = scanner.NextToken();
-                        return new ExpressionStatement(keyword, Expression());
+                        return new ExpressionStatement(keyword, Expression(), token.Row);
                     case "assert":
                         keyword = token.Value;
                         input_token = scanner.NextToken();
                         Match<LeftParenthesis>();
-                        ExpressionStatement stmt = new ExpressionStatement(keyword, Expression());
+                        ExpressionStatement stmt = new ExpressionStatement(keyword, Expression(), token.Row);
                         Match<RightParenthesis>();
                         return stmt;
                     default:
@@ -130,7 +131,7 @@ namespace SyntaxAnalysis
             {
                 Identifier token = Match<Identifier>();
                 Match<AssignmentToken>();
-                return new Assignment(new VariableReference(token.Value), Expression());
+                return new Assignment(new VariableReference(token.Value, token.Row), Expression(), token.Row);
             }
         }
 
@@ -139,15 +140,16 @@ namespace SyntaxAnalysis
             var range_lhs = Expression();
             Match<RangeOperator>();
             var range_rhs = Expression();
-            return new Range(range_lhs, range_rhs);
+            return new Range(range_lhs, range_rhs, range_lhs.Row);
         }
 
         private Expression Expression()
         {
             if (input_token is UnaryNotToken)
             {
+                Token unarynot = input_token;
                 input_token = scanner.NextToken();
-                return new UnaryNot(Operand());
+                return new UnaryNot(Operand(), unarynot.Row);
             }
             else
             {
@@ -162,8 +164,8 @@ namespace SyntaxAnalysis
             {
                 BinaryOperator op = Match<BinaryOperator>();
                 if (op.Value == "&" || op.Value == "=")
-                    return new LogicalOp(op.Value, lhs, Operand());
-                return new ArithmeticOp(op.Value, lhs, Operand());
+                    return new LogicalOp(op.Value, lhs, Operand(), op.Row);
+                return new ArithmeticOp(op.Value, lhs, Operand(), op.Row);
             }
             return lhs;
         }
@@ -173,17 +175,17 @@ namespace SyntaxAnalysis
             if (input_token is IntegerLiteralToken)
             {
                 IntegerLiteralToken token = Match<IntegerLiteralToken>();
-                return new IntegerLiteral(token.Value);
+                return new IntegerLiteral(token.Value, token.Row);
             }
             else if (input_token is StringLiteralToken)
             {
                 StringLiteralToken token = Match<StringLiteralToken>();
-                return new StringLiteral(token.Value);
+                return new StringLiteral(token.Value, token.Row);
             }
             else if (input_token is Identifier)
             {
                 Identifier token = Match<Identifier>();
-                return new VariableReference(token.Value);
+                return new VariableReference(token.Value, token.Row);
             }
             else if (input_token is LeftParenthesis)
             {
@@ -193,7 +195,7 @@ namespace SyntaxAnalysis
                 return expr;
             }
             else
-                throw new SyntaxError("Invalid operand: " + input_token.ToString() +
+                throw new SyntaxError("Invalid operand of type " + input_token.GetType().Name +
                     " before col " + input_token.Col + " on row " + input_token.Row + ".");
         }
 
@@ -213,8 +215,9 @@ namespace SyntaxAnalysis
         {
             if (input_token is AssignmentToken)
             {
+                Token assignment = input_token;
                 input_token = scanner.NextToken();
-                return new Assignment(variable, Expression());
+                return new Assignment(variable, Expression(), assignment.Row);
             }
             // otherwise produce epsilon
             return (Statement) variable;

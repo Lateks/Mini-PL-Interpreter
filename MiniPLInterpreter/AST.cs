@@ -11,9 +11,43 @@ namespace AST
         void accept(NodeVisitor visitor);
     }
 
-    public interface Expression : Node { }
+    public abstract class SyntaxElement : Node
+    {
+        public int Row
+        {
+            get;
+            private set;
+        }
 
-    public interface Statement : Node { }
+        public SyntaxElement(int row)
+        {
+            Row = row;
+        }
+
+        public abstract void accept(NodeVisitor visitor);
+    }
+
+    public abstract class Expression : SyntaxElement
+    {
+        public Expression(int row) : base(row) { }
+    }
+
+    public abstract class Statement : SyntaxElement
+    {
+        public Statement(int row) : base(row) { }
+    }
+
+    public interface Variable : Node
+    {
+        string Name
+        {
+            get;
+        }
+        int Row
+        {
+            get;
+        }
+    }
 
     public class Program : Node
     {
@@ -46,17 +80,17 @@ namespace AST
             private set;
         }
 
-        public Literal(string value)
+        public Literal(string value, int row)
+            : base(row)
         {
             Value = value;
         }
-
-        public abstract void accept(NodeVisitor visitor);
     }
 
     public class IntegerLiteral : Literal
     {
-        public IntegerLiteral(string value) : base(value) { }
+        public IntegerLiteral(string value, int row)
+            : base(value, row) { }
 
         public override void accept(NodeVisitor visitor)
         {
@@ -66,7 +100,8 @@ namespace AST
 
     public class StringLiteral : Literal
     {
-        public StringLiteral(string value) : base(value) { }
+        public StringLiteral(string value, int row)
+            : base(value, row) { }
 
         public override void accept(NodeVisitor visitor)
         {
@@ -74,27 +109,19 @@ namespace AST
         }
     }
 
-    public abstract class Variable : Node
+    public class VariableReference : Expression, Variable
     {
         public string Name
         {
             get;
-            private set;
+            set;
         }
 
-        public Variable(string name)
+        public VariableReference(string name, int row)
+            : base(row)
         {
             Name = name;
         }
-
-        public abstract void accept(NodeVisitor visitor);
-    }
-
-    public class VariableReference : Variable, Expression
-    {
-
-        public VariableReference(string name)
-            : base(name) { }
 
         public override void accept(NodeVisitor visitor)
         {
@@ -102,17 +129,23 @@ namespace AST
         }
     }
 
-    public class VariableDeclaration : Variable, Statement
+    public class VariableDeclaration : Statement, Variable
     {
         public string Type
         {
             get;
             private set;
         }
-
-        public VariableDeclaration(string name, string type)
-            : base(name)
+        public string Name
         {
+            get;
+            private set;
+        }
+
+        public VariableDeclaration(string name, string type, int row)
+            : base(row)
+        {
+            Name = name;
             Type = type;
         }
 
@@ -140,20 +173,19 @@ namespace AST
             private set;
         }
 
-        public BinaryOp(string opsymbol, Expression lhs, Expression rhs)
+        public BinaryOp(string opsymbol, Expression lhs, Expression rhs, int row)
+            : base(row)
         {
             OpSymbol = opsymbol;
             LeftOp = lhs;
             RightOp = rhs;
         }
-
-        public abstract void accept(NodeVisitor visitor);
     }
 
     public class ArithmeticOp : BinaryOp
     {
-        public ArithmeticOp(string opsymbol, Expression lhs, Expression rhs)
-            : base(opsymbol, lhs, rhs) { }
+        public ArithmeticOp(string opsymbol, Expression lhs, Expression rhs, int row)
+            : base(opsymbol, lhs, rhs, row) { }
 
         public override void accept(NodeVisitor visitor)
         {
@@ -165,8 +197,8 @@ namespace AST
 
     public class LogicalOp : BinaryOp
     {
-        public LogicalOp(string opsymbol, Expression lhs, Expression rhs)
-            : base(opsymbol, lhs, rhs) { }
+        public LogicalOp(string opsymbol, Expression lhs, Expression rhs, int row)
+            : base(opsymbol, lhs, rhs, row) { }
 
         public override void accept(NodeVisitor visitor)
         {
@@ -184,19 +216,20 @@ namespace AST
             private set;
         }
 
-        public UnaryNot(Expression operand)
+        public UnaryNot(Expression operand, int row)
+            : base(row)
         {
             Operand = operand;
         }
 
-        public void accept(NodeVisitor visitor)
+        public override void accept(NodeVisitor visitor)
         {
             Operand.accept(visitor);
             visitor.visit(this);
         }
     }
 
-    public class Range : Node
+    public class Range : SyntaxElement
     {
         public Expression Begin
         {
@@ -209,13 +242,14 @@ namespace AST
             private set;
         }
 
-        public Range(Expression lhs, Expression rhs)
+        public Range(Expression lhs, Expression rhs, int row)
+            : base(row)
         {
             Begin = lhs;
             End = rhs;
         }
 
-        public void accept(NodeVisitor visitor)
+        public override void accept(NodeVisitor visitor)
         {
             Begin.accept(visitor);
             End.accept(visitor);
@@ -240,13 +274,14 @@ namespace AST
             private set;
         }
 
-        public Assignment(Variable variable, Expression expression)
+        public Assignment(Variable variable, Expression expression, int row)
+            : base(row)
         {
             Variable = variable;
             Expression = expression;
         }
 
-        public void accept(NodeVisitor visitor)
+        public override void accept(NodeVisitor visitor)
         {
             Variable.accept(visitor);
             Expression.accept(visitor);
@@ -267,13 +302,14 @@ namespace AST
             private set;
         }
 
-        public ExpressionStatement(string keyword, Expression expression)
+        public ExpressionStatement(string keyword, Expression expression, int row)
+            : base(row)
         {
             Keyword = keyword;
             Expression = expression;
         }
 
-        public void accept(NodeVisitor visitor)
+        public override void accept(NodeVisitor visitor)
         {
             Expression.accept(visitor);
             visitor.visit(this);
@@ -292,12 +328,13 @@ namespace AST
             get { return Variable.Name; }
         }
 
-        public ReadStatement(VariableReference variable)
+        public ReadStatement(VariableReference variable, int row)
+            : base(row)
         {
             Variable = variable;
         }
 
-        public void accept(NodeVisitor visitor)
+        public override void accept(NodeVisitor visitor)
         {
             Variable.accept(visitor);
             visitor.visit(this);
@@ -326,14 +363,15 @@ namespace AST
             private set;
         }
 
-        public Loop(VariableReference variable, Range range, List<Statement> body)
+        public Loop(VariableReference variable, Range range, List<Statement> body, int row)
+            : base(row)
         {
             Variable = variable;
             Range = range;
             LoopBody = body;
         }
 
-        public void accept(NodeVisitor visitor)
+        public override void accept(NodeVisitor visitor)
         {
             Variable.accept(visitor);
             Range.accept(visitor);

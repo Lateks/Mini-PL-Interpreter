@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InterpreterNodeVisitorTest.cs" />
+    <Compile Include="InterpretingNodeVisitorTest.cs" />
     <Compile Include="LexerTest.cs" />
     <Compile Include="ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
