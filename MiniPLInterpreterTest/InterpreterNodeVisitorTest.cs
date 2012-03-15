@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using MiniPlInterpreter;
+using MiniPLInterpreter;
 using AST;
 using Errors;
 
@@ -55,7 +55,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(resultdecl, multop);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(10));
         }
 
@@ -66,7 +66,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(resultdecl, addop);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(7));
         }
 
@@ -77,7 +77,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(resultdecl, subop);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(3));
         }
 
@@ -88,7 +88,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(resultdecl, divop);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(2));
         }
     }
@@ -128,7 +128,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(resultdecl, multop);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(10));
         }
 
@@ -139,7 +139,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(resultdecl, addop);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(7));
         }
 
@@ -150,7 +150,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(resultdecl, subop);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(3));
         }
 
@@ -161,7 +161,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(resultdecl, divop);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(2));
         }
     }
@@ -193,7 +193,7 @@ namespace MiniPLInterpreterTest
             var assertion = new ExpressionStatement("assert", boolean);
             program.Add(assertion);
 
-            Assert.DoesNotThrow(() => interpreter.run(new Program(program)));
+            Assert.DoesNotThrow(() => interpreter.Run(new Program(program)));
         }
 
         [Test]
@@ -203,7 +203,7 @@ namespace MiniPLInterpreterTest
             var assertion = new ExpressionStatement("assert", boolean);
             program.Add(assertion);
 
-            Assert.Throws<AssertionFailed>(() => interpreter.run(new Program(program)));
+            Assert.Throws<AssertionFailed>(() => interpreter.Run(new Program(program)));
         }
     }
 
@@ -232,7 +232,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(result, equals);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(true));
         }
 
@@ -243,7 +243,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(result, equals);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(false));
         }
 
@@ -254,7 +254,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(result, equals);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(true));
         }
 
@@ -265,7 +265,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(result, equals);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(false));
         }
 
@@ -277,7 +277,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(result, equals);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(true));
         }
 
@@ -290,7 +290,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(result, equals);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(false));
         }
 
@@ -308,7 +308,7 @@ namespace MiniPLInterpreterTest
             var assignment2 = new Assignment(result2, and2);
             program.Add(assignment2);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(false));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result2")], Is.EqualTo(false));
         }
@@ -321,7 +321,7 @@ namespace MiniPLInterpreterTest
             var assignment = new Assignment(result, and);
             program.Add(assignment);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(true));
         }
     }
@@ -350,7 +350,7 @@ namespace MiniPLInterpreterTest
             symboltable.define(new Symbol("result", "int"));
             var interpreter = new InterpretingNodeVisitor(symboltable);
 
-            interpreter.run(new Program(program));
+            interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(14));
         }
     }

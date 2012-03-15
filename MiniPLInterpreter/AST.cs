@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MiniPlInterpreter;
+using MiniPLInterpreter;
 
 namespace AST
 {

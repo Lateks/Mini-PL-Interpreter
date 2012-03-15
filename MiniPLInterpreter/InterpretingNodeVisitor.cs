@@ -7,7 +7,7 @@ using AST;
 using Errors;
 using System.Diagnostics;
 
-namespace MiniPlInterpreter
+namespace MiniPLInterpreter
 {
     public class InterpretingNodeVisitor : NodeVisitor
     {
@@ -28,7 +28,7 @@ namespace MiniPlInterpreter
             nodevalues = new Hashtable();
         }
 
-        public void run(Program program)
+        public void Run(Program program)
         {
             program.accept(this);
         }
@@ -160,7 +160,7 @@ namespace MiniPlInterpreter
                     throw new AssertionFailed("Assertion failed.");
             }
             if (node.Keyword == "print")
-                Console.WriteLine(value);
+                Console.Write(value);
         }
 
         public void visit(ReadStatement node)
@@ -204,9 +204,17 @@ namespace MiniPlInterpreter
         {
             if (readbuffer == "")
                 readbuffer = Console.ReadLine().Trim();
+
             var split = readbuffer.Split(splitters, 2, StringSplitOptions.RemoveEmptyEntries);
-            readbuffer = split[1];
-            return split[0];
+            if (split.Length < 2)
+                readbuffer = "";
+            else
+                readbuffer = split[1];
+
+            if (split.Length >= 1)
+                return split[0];
+            else
+                return "";
         }
     }
 }

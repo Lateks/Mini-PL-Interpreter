@@ -5,7 +5,7 @@ using System.Text;
 using AST;
 using Errors;
 
-namespace MiniPlInterpreter
+namespace MiniPLInterpreter
 {
     public class SymbolTable
     {

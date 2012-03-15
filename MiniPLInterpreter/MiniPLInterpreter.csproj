@@ -8,7 +8,7 @@
     <ProjectGuid>{9C8D972D-3D36-4487-83C6-AD2FAAD27100}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniPlInterpreter</RootNamespace>
+    <RootNamespace>MiniPLInterpreter</RootNamespace>
     <AssemblyName>MiniPLInterpreter</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>

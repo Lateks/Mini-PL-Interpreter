@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using AST;
 
-namespace MiniPlInterpreter
+namespace MiniPLInterpreter
 {
     public interface NodeVisitor
     {
