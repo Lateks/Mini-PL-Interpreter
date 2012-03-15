@@ -53,11 +53,13 @@ namespace SyntaxAnalysis
                 }
                 else
                     throw new SyntaxError("Expected " + value + " but got " +
-                        ((StringToken)input_token).Value + ".");
+                        ((StringToken)input_token).Value + " before col " +
+                        input_token.Col + " on row " + input_token.Row + ".");
             }
             else
-                throw new SyntaxError("Unexpected token: " +
-                    input_token.ToString());
+                throw new SyntaxError("Unexpected token \"" +
+                    input_token.ToString() + "\" before col " + input_token.Col
+                    + " on row " + input_token.Row + ".");
         }
 
         private List<Statement> StatementList()
@@ -119,7 +121,9 @@ namespace SyntaxAnalysis
                         Match<RightParenthesis>();
                         return stmt;
                     default:
-                        throw new SyntaxError("Invalid keyword " + token.Value + " starting a statement.");
+                        throw new SyntaxError("Invalid keyword " + token.Value +
+                            " starting a statement before col " + token.Col + " on row " +
+                            token.Row + ".");
                 }
             }
             else
@@ -189,7 +193,8 @@ namespace SyntaxAnalysis
                 return expr;
             }
             else
-                throw new SyntaxError("Invalid operand: " + input_token.ToString());
+                throw new SyntaxError("Invalid operand: " + input_token.ToString() +
+                    " before col " + input_token.Col + " on row " + input_token.Row + ".");
         }
 
         private string Identifier()
