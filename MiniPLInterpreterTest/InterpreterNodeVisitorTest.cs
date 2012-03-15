@@ -203,7 +203,7 @@ namespace MiniPLInterpreterTest
             var assertion = new ExpressionStatement("assert", boolean);
             program.Add(assertion);
 
-            Assert.Throws<AssertionFailed>(() => interpreter.Run(new Program(program)));
+            Assert.Throws<MiniPLAssertionFailed>(() => interpreter.Run(new Program(program)));
         }
     }
 

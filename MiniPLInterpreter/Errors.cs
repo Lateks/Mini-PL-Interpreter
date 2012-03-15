@@ -23,15 +23,15 @@ namespace Errors
             : base(message) { }
     }
 
-    public class AssertionFailed : Exception
+    public class MiniPLAssertionFailed : Exception
     {
-        public AssertionFailed(string message)
+        public MiniPLAssertionFailed(string message)
             : base(message) { }
     }
 
-    public class ReadError : Exception
+    public class MiniPLReadError : Exception
     {
-        public ReadError(string message)
+        public MiniPLReadError(string message)
             : base(message) { }
     }
 }

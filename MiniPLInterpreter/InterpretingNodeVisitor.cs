@@ -155,9 +155,9 @@ namespace MiniPLInterpreter
             if (node.Keyword == "assert" && !value)
             {
                 if (expression is Symbol)
-                    throw new AssertionFailed("Assertion failed: " + expression + " is false.");
+                    throw new MiniPLAssertionFailed("Assertion failed: " + expression + " is false.");
                 else // TODO: write a better error message (e.g. row/col information?)
-                    throw new AssertionFailed("Assertion failed.");
+                    throw new MiniPLAssertionFailed("Assertion failed.");
             }
             if (node.Keyword == "print")
                 Console.Write(value);
@@ -176,11 +176,11 @@ namespace MiniPLInterpreter
                 }
                 catch (FormatException)
                 {
-                    throw new ReadError("Could not convert input \"" + input + "\" to int.");
+                    throw new MiniPLReadError("Could not convert input \"" + input + "\" to int.");
                 }
                 catch (OverflowException)
                 {
-                    throw new ReadError("Integer overflow when converting input \"" + input + "\" to int.");
+                    throw new MiniPLReadError("Integer overflow when converting input \"" + input + "\" to int.");
                 }
             }
             else // string variable
