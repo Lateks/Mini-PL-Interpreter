@@ -92,9 +92,9 @@ namespace LexerTest
             Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("foo 42"));
             Assert.That(lexer.NextToken(), Is.InstanceOf<EOF>());
             lexer = new Scanner("\"foo\\n\"");
-            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("foo\\n"));
+            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("foo\n"));
             lexer = new Scanner("\"foo\\\"...\\\"\"");
-            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("foo\\\"...\\\""));
+            Assert.That(((StringLiteralToken) lexer.NextToken()).Value, Is.EqualTo("foo\"...\""));
             lexer = new Scanner("\"foo\\\"");
             Assert.Throws<LexicalError>(() => lexer.NextToken());
             lexer = new Scanner("\"foo\\");

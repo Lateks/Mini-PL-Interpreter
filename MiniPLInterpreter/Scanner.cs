@@ -242,9 +242,28 @@ namespace LexicalAnalysis
 
         private string GetEscapeCharacter()
         {
-            string token = PopInput();
+            PopInput(); // discard '\'
             if (InputLeft()) // currently accepts anything as an escape character
-                return token + PopInput();
+            {
+                string token = PopInput();
+                switch (token)
+                {
+                    case "\\":
+                        return token;
+                    case "\"":
+                        return token;
+                    case "n":
+                        return "\n";
+                    case "r":
+                        return "\r";
+                    case "t":
+                        return "\t";
+                    case "v":
+                        return "\v";
+                    default:
+                        throw new LexicalError("Unknown escape character \\" + token + ".");
+                }
+            }
             else
                 throw new LexicalError("Reached end of input while scanning for a string literal.");
         }
