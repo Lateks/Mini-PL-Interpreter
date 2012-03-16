@@ -354,4 +354,28 @@ namespace MiniPLInterpreterTest
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(14));
         }
     }
+
+    [TestFixture]
+    class TestAssignment
+    {
+        [Test]
+        public void AssignVariableToVariable()
+        {
+            var x = new VariableDeclaration("x", "int", 0);
+            var assignment = new Assignment(x, new IntegerLiteral("1", 0), 0);
+            var y = new VariableDeclaration("y", "int", 0);
+            var assignvariable = new Assignment(y, new VariableReference("x", 0), 0);
+            var statements = new List<Statement>();
+            statements.Add(assignment);
+            statements.Add(assignvariable);
+            var program = new Program(statements);
+            var symboltable = new SymbolTable();
+            symboltable.define(new Symbol("x", "int"));
+            symboltable.define(new Symbol("y", "int"));
+
+            var interpreter = new InterpretingNodeVisitor(symboltable);
+            interpreter.Run(program);
+            Assert.That(interpreter.Valuetable[symboltable.resolve("y")], Is.EqualTo(1));
+        }
+    }
 }

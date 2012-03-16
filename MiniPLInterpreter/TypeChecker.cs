@@ -18,8 +18,10 @@ namespace MiniPLInterpreter
     // of type strings is popped out from the top of the stack
     // and checked (e.g. are operands to an arithmetic operator
     // ints, are operands to logical "=" both of the same type
-    // etc.). Incorrect types cause a SemanticError to be
-    // thrown.
+    // etc.). A stack is easy to use here because usually in
+    // typechecking the ordering of the operands does not
+    // matter very much. Incorrect types cause a SemanticError
+    // to be thrown.
     //
     // When building the symbol table, the visitor ensures that
     // no variable is declared twice and that each variable
@@ -120,9 +122,9 @@ namespace MiniPLInterpreter
 
         public void visit(Range node)
         {
-            string rightoptype = operandtypes.Pop();
-            string leftoptype = operandtypes.Pop();
-            if (rightoptype != "int" || leftoptype != "int")
+            string optype1 = operandtypes.Pop();
+            string optype2 = operandtypes.Pop();
+            if (optype1 != "int" || optype2 != "int")
                 throw new SemanticError("Invalid argument types for range operator \"..\" on row " +
                     node.Row + ".");
         }

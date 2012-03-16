@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST.cs" />
+    <Compile Include="InputReader.cs" />
     <Compile Include="InterpretingNodeVisitor.cs" />
     <Compile Include="NodeVisitor.cs" />
     <Compile Include="Parser.cs" />

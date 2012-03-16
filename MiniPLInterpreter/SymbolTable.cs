@@ -5,6 +5,8 @@ using System.Text;
 
 namespace MiniPLInterpreter
 {
+    // A simple symbol table using variable names as keys
+    // and symbol objects as values.
     public class SymbolTable
     {
         private Dictionary<string, Symbol> symboltable;

@@ -9,11 +9,30 @@ using System.Diagnostics;
 
 namespace MiniPLInterpreter
 {
+    // This visitor traverses and executes the program AST.
+    // Note that the typechecker needs to have been run before
+    // interpreting the AST (to check types as well as to
+    // build the symbol table).
+    //
+    // The visitor keeps track of values in two Hashtables.
+    // One of them (nodevalues) contains the evaluated values
+    // of AST nodes and is keyed by Node. Unlike in the type
+    // checker, a stack would have been more difficult to
+    // use for storing these values because their ordering
+    // is often more important (e.g. left hand and right hand
+    // sides of certain arithmetic operations). In practice
+    // this contains values that are not (or at least not yet)
+    // assigned to a variable.
+    //
+    // The other one (Valuetable) contains the values of symbols
+    // defined in the symbol table after they are assigned and
+    // is keyed by Symbol objects fetched from the symbol table.
     public class InterpretingNodeVisitor : NodeVisitor
     {
         private SymbolTable symboltable;
         private InputReader inputreader;
-        private Hashtable nodevalues; // for storing evaluated values of nodes
+        private Hashtable nodevalues; // For storing evaluated values of nodes
+                                      // (using Node objects as keys).
         public Hashtable Valuetable
         {
             get;
@@ -83,12 +102,18 @@ namespace MiniPLInterpreter
             }
         }
 
+        // Fetches the current evaluated value of the given node.
+        // The type parameter specifies the expected type of the
+        // node (for casting possible variable values to the correct
+        // type). Note that typechecking has already been performed
+        // prior to running this visitor, so type errors at this
+        // stage do not happen.
         T fetch<T>(Node key)
         {
             dynamic value = nodevalues[key];
             if (value is T)
                 return value;
-            else
+            else // value is a Symbol but expected type is something else
                 return (T) Valuetable[value];
         }
 
@@ -134,13 +159,17 @@ namespace MiniPLInterpreter
 
         public void visit(Assignment node)
         {
-            dynamic value = nodevalues[node.Expression];
             Symbol variable;
             if (node.Variable is VariableReference)
                 variable = fetch<Symbol>(node.Variable);
             else
                 variable = symboltable.resolve(node.VarName);
-            Valuetable[variable] = value;
+
+            dynamic value = nodevalues[node.Expression];
+            if (value is Symbol)
+                Valuetable[variable] = Valuetable[value];
+            else
+                Valuetable[variable] = value;
         }
 
         public void visit(ExpressionStatement node)
@@ -155,10 +184,10 @@ namespace MiniPLInterpreter
             if (node.Keyword == "assert" && !value)
             {
                 if (expression is Symbol)
-                    throw new MiniPLAssertionFailed("Assertion failed: " +
-                        ((Symbol) expression).Name + " is false.");
-                else // TODO: write a better error message (e.g. row information?)
-                    throw new MiniPLAssertionFailed("Assertion failed.");
+                    throw new MiniPLAssertionFailed("Assertion failed: variable \"" +
+                        ((Symbol) expression).Name + "\" on row " + node.Row + "is false.");
+                else
+                    throw new MiniPLAssertionFailed("Assertion failed on row " + node.Row + ".");
             }
             if (node.Keyword == "print")
                 Console.Write(value);
@@ -188,34 +217,6 @@ namespace MiniPLInterpreter
             {
                 Valuetable[variable] = input;
             }
-        }
-    }
-
-    public class InputReader
-    {
-        string readbuffer;
-        static char[] splitters = { '\t', '\r', '\n', ' ', '\v', '\f' };
-
-        public InputReader()
-        {
-            this.readbuffer = "";
-        }
-
-        public string ReadWord()
-        {
-            if (readbuffer == "")
-                readbuffer = Console.ReadLine().Trim();
-
-            var split = readbuffer.Split(splitters, 2, StringSplitOptions.RemoveEmptyEntries);
-            if (split.Length < 2)
-                readbuffer = "";
-            else
-                readbuffer = split[1];
-
-            if (split.Length >= 1)
-                return split[0];
-            else
-                return "";
         }
     }
 }
