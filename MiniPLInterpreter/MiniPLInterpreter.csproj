@@ -48,6 +48,7 @@
     <Compile Include="NodeVisitor.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Errors.cs" />
+    <Compile Include="SymbolTable.cs" />
     <Compile Include="TypeChecker.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="Interpreter.cs" />

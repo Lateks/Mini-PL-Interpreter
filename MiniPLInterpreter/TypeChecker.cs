@@ -7,53 +7,6 @@ using Errors;
 
 namespace MiniPLInterpreter
 {
-    public class SymbolTable
-    {
-        private Dictionary<string, Symbol> symboltable;
-
-        public SymbolTable()
-        {
-            symboltable = new Dictionary<string, Symbol>();
-        }
-
-        public void define(Symbol sym)
-        {
-            symboltable.Add(sym.Name, sym);
-        }
-
-        public Symbol resolve(string name)
-        {
-            try
-            {
-                return symboltable[name];
-            }
-            catch (KeyNotFoundException)
-            {
-                return null;
-            }
-        }
-    }
-
-    public class Symbol
-    {
-        public string Name
-        {
-            get;
-            private set;
-        }
-        public string Type
-        {
-            get;
-            private set;
-        }
-
-        public Symbol(string name, string type)
-        {
-            Name = name;
-            Type = type;
-        }
-    }
-
     // This visitor checks that the types of all operands are
     // appropriate and builds a symbol table.
     //
@@ -102,7 +55,8 @@ namespace MiniPLInterpreter
         public void visit(VariableDeclaration node)
         {
             if (symboltable.resolve(node.Name) != null)
-                throw new SemanticError("Variable " + node.Name + " is already defined.");
+                throw new SemanticError("Variable " + node.Name +
+                    " is already defined (row " + node.Row + ").");
             Symbol symbol = new Symbol(node.Name, node.Type);
             symboltable.define(symbol);
         }
@@ -111,7 +65,8 @@ namespace MiniPLInterpreter
         {
             Symbol var = symboltable.resolve(node.Name);
             if (var == null)
-                throw new SemanticError("Reference to undefined identifier " + node.Name + ".");
+                throw new SemanticError("Reference to undefined identifier "
+                    + node.Name + " on row " + node.Row + ".");
             else
                 operandtypes.Push(var.Type);
         }
@@ -119,7 +74,8 @@ namespace MiniPLInterpreter
         public void visit(Loop node)
         {
             if (symboltable.resolve(node.VarName).Type != "int")
-                throw new SemanticError("Loop variable " + node.VarName + " is not an int.");
+                throw new SemanticError("Loop variable " + node.VarName +
+                    " on row " + node.Row + " is not an int.");
 
             for (int i = 0; i < 2; i++)
             { // Check twice to prevent variable declarations inside the loop body
@@ -136,7 +92,8 @@ namespace MiniPLInterpreter
             if (optype1 == "int" && optype2 == "int")
                 operandtypes.Push("int");
             else
-                throw new SemanticError("Non-integer arguments to arithmetic operator.");
+                throw new SemanticError("Non-integer arguments to arithmetic operator on row " +
+                    node.Row + ".");
         }
 
         public void visit(LogicalOp node)
@@ -148,12 +105,13 @@ namespace MiniPLInterpreter
             {
                 case "&":
                     if (optype1 != "bool" || optype2 != "bool")
-                        throw new SemanticError("Non-boolean arguments to logical and operator (&).");
+                        throw new SemanticError("Non-boolean arguments to logical and operator \"&\"" +
+                            " on row " + node.Row + ".");
                     break;
                 case "=":
                     if (optype1 != optype2)
                         throw new SemanticError("Logical operator \"=\" cannot be applied to types \"" +
-                            optype1 + "\" and \"" + optype2 + "\".");
+                            optype1 + "\" and \"" + optype2 + "\" on row " + node.Row + ".");
                     break;
             }
 
@@ -165,7 +123,8 @@ namespace MiniPLInterpreter
             string rightoptype = operandtypes.Pop();
             string leftoptype = operandtypes.Pop();
             if (rightoptype != "int" || leftoptype != "int")
-                throw new SemanticError("Invalid argument types for range operator (..).");
+                throw new SemanticError("Invalid argument types for range operator \"..\" on row " +
+                    node.Row + ".");
         }
 
         public void visit(Assignment node)
@@ -174,11 +133,13 @@ namespace MiniPLInterpreter
             string variableType;
             if (node.Variable is VariableReference)
                 variableType = operandtypes.Pop();
-            else
+            else // variable declarations are not pushed into the stack
                 variableType = symboltable.resolve(node.VarName).Type;
             operandtypes.Clear();
             if (variableType != expressionType)
-                throw new SemanticError("Incompatible types in assignment.");
+                throw new SemanticError("Attempting to assign expression of type " +
+                    "\"" + expressionType + "\" to variable \"" + node.VarName + "\"" +
+                    " of type \"" + variableType + "\" on row " + node.Row + ".");
         }
 
         public void visit(UnaryNot node)
@@ -186,16 +147,19 @@ namespace MiniPLInterpreter
             if (operandtypes.Pop() == "bool")
                 operandtypes.Push("bool");
             else
-                throw new SemanticError("Invalid argument type for unary not operator (!).");
+                throw new SemanticError("Invalid argument type for unary not operator \"!\" on row " +
+                    node.Row + ".");
         }
 
         public void visit(ExpressionStatement node)
         {
             string exprType = operandtypes.Pop();
             if (node.Keyword == "assert" && exprType != "bool")
-                throw new SemanticError("Invalid argument type for assert statement.");
+                throw new SemanticError("Invalid argument type \"" + exprType +
+                    "\" for assert statement on row " + node.Row + ".");
             else if (node.Keyword == "print" && exprType == "bool")
-                throw new SemanticError("Invalid argument type for print statement.");
+                throw new SemanticError("Invalid argument type \"" + exprType +
+                    "\" for print statement on row " + node.Row + ".");
         }
 
         public void visit(IntegerLiteral node)
@@ -207,7 +171,8 @@ namespace MiniPLInterpreter
             }
             catch (OverflowException)
             {
-                throw new SemanticError("Integer overflow: " + node.Value);
+                throw new SemanticError("Integer overflow on row " + node.Row +
+                    ", in literal " + node.Value + ".");
             }
         }
 
@@ -220,7 +185,8 @@ namespace MiniPLInterpreter
         {
             string vartype = operandtypes.Pop();
             if (vartype == "bool")
-                throw new SemanticError("Invalid argument type for read statement.");
+                throw new SemanticError("Invalid argument type \"" + vartype +
+                    "\" for read statement on row " + node.Row + ".");
         }
 
         public void visit(Program node) { }
