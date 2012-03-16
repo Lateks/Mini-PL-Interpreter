@@ -1,0 +1,228 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using AST;
+using Errors;
+
+namespace MiniPLInterpreter
+{
+    public class SymbolTable
+    {
+        private Dictionary<string, Symbol> symboltable;
+
+        public SymbolTable()
+        {
+            symboltable = new Dictionary<string, Symbol>();
+        }
+
+        public void define(Symbol sym)
+        {
+            symboltable.Add(sym.Name, sym);
+        }
+
+        public Symbol resolve(string name)
+        {
+            try
+            {
+                return symboltable[name];
+            }
+            catch (KeyNotFoundException)
+            {
+                return null;
+            }
+        }
+    }
+
+    public class Symbol
+    {
+        public string Name
+        {
+            get;
+            private set;
+        }
+        public string Type
+        {
+            get;
+            private set;
+        }
+
+        public Symbol(string name, string type)
+        {
+            Name = name;
+            Type = type;
+        }
+    }
+
+    // This visitor checks that the types of all operands are
+    // appropriate and builds a symbol table.
+    //
+    // Typechecking is implemented using a string stack. Each
+    // time an operand (e.g. variable or literal) is encountered,
+    // its type in string format ("int", "string" or "bool") is
+    // pushed onto the stack. Each time an operator or keyword
+    // that takes paremeters is encountered, the right number
+    // of type strings is popped out from the top of the stack
+    // and checked (e.g. are operands to an arithmetic operator
+    // ints, are operands to logical "=" both of the same type
+    // etc.). Incorrect types cause a SemanticError to be
+    // thrown.
+    //
+    // When building the symbol table, the visitor ensures that
+    // no variable is declared twice and that each variable
+    // reference actually refers to a variable that is already
+    // defined in the symbol table. Otherwise a SemanticError
+    // is thrown.
+    //
+    // Note that for loop bodies are traversed twice to prevent
+    // any variable declarations within them, because these are
+    // not compatible with singular scope (as defined in the
+    // Mini-PL specification). Of course technically for loops
+    // that iterate over the loop body only once could allow
+    // variable declarations inside the loop body but since
+    // these make no sense, I decided to forbid variable
+    // declarations within loop bodies altogether.
+    public class TypeCheckingVisitor : NodeVisitor
+    {
+        SymbolTable symboltable;
+        Stack<string> operandtypes;
+
+        public TypeCheckingVisitor()
+        {
+            symboltable = new SymbolTable();
+            operandtypes = new Stack<string>();
+        }
+
+        public SymbolTable BuildSymbolTableAndTypeCheck(Program node)
+        {
+            node.accept(this);
+            return symboltable;
+        }
+
+        public void visit(VariableDeclaration node)
+        {
+            if (symboltable.resolve(node.Name) != null)
+                throw new SemanticError("Variable " + node.Name + " is already defined.");
+            Symbol symbol = new Symbol(node.Name, node.Type);
+            symboltable.define(symbol);
+        }
+
+        public void visit(VariableReference node)
+        {
+            Symbol var = symboltable.resolve(node.Name);
+            if (var == null)
+                throw new SemanticError("Reference to undefined identifier " + node.Name + ".");
+            else
+                operandtypes.Push(var.Type);
+        }
+
+        public void visit(Loop node)
+        {
+            if (symboltable.resolve(node.VarName).Type != "int")
+                throw new SemanticError("Loop variable " + node.VarName + " is not an int.");
+
+            for (int i = 0; i < 2; i++)
+            { // Check twice to prevent variable declarations inside the loop body
+              // (would cause problems because of singular scope).
+                foreach (Statement statement in node.LoopBody)
+                    statement.accept(this);
+            }
+        }
+
+        public void visit(ArithmeticOp node)
+        {
+            string optype1 = operandtypes.Pop();
+            string optype2 = operandtypes.Pop();
+            if (optype1 == "int" && optype2 == "int")
+                operandtypes.Push("int");
+            else
+                throw new SemanticError("Non-integer arguments to arithmetic operator.");
+        }
+
+        public void visit(LogicalOp node)
+        {
+            string optype1 = operandtypes.Pop();
+            string optype2 = operandtypes.Pop();
+
+            switch (node.OpSymbol)
+            {
+                case "&":
+                    if (optype1 != "bool" || optype2 != "bool")
+                        throw new SemanticError("Non-boolean arguments to logical and operator (&).");
+                    break;
+                case "=":
+                    if (optype1 != optype2)
+                        throw new SemanticError("Logical operator \"=\" cannot be applied to types \"" +
+                            optype1 + "\" and \"" + optype2 + "\".");
+                    break;
+            }
+
+            operandtypes.Push("bool");
+        }
+
+        public void visit(Range node)
+        {
+            string rightoptype = operandtypes.Pop();
+            string leftoptype = operandtypes.Pop();
+            if (rightoptype != "int" || leftoptype != "int")
+                throw new SemanticError("Invalid argument types for range operator (..).");
+        }
+
+        public void visit(Assignment node)
+        {
+            string expressionType = operandtypes.Pop();
+            string variableType;
+            if (node.Variable is VariableReference)
+                variableType = operandtypes.Pop();
+            else
+                variableType = symboltable.resolve(node.VarName).Type;
+            operandtypes.Clear();
+            if (variableType != expressionType)
+                throw new SemanticError("Incompatible types in assignment.");
+        }
+
+        public void visit(UnaryNot node)
+        {
+            if (operandtypes.Pop() == "bool")
+                operandtypes.Push("bool");
+            else
+                throw new SemanticError("Invalid argument type for unary not operator (!).");
+        }
+
+        public void visit(ExpressionStatement node)
+        {
+            string exprType = operandtypes.Pop();
+            if (node.Keyword == "assert" && exprType != "bool")
+                throw new SemanticError("Invalid argument type for assert statement.");
+            else if (node.Keyword == "print" && exprType == "bool")
+                throw new SemanticError("Invalid argument type for print statement.");
+        }
+
+        public void visit(IntegerLiteral node)
+        {
+            try
+            {
+                Convert.ToInt32(node.Value);
+                operandtypes.Push("int");
+            }
+            catch (OverflowException)
+            {
+                throw new SemanticError("Integer overflow: " + node.Value);
+            }
+        }
+
+        public void visit(StringLiteral node)
+        {
+            operandtypes.Push("string");
+        }
+
+        public void visit(ReadStatement node)
+        {
+            string vartype = operandtypes.Pop();
+            if (vartype == "bool")
+                throw new SemanticError("Invalid argument type for read statement.");
+        }
+
+        public void visit(Program node) { }
+    }
+}
