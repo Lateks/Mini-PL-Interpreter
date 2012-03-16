@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AST.SyntaxElement" Collapsed="true">
+    <Position X="14" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AST.Expression" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.Statement" Collapsed="true">
+    <Position X="18.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.Program" Collapsed="true">
+    <Position X="17" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AST.Literal" Collapsed="true">
+    <Position X="6.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.IntegerLiteral" Collapsed="true">
+    <Position X="5.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.StringLiteral" Collapsed="true">
+    <Position X="7.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.VariableReference" Collapsed="true">
+    <Position X="13" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AST.VariableDeclaration" Collapsed="true">
+    <Position X="10.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAQAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AST.BinaryOp" Collapsed="true">
+    <Position X="9.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.ArithmeticOp" Collapsed="true">
+    <Position X="8.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.LogicalOp" Collapsed="true">
+    <Position X="10.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.UnaryNot" Collapsed="true">
+    <Position X="15.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.Range" Collapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAACAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.Assignment" Collapsed="true">
+    <Position X="13" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAACAAAAAAAAAAAQAAQAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.ExpressionStatement" Collapsed="true">
+    <Position X="15.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAQAQAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.ReadStatement" Collapsed="true">
+    <Position X="17.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAACAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AST.Loop" Collapsed="true">
+    <Position X="19.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAACAQAAAACAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="AST.Node" Collapsed="true">
+    <Position X="20.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AST.Variable" Collapsed="true">
+    <Position X="20.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

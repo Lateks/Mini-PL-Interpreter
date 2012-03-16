@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using MiniPLInterpreter;
-using AST;
-using Errors;
+using MiniPLInterpreter.Support.AbstractSyntaxTree;
+using MiniPLInterpreter.Support.Symbols;
+using MiniPLInterpreter.Errors.MiniPL;
+using MiniPLInterpreter.Interpreter;
 
 namespace MiniPLInterpreterTest
 {

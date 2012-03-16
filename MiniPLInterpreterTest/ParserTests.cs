@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using SyntaxAnalysis;
-using LexicalAnalysis;
-using AST;
-using Errors;
+using MiniPLInterpreter.SyntaxAnalysis;
+using MiniPLInterpreter.LexicalAnalysis;
+using MiniPLInterpreter.Support.AbstractSyntaxTree;
+using MiniPLInterpreter.Errors.Interpreter;
 
 namespace MiniPLInterpreterTest
 {

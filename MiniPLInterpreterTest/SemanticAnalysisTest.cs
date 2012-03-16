@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using MiniPLInterpreter;
-using SyntaxAnalysis;
-using LexicalAnalysis;
-using AST;
-using Errors;
+using MiniPLInterpreter.SyntaxAnalysis;
+using MiniPLInterpreter.LexicalAnalysis;
+using MiniPLInterpreter.Support.AbstractSyntaxTree;
+using MiniPLInterpreter.Support.Symbols;
+using MiniPLInterpreter.Errors.Interpreter;
+using MiniPLInterpreter.TypeCheck;
 
 namespace MiniPLInterpreterTest
 {

@@ -5,52 +5,58 @@ using System.Text;
 
 namespace MiniPLInterpreter
 {
-    // A simple symbol table using variable names as keys
-    // and symbol objects as values.
-    public class SymbolTable
+    namespace Support
     {
-        private Dictionary<string, Symbol> symboltable;
-
-        public SymbolTable()
+        namespace Symbols
         {
-            symboltable = new Dictionary<string, Symbol>();
-        }
-
-        public void define(Symbol sym)
-        {
-            symboltable.Add(sym.Name, sym);
-        }
-
-        public Symbol resolve(string name)
-        {
-            try
+            // A simple symbol table using variable names as keys
+            // and symbol objects as values.
+            public class SymbolTable
             {
-                return symboltable[name];
+                private Dictionary<string, Symbol> symboltable;
+
+                public SymbolTable()
+                {
+                    symboltable = new Dictionary<string, Symbol>();
+                }
+
+                public void define(Symbol sym)
+                {
+                    symboltable.Add(sym.Name, sym);
+                }
+
+                public Symbol resolve(string name)
+                {
+                    try
+                    {
+                        return symboltable[name];
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        return null;
+                    }
+                }
             }
-            catch (KeyNotFoundException)
+
+            public class Symbol
             {
-                return null;
+                public string Name
+                {
+                    get;
+                    private set;
+                }
+                public string Type
+                {
+                    get;
+                    private set;
+                }
+
+                public Symbol(string name, string type)
+                {
+                    Name = name;
+                    Type = type;
+                }
             }
-        }
-    }
-
-    public class Symbol
-    {
-        public string Name
-        {
-            get;
-            private set;
-        }
-        public string Type
-        {
-            get;
-            private set;
-        }
-
-        public Symbol(string name, string type)
-        {
-            Name = name;
-            Type = type;
         }
     }
 }

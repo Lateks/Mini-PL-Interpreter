@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
-using LexicalAnalysis;
-using TokenTypes;
-using Errors;
+using MiniPLInterpreter.LexicalAnalysis;
+using MiniPLInterpreter.Support.TokenTypes;
+using MiniPLInterpreter.Errors.Interpreter;
 
 namespace LexerTest
 {
