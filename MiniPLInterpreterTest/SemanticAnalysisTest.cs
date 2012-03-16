@@ -204,6 +204,18 @@ namespace MiniPLInterpreterTest
         }
 
         [Test]
+        public void VariableDefinitionAndReferenceInAssignment()
+        {
+            var variableref = new VariableReference("foo", 0);
+            var variabledecl = new VariableDeclaration("foo", "int", 0);
+            var assignment = new Assignment(variabledecl, variableref, 0);
+            statementlist.Add(assignment);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
         public void FaultyArithmetic()
         {
             var variable = new VariableDeclaration("foo", "int", 0);
@@ -273,6 +285,17 @@ namespace MiniPLInterpreterTest
             var not = new UnaryNot(stringlit, 0);
             var assert = new ExpressionStatement("assert", not, 0);
             statementlist.Add(assert);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void InvalidTypesInAssignment()
+        {
+            var variabledecl = new VariableDeclaration("foo", "int", 0);
+            var assignment = new Assignment(variabledecl, new StringLiteral("foo", 0), 0);
+            statementlist.Add(assignment);
             var parsetree = new Program(statementlist);
 
             Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));

@@ -131,13 +131,12 @@ namespace MiniPLInterpreter
 
         public void visit(Assignment node)
         {
-            string expressionType = operandtypes.Pop();
             string variableType;
             if (node.Variable is VariableReference)
                 variableType = operandtypes.Pop();
-            else // variable declarations are not pushed into the stack
+            else // variable declaration types are not pushed into the stack
                 variableType = symboltable.resolve(node.VarName).Type;
-            operandtypes.Clear();
+            string expressionType = operandtypes.Pop();
             if (variableType != expressionType)
                 throw new SemanticError("Attempting to assign expression of type " +
                     "\"" + expressionType + "\" to variable \"" + node.VarName + "\"" +

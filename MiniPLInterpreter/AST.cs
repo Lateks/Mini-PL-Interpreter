@@ -283,8 +283,8 @@ namespace AST
 
         public override void accept(NodeVisitor visitor)
         {
-            Variable.accept(visitor);
             Expression.accept(visitor);
+            Variable.accept(visitor);
             visitor.visit(this);
         }
     }
