@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="58033d3e-755c-4047-966a-37b7dc0d717b"
+  name="Errors" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <packagedElements>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="091f4f65-4591-4ba3-8e6b-21f5367454b0"
+        LastKnownName="Interpreter"
+        LastKnownLocation="Package_2317.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="b7947510-ae3d-4215-b2df-bde07c7001d4"
+        LastKnownName="MiniPL"
+        LastKnownLocation="Package1_2317.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="4bebce58-17f8-466e-bfe7-7223d7f369e9"
+        LastKnownName="MiniPL"
+        LastKnownLocation="Package_2318.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="96420f39-b23f-4065-9f52-6dbd9ae4209f"
+        LastKnownName="MiniPL"
+        LastKnownLocation="Package_2319.uml" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

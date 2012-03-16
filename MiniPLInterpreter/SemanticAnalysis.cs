@@ -9,7 +9,7 @@ using MiniPLInterpreter.Support;
 
 namespace MiniPLInterpreter
 {
-    namespace TypeCheck
+    namespace SemanticAnalysis
     {
         // This visitor checks that the types of all operands are
         // appropriate and builds a symbol table.

@@ -1,7 +1,7 @@
 ﻿using System;
 using MiniPLInterpreter.LexicalAnalysis;
 using MiniPLInterpreter.SyntaxAnalysis;
-using MiniPLInterpreter.TypeCheck;
+using MiniPLInterpreter.SemanticAnalysis;
 using MiniPLInterpreter.Interpreter;
 using MiniPLInterpreter.Support.AbstractSyntaxTree;
 using MiniPLInterpreter.Support.Symbols;

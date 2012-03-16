@@ -43,14 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AST.cs" />
+    <Compile Include="AbstractSyntaxTree.cs" />
     <Compile Include="InputReader.cs" />
     <Compile Include="InterpretingNodeVisitor.cs" />
     <Compile Include="NodeVisitor.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Errors.cs" />
     <Compile Include="SymbolTable.cs" />
-    <Compile Include="TypeChecker.cs" />
+    <Compile Include="SemanticAnalysis.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="Interpreter.cs" />
     <Compile Include="Scanner.cs" />

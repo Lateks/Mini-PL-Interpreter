@@ -8,7 +8,7 @@ using MiniPLInterpreter.LexicalAnalysis;
 using MiniPLInterpreter.Support.AbstractSyntaxTree;
 using MiniPLInterpreter.Support.Symbols;
 using MiniPLInterpreter.Errors.Interpreter;
-using MiniPLInterpreter.TypeCheck;
+using MiniPLInterpreter.SemanticAnalysis;
 
 namespace MiniPLInterpreterTest
 {

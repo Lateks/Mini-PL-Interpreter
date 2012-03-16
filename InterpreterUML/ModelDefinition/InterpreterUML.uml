@@ -1030,6 +1030,12 @@
         </ownedOperationsInternal>
       </class>
     </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="f998227a-c234-4e6a-b8eb-992901a97b43"
+        LastKnownName="MiniPLInterpreter"
+        LastKnownLocation="Package_2316.uml" />
+    </packageHasNamedElement>
   </packagedElements>
   <primitiveType
     Id="220a3521-e091-4221-bae9-3ef9018e845c"

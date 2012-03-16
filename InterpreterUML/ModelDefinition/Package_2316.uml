@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="f998227a-c234-4e6a-b8eb-992901a97b43"
+  name="MiniPLInterpreter" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <packagedElements>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="58033d3e-755c-4047-966a-37b7dc0d717b"
+        LastKnownName="Errors"
+        LastKnownLocation="Package1_2316.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="544c51f9-82cb-4820-a654-77785653e87e"
+        LastKnownName="LexicalAnalysis"
+        LastKnownLocation="Package_2320.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="2fa34a63-831b-42be-a7df-f788f28a5714"
+        LastKnownName="SyntaxAnalysis"
+        LastKnownLocation="Package_2322.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="6016028e-002f-4a0b-b519-e6c0bd4b262d"
+        LastKnownName="SemanticAnalysis"
+        LastKnownLocation="Package_2323.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="09679246-16d5-4157-8ac6-b0bf8cd1cfbd"
+        LastKnownName="Support"
+        LastKnownLocation="Package_2328.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="cc3c4eb7-647d-400e-936b-b66bcdb393e2"
+        LastKnownName="Interpreter"
+        LastKnownLocation="Package_2341.uml" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

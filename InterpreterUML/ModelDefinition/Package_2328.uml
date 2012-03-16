@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="09679246-16d5-4157-8ac6-b0bf8cd1cfbd"
+  name="Support" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <packagedElements>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="9aaed83a-3970-45f9-8db7-e51c652dd07a"
+        LastKnownName="AbstractSyntaxTree"
+        LastKnownLocation="Package1_2328.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="919bec2c-5b33-445a-848d-39517e4de8bd"
+        LastKnownName="TokenTypes"
+        LastKnownLocation="Package_2329.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="a63fb6ed-ab9d-47de-8b95-8cb71abf80a6"
+        name="NodeVisitor"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <Interface
+        Id="75f2d39b-1cf1-4ae3-855c-a68d37c46a1e"
+        name="NodeVisitor"
+        isAbstract="false"
+        isLeaf="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="dfd74a87-79dc-444d-a4f3-e93c1d0f237b"
+        LastKnownName="Symbols"
+        LastKnownLocation="Package_2331.uml" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

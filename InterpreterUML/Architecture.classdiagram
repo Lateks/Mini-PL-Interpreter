@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="a32ab976-5139-4139-bc9c-d7445cdc3d04" name="Architecture" linkedPackageId="9b3a1d22-642f-42fc-bdef-f102f828120f" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <profileInstances>
+    <packageHasProfileInstances Id="28b9d41c-6f0b-4957-9317-a5873ed5f2d2">
+      <profileInstance Id="8d31e4e1-8e31-4ed0-861c-3185dbcb22fd" name="StandardProfileL2">
+        <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+      </profileInstance>
+      <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances Id="7580e620-faeb-477b-baad-95055e17aaad">
+      <profileInstance Id="fc3715d8-177d-4eb0-90b1-a2c93984e038" name="StandardProfileL3">
+        <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+      </profileInstance>
+      <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="1692d136-aedb-4350-8980-ed66e6f37109" name="MiniPLInterpreter">
+        <elementDefinition Id="f998227a-c234-4e6a-b8eb-992901a97b43" />
+        <packagedElements>
+          <packageHasNamedElement>
+            <package Id="6004b5e8-e71b-4a77-998e-429826bb614c" name="Errors">
+              <elementDefinition Id="58033d3e-755c-4047-966a-37b7dc0d717b" />
+              <packagedElements>
+                <packageHasNamedElement>
+                  <package Id="4711b449-edc0-453f-9ca3-84f018c8c200" name="Interpreter">
+                    <elementDefinition Id="091f4f65-4591-4ba3-8e6b-21f5367454b0" />
+                    <packagedElements>
+                      <packageHasNamedElement>
+                        <class Id="894949f5-8350-4163-8a87-70e68496cda3" name="LexicalError" isAbstract="false" isLeaf="false" isActiveClass="false">
+                          <elementDefinition Id="a6bd4c3b-af71-44e6-ba2e-1e44bc2526f1" />
+                        </class>
+                      </packageHasNamedElement>
+                      <packageHasNamedElement>
+                        <class Id="35699953-05d0-48f4-83b5-0bc3ccf45d8c" name="SyntaxError" isAbstract="false" isLeaf="false" isActiveClass="false">
+                          <elementDefinition Id="b044ec0c-b950-42b5-8f60-61a044e7d90a" />
+                        </class>
+                      </packageHasNamedElement>
+                      <packageHasNamedElement>
+                        <class Id="81d9b83a-7b4d-4b83-817a-bbf9ed4106b4" name="SemanticError" isAbstract="false" isLeaf="false" isActiveClass="false">
+                          <elementDefinition Id="ba0e4dcd-3a5d-4e7f-88d3-b46a43170674" />
+                        </class>
+                      </packageHasNamedElement>
+                    </packagedElements>
+                  </package>
+                </packageHasNamedElement>
+                <packageHasNamedElement>
+                  <package Id="38bcdb3c-6930-4d49-8412-947d996e0a9b" name="MiniPL">
+                    <elementDefinition Id="96420f39-b23f-4065-9f52-6dbd9ae4209f" />
+                    <packagedElements>
+                      <packageHasNamedElement>
+                        <class Id="6b5914a7-21ff-4097-a485-7ca82f549fe3" name="MiniPLAssertionFailed" isAbstract="false" isLeaf="false" isActiveClass="false">
+                          <elementDefinition Id="6ea9f70a-fdcf-4e0d-b6f2-2f698b237684" />
+                        </class>
+                      </packageHasNamedElement>
+                      <packageHasNamedElement>
+                        <class Id="8e925342-a11a-48d4-befc-14030aab0c93" name="MiniPLReadError" isAbstract="false" isLeaf="false" isActiveClass="false">
+                          <elementDefinition Id="3e42c22b-ab29-47d3-94f1-89f16f309b34" />
+                        </class>
+                      </packageHasNamedElement>
+                    </packagedElements>
+                  </package>
+                </packageHasNamedElement>
+              </packagedElements>
+            </package>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="a0d704c2-fb68-484b-be3f-fc5a40134ecb" name="LexicalAnalysis">
+              <elementDefinition Id="544c51f9-82cb-4820-a654-77785653e87e" />
+              <packagedElements>
+                <packageHasNamedElement>
+                  <class Id="da5e4d20-571b-458a-b4a5-79d5dd2eb4ba" name="Scanner" isAbstract="false" isLeaf="false" isActiveClass="false">
+                    <elementDefinition Id="7aa35347-e4b6-4a59-8720-a6bd8c17b281" />
+                  </class>
+                </packageHasNamedElement>
+              </packagedElements>
+            </package>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="3c317957-7995-4ea1-b4e8-388ef008dee6" name="SyntaxAnalysis">
+              <elementDefinition Id="2fa34a63-831b-42be-a7df-f788f28a5714" />
+              <packagedElements>
+                <packageHasNamedElement>
+                  <class Id="3154af3e-d03f-4cb6-ba1b-4c93dc9d660c" name="Parser" isAbstract="false" isLeaf="false" isActiveClass="false">
+                    <elementDefinition Id="faeb0f3a-03d0-4bda-9797-6c353501e914" />
+                  </class>
+                </packageHasNamedElement>
+              </packagedElements>
+            </package>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="08e05515-5572-44ea-a2c8-6d15813e2017" name="SemanticAnalysis">
+              <elementDefinition Id="6016028e-002f-4a0b-b519-e6c0bd4b262d" />
+              <packagedElements>
+                <packageHasNamedElement>
+                  <class Id="15b611e0-7f9a-4185-aac7-be8f111759c4" name="TypeCheckingNodeVisitor" isAbstract="false" isLeaf="false" isActiveClass="false">
+                    <elementDefinition Id="dfcf0dfc-4be6-49fa-817c-c86d8eed016d" />
+                    <suppliersInternal>
+                      <interfaceRealization Id="1017ae42-7be4-4b12-9db1-c2198566bd68">
+                        <interfaceMoniker Id="070c07e7-4c83-458f-b393-63c4b33970a6" LastKnownName="NodeVisitor" />
+                        <elementDefinition Id="18e8e5b1-10f3-422c-b5b5-2a939f91101e" />
+                      </interfaceRealization>
+                    </suppliersInternal>
+                    <ownedOperationsInternal>
+                      <operation Id="678b3150-adde-4fdd-b378-172879b9d961" name="BuildSymbolTableAndTypeCheck" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+                        <elementDefinition Id="0069b43e-6d86-4aa7-bab0-e4bfc7d13249" />
+                      </operation>
+                    </ownedOperationsInternal>
+                  </class>
+                </packageHasNamedElement>
+              </packagedElements>
+            </package>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="53983bf3-c1bf-4e82-b43e-21f967a085bd" name="Support">
+              <elementDefinition Id="09679246-16d5-4157-8ac6-b0bf8cd1cfbd" />
+              <packagedElements>
+                <packageHasNamedElement>
+                  <package Id="31f968b9-7e2e-471a-9865-59b147ac113c" name="AbstractSyntaxTree">
+                    <elementDefinition Id="9aaed83a-3970-45f9-8db7-e51c652dd07a" />
+                    <packagedElements>
+                      <packageHasNamedElement>
+                        <Interface Id="9a2d0851-0a47-4c03-9069-d4db1027cead" name="Node" isAbstract="false" isLeaf="false">
+                          <elementDefinition Id="b7d68ec4-1ad8-4b00-97a4-94f320273ac9" />
+                        </Interface>
+                      </packageHasNamedElement>
+                    </packagedElements>
+                  </package>
+                </packageHasNamedElement>
+                <packageHasNamedElement>
+                  <package Id="d9f09f5c-9f0b-40b6-8b2c-8e995cdfe360" name="TokenTypes">
+                    <elementDefinition Id="919bec2c-5b33-445a-848d-39517e4de8bd" />
+                    <packagedElements>
+                      <packageHasNamedElement>
+                        <class Id="c1730c6a-76ef-4db8-9ea0-1d84fc4f5a00" name="Token" isAbstract="false" isLeaf="false" isActiveClass="false">
+                          <elementDefinition Id="0e7c1f2b-32a2-4582-be12-020564046d77" />
+                        </class>
+                      </packageHasNamedElement>
+                    </packagedElements>
+                  </package>
+                </packageHasNamedElement>
+                <packageHasNamedElement>
+                  <Interface Id="070c07e7-4c83-458f-b393-63c4b33970a6" name="NodeVisitor" isAbstract="false" isLeaf="false">
+                    <elementDefinition Id="75f2d39b-1cf1-4ae3-855c-a68d37c46a1e" />
+                  </Interface>
+                </packageHasNamedElement>
+                <packageHasNamedElement>
+                  <package Id="d0273050-6075-4c14-8c24-debae6b85920" name="Symbols">
+                    <elementDefinition Id="dfd74a87-79dc-444d-a4f3-e93c1d0f237b" />
+                    <packagedElements>
+                      <packageHasNamedElement>
+                        <class Id="48ed6ed7-8959-4026-a701-8b3a8707b80b" name="Symbol" isAbstract="false" isLeaf="false" isActiveClass="false">
+                          <elementDefinition Id="ea7b034e-542a-49e6-83bb-2c8af0ca9907" />
+                        </class>
+                      </packageHasNamedElement>
+                      <packageHasNamedElement>
+                        <class Id="0cbd8694-97e4-4d7e-94a8-e60f7060a1f6" name="SymbolTable" isAbstract="false" isLeaf="false" isActiveClass="false">
+                          <elementDefinition Id="a73c97f6-3b43-468b-a91e-c1ae85d66b27" />
+                          <targetEnds>
+                            <association Id="f44497cb-8c21-41e0-8280-48783cca14d9" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+                              <classMoniker Id="48ed6ed7-8959-4026-a701-8b3a8707b80b" LastKnownName="Symbol" />
+                              <relationshipOwnedElementsInternal>
+                                <associationHasOwnedEnds>
+                                  <memberEnd Id="b3926703-b01d-49c5-a3f5-f3bc537d7680" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                                    <elementDefinition Id="044700b7-0071-4226-b3a9-d0e427fd5956" />
+                                  </memberEnd>
+                                </associationHasOwnedEnds>
+                                <associationHasOwnedEnds>
+                                  <memberEnd Id="fbe372fd-6ce7-4dba-8b07-d5a774fcf629" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                                    <elementDefinition Id="1cd31c6d-8b86-494d-b1e4-e6afc3ee1ca0" />
+                                  </memberEnd>
+                                </associationHasOwnedEnds>
+                              </relationshipOwnedElementsInternal>
+                              <elementDefinition Id="5da4d64d-016c-4b19-8d60-2d8bca09254d" />
+                            </association>
+                          </targetEnds>
+                        </class>
+                      </packageHasNamedElement>
+                    </packagedElements>
+                  </package>
+                </packageHasNamedElement>
+              </packagedElements>
+            </package>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="2599b0f2-f6a2-4f2f-a376-34a2d6561044" name="Interpreter">
+              <elementDefinition Id="cc3c4eb7-647d-400e-936b-b66bcdb393e2" />
+              <packagedElements>
+                <packageHasNamedElement>
+                  <class Id="d2ee9e3c-7a2d-4046-9227-d4ec90198b75" name="InterpretingNodeVisitor" isAbstract="false" isLeaf="false" isActiveClass="false">
+                    <elementDefinition Id="6b500f32-bf86-4fb2-8b49-23de8bbefd2c" />
+                    <suppliersInternal>
+                      <interfaceRealization Id="c92e34f4-278c-46da-8c6f-d520e6f15821">
+                        <interfaceMoniker Id="070c07e7-4c83-458f-b393-63c4b33970a6" LastKnownName="NodeVisitor" />
+                        <elementDefinition Id="424cc401-1d6b-4ca5-8591-f83eefe2bb41" />
+                      </interfaceRealization>
+                    </suppliersInternal>
+                    <targetEnds>
+                      <association Id="fa4dc1b8-596b-4ac3-8f67-c4d354010225" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+                        <classMoniker Id="c895a046-6df1-4e85-a80f-d4b23ccff4f1" LastKnownName="InputReader" />
+                        <relationshipOwnedElementsInternal>
+                          <associationHasOwnedEnds>
+                            <memberEnd Id="e44604c0-245c-4741-9174-91c180da71c8" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="false" isNavigableOwned="false">
+                              <elementDefinition Id="36a33c86-66e8-45ba-b00a-590072ddb4c5" />
+                            </memberEnd>
+                          </associationHasOwnedEnds>
+                          <associationHasOwnedEnds>
+                            <memberEnd Id="836b8838-c6e3-4d4e-aef6-5374b315349a" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="true">
+                              <elementDefinition Id="a35bb524-3c65-432d-890b-525bf4a345a1" />
+                            </memberEnd>
+                          </associationHasOwnedEnds>
+                        </relationshipOwnedElementsInternal>
+                        <elementDefinition Id="a7bd9777-3525-479a-83eb-90298e2c6727" />
+                      </association>
+                    </targetEnds>
+                  </class>
+                </packageHasNamedElement>
+                <packageHasNamedElement>
+                  <class Id="c895a046-6df1-4e85-a80f-d4b23ccff4f1" name="InputReader" isAbstract="false" isLeaf="false" isActiveClass="false">
+                    <elementDefinition Id="265fe17e-fdf3-47ce-a05e-5c346f8c055f" />
+                  </class>
+                </packageHasNamedElement>
+                <packageHasNamedElement>
+                  <class Id="e68b2384-220e-4a3b-9f63-96ddfd2d11c5" name="Interpreter" isAbstract="false" isLeaf="false" isActiveClass="false">
+                    <elementDefinition Id="1eaef24c-8f99-45b4-b1a5-c361b818c3ec" />
+                    <targetEnds>
+                      <association Id="3421e8d0-db8d-4869-899c-a0f2379dd63b" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+                        <classMoniker Id="d2ee9e3c-7a2d-4046-9227-d4ec90198b75" LastKnownName="InterpretingNodeVisitor" />
+                        <relationshipOwnedElementsInternal>
+                          <associationHasOwnedEnds>
+                            <memberEnd Id="f2d02b40-66d6-4c1c-9ca5-788bfda4c91f" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="false" isNavigableOwned="false">
+                              <elementDefinition Id="c0111ad6-bb56-48ea-aa2a-b80f69eaf892" />
+                            </memberEnd>
+                          </associationHasOwnedEnds>
+                          <associationHasOwnedEnds>
+                            <memberEnd Id="13280637-3c01-43c6-8d6d-80c33dd99999" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="true">
+                              <elementDefinition Id="be03c43e-1e50-4290-932d-eb2289655d7d" />
+                            </memberEnd>
+                          </associationHasOwnedEnds>
+                        </relationshipOwnedElementsInternal>
+                        <elementDefinition Id="930ff9d2-378f-4060-a0c7-3ffa03a94f89" />
+                      </association>
+                    </targetEnds>
+                    <ownedOperationsInternal>
+                      <operation Id="14f6894d-f361-43da-9463-26d64bd08a18" name="Main" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+                        <elementDefinition Id="e78ef0d6-e4a8-4082-b6a6-3eb53f5019ab" />
+                      </operation>
+                    </ownedOperationsInternal>
+                  </class>
+                </packageHasNamedElement>
+              </packagedElements>
+            </package>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+  </packagedElements>
+  <package Id="9b3a1d22-642f-42fc-bdef-f102f828120f" name="InterpreterUML">
+    <elementDefinition Id="5cadbd80-8b3e-4b89-9e38-023b6874c4e8" />
+  </package>
+</logicalClassDesignerModel>
