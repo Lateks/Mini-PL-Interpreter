@@ -64,7 +64,7 @@ This section covers issues related to scanning and parsing Mini-PL: token patter
     \hline
     Colon symbol (type declaration) & : \\
     \hline
-    Operator symbols \textsuperscript{3} & +|-|*|<|=|\&|! \\
+    Operator symbols \textsuperscript{3} & +|-|*|<|/|=|\&|! \\
     \hline
     Parentheses & (|) \\
     \hline
@@ -77,8 +77,21 @@ Notes:
 \begin{enumerate}
 \item Matching patterns are identified as keywords or variables by checking a predefined keyword list.
 \item String literals can contain any characters except non-escaped quotes or backslashes. Valid escape characters are \verb \\ , \verb \n , \verb \t , \verb \v , \verb \r , \verb \" . Note that backslash characters in the regex are character literals with no special escape meaning.
-\item The specification lists \verb,!, as a binary operator as well as a unary operator. Because the specification did not specify the meaning of \verb,!, as a binary operator, I assumed it was mistakenly listed as such and only accepted it as a unary operator.
+\item The specification lists \verb,!, as a binary operator as well as a unary operator. Because the specification did not specify the meaning of \verb,!, as a binary operator, I assumed it was mistakenly listed as such and only accepted it as a unary operator. The division operator symbol / is special because it can also begin a comment.
 \end{enumerate}
+
+Non-token patterns:
+\begin{table}[h!]
+\begin{tabular}{| l | l |}
+    \hline
+    Whitespace & (\textbackslash t|\textbackslash r|\textbackslash n|\textbackslash v| )* \\
+    \hline
+    Single line comment & //[\^{}\textbackslash n]*\textbackslash n \\
+    \hline
+    Multiline comment (\textbackslash * is an asterisk symbol) & /\textbackslash *.*\textbackslash */ \\
+    \hline
+\end{tabular}
+\end{table}
 
 \subsection{Context-free grammar}
 
