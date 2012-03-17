@@ -32,14 +32,43 @@ This section covers the general architecture of the interpreter, testing, buildi
 
 \begin{figure}
     \includegraphics[scale=0.7]{architecture.png}
-    \caption{The architecture of the interpreter (exluding different token and node classes and package imports to maintain clarity).}
+    \caption{The architecture of the interpreter exluding different token and node classes and package imports to maintain clarity. See the abstract syntax tree description for a list and a diagram of Node classes. Token classes roughly correspond to Node types in AbstractSyntaxTree.}
+    \label{fig:architecture}
 \end{figure}
+
+Figure \ref{fig:architecture} shows the general architecture of the program. Package (or namespace) imports have been excluded to maintain clarity. Lexical analysis (the Scanner class), syntax analysis (the Parser class), semantic analysis (the TypeCheckingNodeVisitor class) and interpretation (everything in the Interpreter namespace) are architecturally completely separate.
+
+In practice, the Parser needs to be given a Scanner instance that it can call for new tokens as a parameter. My Scanner implementation does not evaluate the whole source code at once but matches and returns one token at a time when NextToken() is called, so in practice lexical analysis and syntax analysis are interleaved. If desired, however, this could trivially be changed so that Scanner builds e.g. a queue of tokens in one pass of the source code, returning them one at a time on calls to NextToken(), but I did not see a reason for it. The only peculiarity this may cause is that sometimes a syntax error may be detected before a lexical one. Parser is, of course, oblivious to how the Scanner works internally, as long as NextToken() always returns a valid Token object.
+
+The Parser produces an abstract syntax tree. The abstract syntax tree is then traversed by the TypeCheckingNodeVisitor that produces a symbol table. In addition to producing the symbol table it checks for static type errors and that variables are declared before use. The symbol table is then given to the InterpretingNodeVisitor that also traverses the abstract syntax tree and executes the commands described by it. The Main() function in the Interpreter class coordinates the correct order of execution.
+
+The Interpreter namespace also contains the InputReader for buffered reading of input in executing Mini-PL read statements. Buffered reading is required because the Mini-PL specification (see appendix) requires that reading be done one whitespace-delimited word at a time whereas C$\sharp$ only provides reading one character at a time or one line at a time. The InputReader is in the Interpreter namespace mostly because other modules do not use it.
+
+Utilities that are used by several different packages or namespaces are in the Support namespace. These include AbstractSyntaxTree (used in parsing, semantic analysis and interpretation), TokenTypes (used by Scanner and Parser), Symbol (containing Symbols and SymbolTables, used in semantic analysis and interpretation) and the NodeVisitor interface, implemented by InterpretingNodeVisitor and TypeCheckingNodeVisitor.
+
+Errors have their own namespace which is in turn divided into interpreter errors (lexical, syntactic and semantic) and Mini-PL errors. These are described in the error handling section below.
 
 \subsection{Error handling}
 
+As described in the architecture section, the Errors namespace is divided into interpreter related errors that can be lexical, syntactic or semantic, and Mini-PL related exceptions.
+
+LexicalErrors are thrown by the Scanner, SyntaxErrors by Parser and SemanticErrors by TypeCheckingNodeVisitor. The types of semantic errors reported are type mismatch, integer overflow in an integer literal, reference to an unknown variable and declaration of a variable that is already defined. Whenever possible, error messages contain row and/or column information and possible additional information about the offending token. When both a row and a column are specified in the message, the actual language token referenced resides immediately before that point in the source code. Both row and column numbering start from 1.
+
+It should be noted that my implementation raises a SemanticError if for loop bodies contain variable declarations. Because everything in Mini-PL programs resides inside a single scope (as specified in the Mini-PL specification, see appendix), a variable declaration in a for loop that has more than one iteration causes that variable to be declared several times, which is not allowed. Of course a for loop that is iterated over only once would not cause this problem but since for loops that iterate over the body less than twice make little sense, I decided to forbid variable declarations inside loop bodies altogether. Of course more sensible and slightly more complex scoping rules would have the for loop create its own scope ''inside'' the scope of the main program but that goes against the specification.
+
+Out of the Mini-PL exceptions, only assertion failure is mentioned in the specification. InterpretingNodeVisitor throws MiniPLAssertionFailed when a Mini-PL assert statement fails (the argument to assert is false). To handle errors encountered in reading integers when executing a read statement, MiniPLReadError is introduced. It is thrown when a read statement attempts to read an integer and either the input is not a valid integer or an integer overflow occurs when converting to a 32-bit signed integer.
+
+All errors (both Interpreter and Mini-PL) are handled by a try-catch statement wrapping most of the body of the Main() function in the Interpreter class. When an exception is raised, the Main() function prints the error message and exits. The interpreter does not utilize any error recovery strategies for reporting possible multiple errors in a source file at a time, but this did not appear to be a requirement judging by the project specification.
+
 \subsection{Testing}
 
+The project MiniPLInterpreterTest, included in the \verb,src, directory contains unit tests for most of the source code. Tests were written using NUnit\footnote{\url{http://www.nunit.org}} 2.6 and run using TestDriven.Net\footnote{\url{http://testdriven.net}} (Personal, version 3.3.2779 Beta 2). The scanner was developed in a test driven manner. The parser and visitors were developed by writing a complete rudimentary version first and then writing tests to guide further development and to find bugs.
+
+I did not have enough time to do proper integration testing, so I just ran a few small programs as a form of non-automated ad-hoc integration testing and fixed the bugs that I found by first adding a new failing unit test and then making it pass. Some test programs were valid, some contained errors, so I could see error handling in action, and some tested functionality that I was more or less suspicious of. These programs included the example programs given in the Mini-PL specification (see appendix).
+
 \subsection{Building and running the interpreter}
+
+TODO
 
 \section{The Mini-PL language}
 
@@ -77,7 +106,7 @@ Notes:
 \begin{enumerate}
 \item Matching patterns are identified as keywords or variables by checking a predefined keyword list.
 \item String literals can contain any characters except non-escaped quotes or backslashes. Valid escape characters are \verb \\ , \verb \n , \verb \t , \verb \v , \verb \r , \verb \" . Note that backslash characters in the regex are character literals with no special escape meaning.
-\item The specification lists \verb,!, as a binary operator as well as a unary operator. Because the specification did not specify the meaning of \verb,!, as a binary operator, I assumed it was mistakenly listed as such and only accepted it as a unary operator. The division operator symbol / is special because it can also begin a comment.
+\item The specification (see appendices) lists \verb,!, as a binary operator as well as a unary operator. Because the specification did not specify the meaning of \verb,!, as a binary operator, I assumed it was mistakenly listed as such and only accepted it as a unary operator. The division operator symbol / is special because it can also begin a comment.
 \end{enumerate}
 
 Non-token patterns:
@@ -124,6 +153,38 @@ Refer to appendices for the original non-LL(1) grammar. I have renamed \verb,<st
 \end{verbatim}
 
 \subsection{Abstract syntax trees}
+
+Figure \ref{fig:ast} (as generated by Visual Studio) shows the basic class structure of my abstract syntax tree implementation. I have tried to differentiate between different types of expressions and statements quite a lot to minimize the need for e.g. operator symbol checks in type checking and interpretation phases and to make it easier to perceive possible faults in parsing code. The basic ideas are the following:
+
+\begin{itemize}
+    \item All node classes implement the Node interface that specifies an accept function for NodeVisitors.
+    \item \verb,Program, is a Node class that holds a list of \verb,Statements,. All other nodes are \verb,SyntaxElements,.
+    \item \verb,SyntaxElements, can be \verb,Statements, or \verb,Expressions,. (A special case is \verb,Range, which is neither because it only appears in a very specific context.) Whether a node is a \verb,Statement, or \verb,Expression, decides where it can appear (e.g. an arithmetic operator's operands must be \verb,Expressions,, never \verb,Statements,).
+    \item \verb,VariableDeclaration, (which is a \verb,Statement, because it can appear on its own) and \verb,VariableReference, (which is an \verb,Expression,) implement the interface \verb,Variable, which appears as the left-hand side of an assignment operation.
+\end{itemize}
+
+\begin{figure}
+\includegraphics[scale=0.5,angle=90]{ast.png}
+\caption{Node classes and interfaces in the abstract syntax tree}
+\label{fig:ast}
+\end{figure}
+
+The following is a list of different Node constructors\footnote{All constructors additionally take a source row number as a parameter for use in error messages, but I have left these out for clarity} with inheritance information:
+\begin{itemize}
+    \item \verb,Program(List<Statement> statements),
+    \item \verb,IntegerLiteral(string value), (is a \verb,Literal, which is an \verb,Expression,)
+    \item \verb,StringLiteral(string value), (is a \verb,Literal, which is an \verb,Expression,)
+    \item \verb,VariableReference(string name), (is an \verb,Expression, and a \verb,Variable,)
+    \item \verb/ArithmeticOp(string opsymbol, Expression lhs, Expression rhs)/ (is a \verb,BinaryOp, which is an \verb,Expression,)
+    \item \verb/LogicalOp(string opsymbol, Expression lhs, Expression rhs)/ (is a \verb,BinaryOp, which is an \verb,Expression,)
+    \item \verb/UnaryNot(Expression operand)/ (is an \verb,Expression,)
+    \item \verb/Range(Expression lhs, Expression rhs)/
+    \item \verb/VariableDeclaration(string name, string type)/ (is a \verb,Statement, and a \verb,Variable,)
+    \item \verb/Assignment(Variable variable, Expression expression)/ (is a \verb,Statement,)
+    \item \verb/ExpressionStatement(string keyword, Expression expression)/ \footnote{ExpressionStatement covers those statements that begin with a keyword and take an expression as a parameter. In practice, this means assert and print. The read statement is more specific: it only accepts a VariableReference.} (is a \verb,Statement,)
+    \item \verb/ReadStatement(VariableReference variable)/ (is a \verb,Statement,)
+    \item \verb/Loop(VariableReference variable, Range range, List<Statement> body)/ (is a \verb,Statement,)
+\end{itemize}
 
 \appendix
 \section{Appendices}
