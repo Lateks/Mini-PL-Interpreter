@@ -31,14 +31,16 @@ This section covers the general architecture of the interpreter, testing, error 
 \subsection{Architecture}
 
 \begin{figure}
-    \includegraphics[scale=0.7]{architecture.png}
-    \caption{The architecture of the interpreter exluding different token and node classes and package imports to maintain clarity. See the abstract syntax tree description for a list and a diagram of Node classes. Token classes roughly correspond to Node types in AbstractSyntaxTree.}
+    \includegraphics[scale=0.75]{architecture.png}
+    \caption{The architecture of the interpreter exluding different Token and Node classes and package imports to maintain clarity. See the abstract syntax tree description for a list and a diagram of Node classes. Token classes roughly correspond to Node types in AbstractSyntaxTree.}
     \label{fig:architecture}
 \end{figure}
 
 Figure \ref{fig:architecture} shows the general architecture of the program. Package (or namespace) imports have been excluded to maintain clarity. Lexical analysis (the Scanner class), syntax analysis (the Parser class), semantic analysis (the TypeCheckingNodeVisitor class) and interpretation (everything in the Interpreter namespace) are architecturally completely separate.
 
-In practice, the Parser needs to be given a Scanner instance that it can call for new tokens as a parameter. My Scanner implementation does not evaluate the whole source code at once but matches and returns one token at a time when NextToken() is called, so in practice lexical analysis and syntax analysis are interleaved. If desired, however, this could trivially be changed so that Scanner builds e.g. a queue of tokens in one pass of the source code, returning them one at a time on calls to NextToken(), but I did not see a reason for it. The only peculiarity this may cause is that sometimes a syntax error may be detected before a lexical one. Parser is, of course, oblivious to how the Scanner works internally, as long as NextToken() always returns a valid Token object.
+The Scanner is given a string containing the whole program as a parameter. It converts the input string into a stack for ease of use. Some of this input handling and row/column number tracking could be separated into its own module but it does not take too much space in the Scanner, so I decided to keep it there. A PopInput() wrapper function handles both popping from the stack and incrementing row and column numbers as needed.
+
+The Parser needs to be given a Scanner instance that it can call for new tokens as a parameter. My Scanner implementation does not evaluate the whole source code at once but matches and returns one token at a time when NextToken() is called, so in practice lexical analysis and syntax analysis are interleaved. If desired, however, this could trivially be changed so that Scanner builds e.g. a queue of tokens in one pass of the source code, returning them one at a time on calls to NextToken(), but I did not see a reason for it. The only peculiarity this may cause is that sometimes a syntax error may be detected before a lexical one. Parser is, of course, oblivious to how the Scanner works internally, as long as NextToken() always returns a valid Token object.
 
 The Parser produces an abstract syntax tree. The abstract syntax tree is then traversed by the TypeCheckingNodeVisitor that produces a symbol table. In addition to producing the symbol table it checks for static type errors as well as that variables are declared before use but not declared more than once. The symbol table is then given to the InterpretingNodeVisitor that also traverses the abstract syntax tree and executes the commands described by it. The Main() function in the Interpreter class coordinates the correct order of execution.
 
@@ -54,7 +56,7 @@ I have attempted to name variables, classes and functions and structure the code
 
 As described in the architecture section, the Errors namespace is divided into interpreter related errors that can be lexical, syntactic or semantic, and Mini-PL related exceptions.
 
-LexicalErrors are thrown by the Scanner, SyntaxErrors by Parser and SemanticErrors by TypeCheckingNodeVisitor. The types of semantic errors reported are type mismatch, integer overflow in an integer literal, reference to an unknown variable and declaration of a variable that is already defined. Whenever possible, error messages contain row and/or column information and possible additional information about the offending token. When both a row and a column are specified in the message, the actual language token referenced resides immediately before that point in the source code. Both row and column numbering start from 1.
+LexicalErrors are thrown by the Scanner, SyntaxErrors by Parser and SemanticErrors by TypeCheckingNodeVisitor. The types of semantic errors reported are type mismatch, integer overflow in an integer literal, reference to an unknown variable and declaration of a variable that is already defined. Whenever possible, error messages contain row and/or column information and possible additional information about the offending token. When both a row and a column are specified in the message, the column refers to the position of the last character of that token. This is because the Scanner reports its position when it recognizes a token. For slightly nicer error messages, the starting position of the Scanner after skipping whitespace and comments could easily be stored. Both row and column numberings start from 1.
 
 It should be noted that my implementation raises a SemanticError if for loop bodies contain variable declarations. Because everything in Mini-PL programs resides inside a single scope (as specified in the Mini-PL specification, see appendix), a variable declaration in a for loop that has more than one iteration causes that variable to be declared several times, which is not allowed. Of course a for loop that is iterated over only once would not cause this problem but since for loops that iterate over the body less than twice make little sense, I decided to disallow variable declarations inside loop bodies altogether. Of course more sensible and slightly more complex scoping rules would have the for loop create its own scope ''inside'' the scope of the main program but that goes against the specification.
 
@@ -202,7 +204,7 @@ The following is a list of different Node constructors\footnote{All constructors
 \appendix
 \section{Appendices}
 
-Start on page 9 after figure \ref{fig:ast}. Includes project specification and Mini-PL specification.
+Appendices start on page 9 after figure \ref{fig:ast}. Includes project specification and Mini-PL specification.
 
 \includepdf[pages={1, 2}]{project_spec.pdf}
 
