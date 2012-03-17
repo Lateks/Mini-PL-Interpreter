@@ -95,6 +95,34 @@ Non-token patterns:
 
 \subsection{Context-free grammar}
 
+Refer to appendices for the original non-LL(1) grammar. I have renamed \verb,<stmts>, to \verb,<stmt-list>,. \verb,\epsilon, denotes the empty string.
+
+\begin{verbatim}
+<prog>           ::= <stmt-list>
+<stmt-list>      ::= <stmt> ";" <stmt-list-tail>
+<stmt-list-tail> ::= <stmt-list>
+                  | \epsilon
+<stmt>           ::= "var" <var-ident> ":" <type> <opt-assignment>
+                  |  <var-ident> ":=" <expr>
+                  |  "for" <var_ident> "in" <expr> ".." <expr>
+                     "do" <stmt-list> "end" "for"
+                  |  "read" <var-ident>
+                  |  "print" <expr>
+                  |  "assert" "(" <expr> ")"
+<opt-assignment> ::= ":=" <expr>
+                  |  \epsilon
+<expr>           ::= <opnd> <expr-tail>
+                  |  <unary-op> <opnd>
+<expr-tail>      ::= <op> <opnd>
+                  |  \epsilon
+<opnd>           ::= <int>
+                  |  <string>
+                  |  <var-ident>
+                  |  "(" <expr> ")"
+<type>           ::= "int" | "string" | "bool"
+<var-ident>      ::= <ident>
+\end{verbatim}
+
 \subsection{Abstract syntax trees}
 
 \appendix
