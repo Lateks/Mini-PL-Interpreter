@@ -43,15 +43,15 @@ namespace MiniPLInterpreter
                 }
                 catch (LexicalError e)
                 {
-                    Console.WriteLine("Lexical error:\n" + e.Message + "\n");
+                    Console.WriteLine("Lexical error: " + e.Message + "\n");
                 }
                 catch (SyntaxError e)
                 {
-                    Console.WriteLine("Syntax error:\n" + e.Message + "\n");
+                    Console.WriteLine("Syntax error: " + e.Message + "\n");
                 }
                 catch (SemanticError e)
                 {
-                    Console.WriteLine("Semantic error:\n" + e.Message + "\n");
+                    Console.WriteLine("Semantic error: " + e.Message + "\n");
                 }
                 catch (MiniPLAssertionFailed e)
                 {

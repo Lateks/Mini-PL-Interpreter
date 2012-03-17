@@ -104,7 +104,7 @@ namespace MiniPLInterpreter
                     else if (InputLeft() && input.Peek().Equals('*'))
                         SkipMultilineComment();
                     else
-                    {
+                    { // The character was a division symbol => return it on top of the stack.
                         input.Push(symbol);
                         return false;
                     }
@@ -244,7 +244,7 @@ namespace MiniPLInterpreter
             private string GetEscapeCharacter()
             {
                 PopInput(); // discard '\'
-                if (InputLeft()) // currently accepts anything as an escape character
+                if (InputLeft())
                 {
                     string token = PopInput();
                     switch (token)
