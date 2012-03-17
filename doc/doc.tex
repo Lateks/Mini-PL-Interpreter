@@ -1,5 +1,5 @@
 \documentclass[a4paper,11pt]{article}
-\usepackage[top = 1.5 in, bottom = 1 in, left = 1.5 in, right = 1.5 in]{geometry}
+\usepackage[top = 1.5 in, bottom = 1 in, left = 1 in, right = 1 in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{csquotes}
@@ -30,6 +30,11 @@ This section covers the general architecture of the interpreter, testing, buildi
 
 \subsection{Architecture}
 
+\begin{figure}
+    \includegraphics[scale=0.7]{architecture.png}
+    \caption{The architecture of the interpreter (exluding different token and node classes and package imports to maintain clarity).}
+\end{figure}
+
 \subsection{Error handling}
 
 \subsection{Testing}
@@ -41,6 +46,39 @@ This section covers the general architecture of the interpreter, testing, buildi
 This section covers issues related to scanning and parsing Mini-PL: token patterns, the context-free grammar, and the abstract syntax tree.
 
 \subsection{Mini-PL token patterns}
+
+\begin{table}[h!]
+\begin{tabular}{| l | l |}
+    \hline
+    Token type & Regular expression \\
+    \hline
+    Variable or keyword \textsuperscript{1} & [a-zA-Z][0-9a-zA-Z]* \\
+    \hline
+    Integer literal & [0-9][0-9]* \\
+    \hline
+    String literal \textsuperscript{2} & "([\^{}"\textbackslash]|(\textbackslash[\textbackslash tnrv"]))*" \\
+    \hline
+    Endline symbol & ; \\
+    \hline
+    Assignment symbol & := \\
+    \hline
+    Colon symbol (type declaration) & : \\
+    \hline
+    Operator symbols \textsuperscript{3} & +|-|*|<|=|\&|! \\
+    \hline
+    Parentheses & (|) \\
+    \hline
+    Range operator & .. \\
+    \hline
+\end{tabular}
+\end{table}
+
+Notes:
+\begin{enumerate}
+\item Matching patterns are identified as keywords or variables by checking a predefined keyword list.
+\item String literals can contain any characters except non-escaped quotes or backslashes. Valid escape characters are \verb \\ , \verb \n , \verb \t , \verb \v , \verb \r , \verb \" . Note that backslash characters in the regex are character literals with no special escape meaning.
+\item The specification lists \verb,!, as a binary operator as well as a unary operator. Because the specification did not specify the meaning of \verb,!, as a binary operator, I assumed it was mistakenly listed as such and only accepted it as a unary operator.
+\end{enumerate}
 
 \subsection{Context-free grammar}
 
