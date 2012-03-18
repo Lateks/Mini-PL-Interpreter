@@ -7,7 +7,6 @@ using MiniPLInterpreter.Support.TokenTypes;
 using MiniPLInterpreter.Errors.MiniPL;
 using MiniPLInterpreter.Errors.Interpreter;
 using MiniPLInterpreter.Support.AbstractSyntaxTree;
-using MiniPLInterpreter.Support.TokenTypes;
 
 namespace MiniPLInterpreter
 {
