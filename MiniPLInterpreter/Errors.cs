@@ -48,6 +48,12 @@ namespace MiniPLInterpreter
                 public MiniPLReadError(string message)
                     : base(message) { }
             }
+
+            public class MiniPLDivisionByZero : Exception
+            {
+                public MiniPLDivisionByZero(string message)
+                    : base(message) { }
+            }
         }
     }
 }

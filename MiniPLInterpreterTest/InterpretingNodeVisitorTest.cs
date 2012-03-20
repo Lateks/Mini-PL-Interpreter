@@ -165,6 +165,16 @@ namespace MiniPLInterpreterTest
             interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(2));
         }
+
+        [Test]
+        public void DivisionByZero()
+        {
+            var divop = new ArithmeticOp("/", op1, new IntegerLiteral("0", 0), 0);
+            var assignment = new Assignment(resultdecl, divop, 0);
+            program.Add(assignment);
+
+            Assert.Throws<MiniPLDivisionByZero>(() => interpreter.Run(new Program(program)));
+        }
     }
 
     [TestFixture]

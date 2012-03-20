@@ -100,6 +100,8 @@ namespace MiniPLInterpreter
                         nodevalues[node] = firstop * secondop;
                         break;
                     case "/":
+                        if (secondop == 0)
+                            throw new MiniPLDivisionByZero("Division by zero on row " + node.Row + ".");
                         nodevalues[node] = firstop / secondop;
                         break;
                 }
