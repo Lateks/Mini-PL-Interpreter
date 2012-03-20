@@ -166,7 +166,7 @@ namespace MiniPLInterpreter
                 if (input_token is BinaryOperator)
                 {
                     BinaryOperator op = Match<BinaryOperator>();
-                    if (op.Value == "&" || op.Value == "=")
+                    if (op.Value == "&" || op.Value == "=" ||op.Value == "<")
                         return new LogicalOp(op.Value, lhs, Operand(), op.Row);
                     return new ArithmeticOp(op.Value, lhs, Operand(), op.Row);
                 }

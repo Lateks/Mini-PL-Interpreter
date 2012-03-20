@@ -166,6 +166,18 @@ namespace MiniPLInterpreterTest
         }
 
         [Test]
+        public void LogicalOpLt()
+        {
+            var integer = new IntegerLiteral("1", 0);
+            var lt = new LogicalOp("<", integer, integer, 0);
+            var assert = new ExpressionStatement("assert", lt, 0);
+            statementlist.Add(assert);
+            var parsetree = new Program(statementlist);
+
+            Assert.DoesNotThrow(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
         public void UnaryNot()
         {
             var integer = new IntegerLiteral("42", 0);
@@ -261,6 +273,18 @@ namespace MiniPLInterpreterTest
             var equal = new LogicalOp("=", integer, integer, 0);
             var and = new LogicalOp("&", equal, integer, 0);
             var assert = new ExpressionStatement("assert", and, 0);
+            statementlist.Add(assert);
+            var parsetree = new Program(statementlist);
+
+            Assert.Throws<SemanticError>(() => symbolTableBuilder.BuildSymbolTableAndTypeCheck(parsetree));
+        }
+
+        [Test]
+        public void StringArgumentToLt()
+        {
+            var somestring = new StringLiteral("foo", 0);
+            var lt = new LogicalOp("<", somestring, somestring, 0);
+            var assert = new ExpressionStatement("assert", lt, 0);
             statementlist.Add(assert);
             var parsetree = new Program(statementlist);
 

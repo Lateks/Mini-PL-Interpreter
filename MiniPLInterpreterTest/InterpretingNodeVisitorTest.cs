@@ -335,6 +335,30 @@ namespace MiniPLInterpreterTest
             interpreter.Run(new Program(program));
             Assert.That(interpreter.Valuetable[symboltable.resolve("result")], Is.EqualTo(true));
         }
+
+        [Test]
+        public void FalseLt()
+        {
+            var firstop = new IntegerLiteral("2", 0);
+            var secondop = new IntegerLiteral("1", 0);
+            var lt = new LogicalOp("<", firstop, secondop, 0);
+            var assert = new ExpressionStatement("assert", lt, 0);
+            program.Add(assert);
+
+            Assert.Throws<MiniPLAssertionFailed>(() => interpreter.Run(new Program(program)));
+        }
+
+        [Test]
+        public void TrueLt()
+        {
+            var firstop = new IntegerLiteral("1", 0);
+            var secondop = new IntegerLiteral("2", 0);
+            var lt = new LogicalOp("<", firstop, secondop, 0);
+            var assert = new ExpressionStatement("assert", lt, 0);
+            program.Add(assert);
+
+            Assert.DoesNotThrow(() => interpreter.Run(new Program(program)));
+        }
     }
 
     [TestFixture]

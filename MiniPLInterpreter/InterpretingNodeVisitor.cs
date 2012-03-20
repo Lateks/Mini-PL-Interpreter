@@ -135,6 +135,12 @@ namespace MiniPLInterpreter
                     case "&":
                         nodevalues[node] = firstop && secondop;
                         break;
+                    case "<":
+                        if (firstop < secondop)
+                            nodevalues[node] = true;
+                        else
+                            nodevalues[node] = false;
+                        break;
                 }
             }
 

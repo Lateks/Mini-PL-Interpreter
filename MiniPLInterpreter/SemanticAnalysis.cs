@@ -119,6 +119,11 @@ namespace MiniPLInterpreter
                             throw new SemanticError("Logical operator \"=\" cannot be applied to types \"" +
                                 optype1 + "\" and \"" + optype2 + "\" on row " + node.Row + ".");
                         break;
+                    case "<":
+                        if (optype1 != "int" || optype2 != "int")
+                            throw new SemanticError("Non-integer arguments to lt operator \"<\" on row " +
+                                node.Row + ".");
+                        break;
                 }
 
                 operandtypes.Push("bool");
